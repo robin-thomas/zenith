@@ -1,0 +1,21 @@
+.appname {
+  color: black;
+  margin-bottom: 5rem;
+  font-size: 1.2rem;
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
+}
+
+.appmenu {
+  color: black;
+  font-size: 0.8rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.appfooter {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 1rem;
+  width: 85%;
+}
