@@ -1,0 +1,26 @@
+{
+  "name": "zenith",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "deploy:contract": "npx hardhat run --network polygon_mumbai scripts/deploy.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/robin-thomas/zenith.git"
+  },
+  "author": "Robin Thomas <robinthomas2591@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/robin-thomas/zenith/issues"
+  },
+  "homepage": "https://github.com/robin-thomas/zenith#readme",
+  "devDependencies": {
+    "@chainlink/contracts": "^0.6.1",
+    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "@openzeppelin/contracts": "^4.8.3",
+    "dotenv": "^16.0.3",
+    "hardhat": "^2.14.0"
+  }
+}
