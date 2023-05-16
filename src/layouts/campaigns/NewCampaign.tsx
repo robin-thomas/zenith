@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 
 import Grid from '@mui/material/Unstable_Grid2';
 import Dialog from '@mui/material/Dialog';
@@ -36,6 +36,13 @@ const validationSchema = YupObject({
 const NewCampaign: FC<NewCampaignProps> = ({ open, onClose }) => {
   const [activeStep, setActiveStep] = useState(0);
 
+  useEffect(() => {
+    if (activeStep === 3) {
+      setTimeout(() => onClose(), 2500);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeStep]);
+
   return (
     <Formik
       initialValues={{
@@ -51,7 +58,15 @@ const NewCampaign: FC<NewCampaignProps> = ({ open, onClose }) => {
         setActiveStep(index => index + 1);
       }}
     >
-      <Dialog open={open} onClose={onClose}>
+      <Dialog
+        open={open}
+        onClose={(_, reason) => {
+          if (reason !== 'backdropClick') {
+            onClose();
+          }
+        }}
+        disableEscapeKeyDown
+      >
         <Listener open={open} setActiveStep={setActiveStep} />
         <DialogTitle>Create New Campaign</DialogTitle>
         <DialogContent>
@@ -116,7 +131,7 @@ const NewCampaign: FC<NewCampaignProps> = ({ open, onClose }) => {
             </Step>
           </Stepper>
         </DialogContent>
-        <NewCampaignActions activeStep={activeStep} setActiveStep={setActiveStep} />
+        <NewCampaignActions activeStep={activeStep} setActiveStep={setActiveStep} onClose={onClose} />
       </Dialog>
     </Formik>
   );

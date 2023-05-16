@@ -7,15 +7,17 @@ import { useFormikContext } from 'formik';
 import type { NewCampaignState } from './NewCampaign.types';
 import type { PaymentProps } from './Payment.types';
 import styles from './Payment.module.css';
+import { useAppContext } from '@/hooks/useAppContext';
 
 const Payment: FC<PaymentProps> = ({ setActiveStep }) => {
   const { values } = useFormikContext<NewCampaignState>();
 
-  const [loading, setLoading] = useState(false);
+  const { paymentProcessing, setPaymentProcessing } = useAppContext();
 
   const onClick = () => {
-    setLoading(true);
+    setPaymentProcessing(true);
     setTimeout(() => {
+      setPaymentProcessing(false);
       setActiveStep(index => index + 1);
     }, 2000);
   }
@@ -30,7 +32,7 @@ const Payment: FC<PaymentProps> = ({ setActiveStep }) => {
         color="primary"
         sx={{ marginTop: 1 }}
         onClick={onClick}
-        loading={loading}
+        loading={paymentProcessing}
       >
         Pay {values.budget} Ether
       </LoadingButton>
