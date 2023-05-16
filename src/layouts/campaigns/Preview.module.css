@@ -1,0 +1,19 @@
+.adname {
+  color: #8ab4f8
+}
+
+.adname:hover {
+  text-decoration: underline;
+}
+
+.addescription {
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.adurl {
+  color: green;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}

@@ -8,3 +8,12 @@ typechain-types
 # Hardhat files
 cache
 artifacts
+
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+.next/
+out/
+build
+
+npm-debug.log*
