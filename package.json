@@ -1,26 +1,45 @@
 {
   "name": "zenith",
   "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "deploy:contract": "npx hardhat run --network polygon_mumbai scripts/deploy.ts"
-  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/robin-thomas/zenith.git"
   },
   "author": "Robin Thomas <robinthomas2591@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/robin-thomas/zenith/issues"
-  },
   "homepage": "https://github.com/robin-thomas/zenith#readme",
+  "scripts": {
+    "deploy:contract": "npx hardhat run --network polygon_mumbai scripts/deploy.ts",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/lab": "^5.0.0-alpha.129",
+    "@mui/material": "^5.13.0",
+    "@mui/x-date-pickers": "^6.4.0",
+    "dayjs": "^1.11.7",
+    "formik": "^2.2.9",
+    "next": "^13.4.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "yup": "^1.1.1"
+  },
   "devDependencies": {
     "@chainlink/contracts": "^0.6.1",
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
     "@openzeppelin/contracts": "^4.8.3",
+    "@types/node": "^20.1.5",
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
     "dotenv": "^16.0.3",
-    "hardhat": "^2.14.0"
+    "eslint": "^8.40.0",
+    "eslint-config-next": "^13.4.2",
+    "hardhat": "^2.14.0",
+    "typescript": "^5.0.4"
   }
 }
