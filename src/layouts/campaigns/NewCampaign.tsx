@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState } from 'react';
 
 import Grid from '@mui/material/Unstable_Grid2';
 import Dialog from '@mui/material/Dialog';
@@ -15,13 +15,14 @@ import { Formik } from 'formik';
 import { object as YupObject, string as YupString, number as YupNumber, date as YupDate } from 'yup';
 import dayjs from 'dayjs';
 
+import Listener from '@/layouts/campaigns/Listener';
 import Payment from '@/layouts/campaigns/Payment';
 import CampaignEnd from '@/layouts/campaigns/CampaignEnd';
 import NewCampaignActions from '@/layouts/campaigns/NewCampaignActions';
 import Preview from '@/layouts/campaigns/Preview';
 import TextInput from '@/layouts/campaigns/TextInput';
 import type { NewCampaignProps } from './NewCampaign.types';
-import { PLACEHOLDER_NAME, PLACEHOLDER_DESCRIPTION, PLACEHOLDER_URL } from './config';
+import { PLACEHOLDER_NAME, PLACEHOLDER_DESCRIPTION, PLACEHOLDER_URL } from '@/constants/campaign';
 
 const validationSchema = YupObject({
   name: YupString(),
@@ -35,20 +36,14 @@ const validationSchema = YupObject({
 const NewCampaign: FC<NewCampaignProps> = ({ open, onClose }) => {
   const [activeStep, setActiveStep] = useState(0);
 
-  useEffect(() => {
-    if (!open) {
-      setActiveStep(0);
-    }
-  }, [open]);
-
   return (
     <Formik
       initialValues={{
         name: '',
         description: '',
         url: '',
-        budget: 0,
-        costPerClick: 0,
+        budget: '',
+        costPerClick: '',
         endDate: null,
       }}
       validationSchema={validationSchema}
@@ -57,6 +52,7 @@ const NewCampaign: FC<NewCampaignProps> = ({ open, onClose }) => {
       }}
     >
       <Dialog open={open} onClose={onClose}>
+        <Listener open={open} setActiveStep={setActiveStep} />
         <DialogTitle>Create New Campaign</DialogTitle>
         <DialogContent>
           <Stepper activeStep={activeStep} orientation="vertical">

@@ -1,10 +1,10 @@
 import type { FC } from 'react';
 
-import TextField from "@mui/material/TextField";
-import { useFormikContext } from "formik";
+import TextField from '@mui/material/TextField';
+import { useFormikContext } from 'formik';
 
-import type { TextInputProps } from "./TextInput.types";
-import type { NewCampaignState } from "./NewCampaign.types";
+import type { TextInputProps } from './TextInput.types';
+import type { NewCampaignState } from './NewCampaign.types';
 
 const TextInput: FC<TextInputProps> = ({ type, id, label, placeholder, rows, InputProps }) => {
   const { values, touched, errors, handleChange, handleBlur } = useFormikContext<NewCampaignState>();

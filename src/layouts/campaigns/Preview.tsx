@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useFormikContext } from 'formik';
 
 import type { NewCampaignState } from './NewCampaign.types';
-import { PLACEHOLDER_NAME, PLACEHOLDER_DESCRIPTION, PLACEHOLDER_URL } from './config';
+import { PLACEHOLDER_NAME, PLACEHOLDER_DESCRIPTION, PLACEHOLDER_URL } from '@/constants/campaign';
 import styles from './Preview.module.css';
 
 const getUrlLabel = (url: string) => {

@@ -6,6 +6,7 @@ import { useFormikContext } from 'formik';
 
 import type { NewCampaignState } from './NewCampaign.types';
 import type { PaymentProps } from './Payment.types';
+import styles from './Payment.module.css';
 
 const Payment: FC<PaymentProps> = ({ setActiveStep }) => {
   const { values } = useFormikContext<NewCampaignState>();
@@ -21,6 +22,9 @@ const Payment: FC<PaymentProps> = ({ setActiveStep }) => {
 
   return (
     <>
+      <p className={styles.description}>
+        Clicking on the below button will open MetaMask and ask you to confirm the transaction.
+      </p>
       <LoadingButton
         variant="contained"
         color="primary"
