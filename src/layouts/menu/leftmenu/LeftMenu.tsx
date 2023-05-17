@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Poppins, Montserrat_Alternates } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import Link from 'next/link';
-import Image from 'next/image';
 
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
@@ -19,19 +18,22 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 
 import { items } from '@/constants/leftmenu';
 import styles from './LeftMenu.module.css';
-import { Divider } from '@mui/material';
+import Logo from '@/layouts/logo/Logo';
+import { useAppContext } from '@/hooks/useAppContext';
 
 const poppins = Poppins({ weight: '300', subsets: ['latin'] });
-const montserrat_alternates = Montserrat_Alternates({ weight: '700', subsets: ['latin'] });
 
 const getCurrentMenu = () => {
   return items.find((item) => item.href === window.location.pathname)?.name ?? 'Analytics';
 };
 
 const LeftMenu: React.FC = () => {
+  const { setWallet } = useAppContext();
+
   const [open, setOpen] = useState(false);
   const [selectedLeftMenu, setSelectedLeftMenu] = useState<string>();
 
@@ -43,17 +45,14 @@ const LeftMenu: React.FC = () => {
   const onLogoutClick = () => setOpen(true);
 
   const onLogout = async () => {
-    // TODO;
-
     handleClose();
+    window.sessionStorage.setItem('zenith.user.logout', 'true');
+    setWallet(undefined);
   };
 
   return (
     <>
-      <div className={styles.appname}>
-        <Image src="/logo.png" width="40" height="17" alt="logo" />&nbsp;
-        <span className={montserrat_alternates.className}>Zenith.</span>
-      </div>
+      <Logo />
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Logout?</DialogTitle>
         <DialogContent>
