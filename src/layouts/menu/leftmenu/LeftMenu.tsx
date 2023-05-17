@@ -28,7 +28,10 @@ const montserrat_alternates = Montserrat_Alternates({ weight: '700', subsets: ['
 
 const LeftMenu: React.FC = () => {
   const getCurrentMenu = () => {
-    return items.find((item) => item.href === window.location.pathname)?.name ?? 'Analytics';
+    if (typeof window === 'undefined') {
+      return 'Analytics';
+    }
+    return items.find((item) => item.href === window?.location.pathname)?.name ?? 'Analytics';
   };
 
   const [open, setOpen] = useState(false);
