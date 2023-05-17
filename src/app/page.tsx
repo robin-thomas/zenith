@@ -21,7 +21,7 @@ const poppins = Poppins({ weight: '600', subsets: ['latin'] });
 
 interface StatProps {
   name: string;
-  value?: number;
+  value?: number | string;
 }
 
 const Stat: React.FC<StatProps> = ({ name, value }) => (
@@ -58,7 +58,6 @@ const Home: React.FC = () => {
       const accounts = await loginWithMetamask();
       if (accounts?.length > 0) {
         setWallet({ accounts });
-        setLoggingIn(false);
       }
     } catch (err) {
       setLoggingIn(false);

@@ -21,7 +21,7 @@ const validationSchema = YupObject({
   name: YupString(),
   description: YupString(),
   url: YupString().url(),
-  budget: YupNumber().min(1, 'Atleast 1 Ether').required('Required'),
+  budget: YupNumber().min(0.1, 'Atleast 0.1 Ether').required('Required'),
   costPerClick: YupNumber().min(0.001, 'Atleast 0.001 Ether').required('Required'),
   endDate: YupDate().min(dayjs().add(1, 'day').startOf('day'), 'Should be atleast tomorrow').required('Required'),
 });

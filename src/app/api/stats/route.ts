@@ -10,9 +10,11 @@ export async function GET() {
 
   const campaigns = await contract.numCampaigns();
   const adClicks = await contract.numAdClicks();
+  // const totalRewards = await contract.totalRewards();
 
   return NextResponse.json({
     campaigns: campaigns.toNumber(),
     adClicks: adClicks.toNumber(),
+    totalRewards: 0,
   });
 }
