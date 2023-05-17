@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -8,7 +6,7 @@ import dayjs from 'dayjs';
 
 import type { NewCampaignState } from './NewCampaign.types';
 
-const CampaignEnd: FC = () => {
+const CampaignEnd: React.FC = () => {
   const { values, setFieldValue, touched, errors, handleBlur } = useFormikContext<NewCampaignState>();
 
   return (

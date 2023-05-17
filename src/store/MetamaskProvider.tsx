@@ -1,12 +1,13 @@
+'use client';
+
 import { useEffect }  from 'react';
-import type { FC } from 'react';
 
 import detectEthereumProvider from '@metamask/detect-provider';
 
 import { useAppContext } from '@/hooks/useAppContext';
 import type { IMetamaskProviderProps } from './MetamaskProvider.types';
 
-const MetamaskProvider: FC<IMetamaskProviderProps> = ({ children }) => {
+const MetamaskProvider: React.FC<IMetamaskProviderProps> = ({ children }) => {
   const { setWallet } = useAppContext();
 
   useEffect(() => {

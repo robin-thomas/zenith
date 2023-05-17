@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import { useFormikContext } from 'formik';
@@ -8,7 +6,7 @@ import type { NewCampaignState } from './NewCampaign.types';
 import type { NewCampaignActionsProps } from './NewCampaignActions.types';
 import { useAppContext } from '@/hooks/useAppContext';
 
-const NewCampaignActions: FC<NewCampaignActionsProps> = ({ activeStep, setActiveStep }) => {
+const NewCampaignActions: React.FC<NewCampaignActionsProps> = ({ activeStep, setActiveStep }) => {
   const { handleSubmit } = useFormikContext<NewCampaignState>();
   const { paymentProcessing } = useAppContext();
 

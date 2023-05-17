@@ -1,7 +1,7 @@
 import './globals.css';
-import { Inter } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'] });
+import DataProvider from '@/store/DataProvider';
+import MetamaskProvider from '@/store/MetamaskProvider';
 
 export const metadata = {
   title: 'Zenith',
@@ -15,7 +15,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <DataProvider>
+          <MetamaskProvider>
+            {children}
+          </MetamaskProvider>
+        </DataProvider>
+      </body>
     </html>
   );
 }

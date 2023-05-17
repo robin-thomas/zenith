@@ -1,9 +1,9 @@
 .appname {
-  color: black;
-  margin-bottom: 2rem;
-  font-size: 1.25rem;
-  margin-left: 0.75rem;
-  margin-right: 0.75rem;
+  color: black !important;
+  margin-bottom: 2rem !important;
+  font-size: 1.25rem !important;
+  margin-left: 0.75rem !important;
+  margin-right: 0.75rem !important;
 }
 
 .subheader {
@@ -19,10 +19,11 @@
 }
 
 .appfooter {
-  position: absolute;
+  position: absolute !important;
   bottom: 5rem !important;
   width: calc(100% - 1.55rem);
-  background: rgba(0,0,0,0.15) !important;
+  background: #8168eb !important;
+  /* background: #1976d2 !important; */
   padding: 0.5rem !important;
   border-radius: 0.25rem !important;
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Poppins, Montserrat_Alternates } from 'next/font/google';
 import Link from 'next/link';
 
@@ -8,7 +8,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListSubheader from '@mui/material/ListSubheader';
 import Avatar from '@mui/material/Avatar';
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import Grid from '@mui/material/Unstable_Grid2';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
@@ -26,16 +26,17 @@ import { Divider } from '@mui/material';
 const poppins = Poppins({ weight: '300', subsets: ['latin'] });
 const montserrat_alternates = Montserrat_Alternates({ weight: '700', subsets: ['latin'] });
 
-const LeftMenu: React.FC = () => {
-  const getCurrentMenu = () => {
-    if (typeof window === 'undefined') {
-      return 'Analytics';
-    }
-    return items.find((item) => item.href === window?.location.pathname)?.name ?? 'Analytics';
-  };
+const getCurrentMenu = () => {
+  return items.find((item) => item.href === window.location.pathname)?.name ?? 'Analytics';
+};
 
+const LeftMenu: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const [selectedLeftMenu, setSelectedLeftMenu] = useState(getCurrentMenu());
+  const [selectedLeftMenu, setSelectedLeftMenu] = useState<string>();
+
+  useEffect(() => {
+    setSelectedLeftMenu(getCurrentMenu());
+  }, []);
 
   const handleClose = () => setOpen(false);
   const onLogoutClick = () => setOpen(true);
@@ -91,12 +92,12 @@ const LeftMenu: React.FC = () => {
       <div className={styles.appfooter}>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid>
-            <Avatar />
+            <Avatar sx={{ width: 30, height: 30 }} />
           </Grid>
           <Grid>
-            <Tooltip title="Logout" arrow>
+            <Tooltip title="Logout" arrow placement="top">
               <IconButton onClick={onLogoutClick}>
-                <LogoutIcon fontSize="small" />
+                <LogoutRoundedIcon fontSize="small" style={{ color: 'white' }} />
               </IconButton>
             </Tooltip>
           </Grid>

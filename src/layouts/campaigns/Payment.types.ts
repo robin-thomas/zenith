@@ -1,5 +1,3 @@
-import type { Dispatch, SetStateAction } from 'react';
-
 export interface PaymentProps {
-  setActiveStep: Dispatch<SetStateAction<number>>
+  setActiveStep: React.Dispatch<React.SetStateAction<number>>
 };

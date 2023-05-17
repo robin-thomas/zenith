@@ -21,3 +21,24 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.MuiButton-textPrimary:not(:disabled) {
+  color: #8168eb !important;
+}
+
+.MuiButton-containedPrimary {
+  background-color: #8168eb !important;
+}
+
+.MuiInputBase-colorPrimary::after {
+  border-bottom-color: #8168eb !important;
+}
+
+.MuiStepIcon-root.Mui-active,
+.MuiStepIcon-root.Mui-completed {
+  color: #8168eb !important;
+}
+
+.MuiMenuItem-root.Mui-selected {
+  background-color: rgba(129,104,235,0.4) !important;
+}
