@@ -26,11 +26,11 @@ import { Divider } from '@mui/material';
 const poppins = Poppins({ weight: '300', subsets: ['latin'] });
 const montserrat_alternates = Montserrat_Alternates({ weight: '700', subsets: ['latin'] });
 
-const getCurrentMenu = () => {
-  return items.find((item) => item.href === window.location.pathname)?.name ?? 'Analytics';
-};
-
 const LeftMenu: React.FC = () => {
+  const getCurrentMenu = () => {
+    return items.find((item) => item.href === window.location.pathname)?.name ?? 'Analytics';
+  };
+
   const [open, setOpen] = useState(false);
   const [selectedLeftMenu, setSelectedLeftMenu] = useState(getCurrentMenu());
 
