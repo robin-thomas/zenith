@@ -6,6 +6,6 @@ const Campaigns: React.FC = () => (
   <>
     <Title title="Campaigns" />
   </>
-)
+);
 
 export default Campaigns;

@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import Grid from '@mui/material/Unstable_Grid2';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -11,13 +11,11 @@ import { Formik } from 'formik';
 import { object as YupObject, string as YupString, number as YupNumber, date as YupDate } from 'yup';
 import dayjs from 'dayjs';
 
-import Listener from '@/layouts/campaigns/Listener';
 import Payment from '@/layouts/campaigns/Payment';
 import CampaignEnd from '@/layouts/campaigns/CampaignEnd';
 import NewCampaignActions from '@/layouts/campaigns/NewCampaignActions';
 import Preview from '@/layouts/campaigns/Preview';
 import TextInput from '@/layouts/campaigns/TextInput';
-import type { NewCampaignProps } from './NewCampaign.types';
 import { PLACEHOLDER_NAME, PLACEHOLDER_DESCRIPTION, PLACEHOLDER_URL } from '@/constants/campaign';
 
 const validationSchema = YupObject({
@@ -29,7 +27,7 @@ const validationSchema = YupObject({
   endDate: YupDate().min(dayjs().add(1, 'day').startOf('day'), 'Should be atleast tomorrow').required('Required'),
 });
 
-const NewCampaign: FC<NewCampaignProps> = ({ open, onClose }) => {
+const NewCampaign: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   return (
@@ -48,7 +46,6 @@ const NewCampaign: FC<NewCampaignProps> = ({ open, onClose }) => {
       }}
     >
       <>
-        <Listener open={open} setActiveStep={setActiveStep} />
         <p>Create New Campaign</p>
         <>
           <Stepper activeStep={activeStep} orientation="vertical">
@@ -112,7 +109,7 @@ const NewCampaign: FC<NewCampaignProps> = ({ open, onClose }) => {
             </Step>
           </Stepper>
         </>
-        <NewCampaignActions activeStep={activeStep} setActiveStep={setActiveStep} onClose={onClose} />
+        <NewCampaignActions activeStep={activeStep} setActiveStep={setActiveStep} />
       </>
     </Formik>
   );

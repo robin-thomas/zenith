@@ -7,7 +7,7 @@ import { useAppContext } from '@/hooks/useAppContext';
 import type { IMetamaskProviderProps } from './MetamaskProvider.types';
 
 const MetamaskProvider: FC<IMetamaskProviderProps> = ({ children }) => {
-  const { wallet, setWallet } = useAppContext();
+  const { setWallet } = useAppContext();
 
   useEffect(() => {
     const refreshAccounts = (accounts: any) => {
@@ -16,7 +16,7 @@ const MetamaskProvider: FC<IMetamaskProviderProps> = ({ children }) => {
       } else {
         setWallet(undefined);
       }
-    }
+    };
 
     const getProvider = async () => {
       const provider = await detectEthereumProvider({ silent: true });
@@ -29,9 +29,10 @@ const MetamaskProvider: FC<IMetamaskProviderProps> = ({ children }) => {
         window.ethereum.on('accountsChanged', refreshAccounts);
         window.ethereum.on('chainChanged', () => setWallet(undefined));
       }
-    }
+    };
 
     getProvider();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <>{children}</>;

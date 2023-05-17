@@ -6,8 +6,8 @@ import NewCampaign from '@/layouts/campaigns/NewCampaign';
 const Campaigns: React.FC = () => (
   <>
     <Title title="Create New Campaign" />
-    <NewCampaign open={true} onClose={() => {}}/>
+    <NewCampaign />
   </>
-)
+);
 
 export default Campaigns;

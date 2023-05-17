@@ -6,6 +6,6 @@ const Rewards: React.FC = () => (
   <>
     <Title title="Rewards" />
   </>
-)
+);
 
 export default Rewards;

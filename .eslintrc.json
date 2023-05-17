@@ -1,3 +1,9 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-unused-vars": "error",
+    "semi": "error",
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "no-var": "error"
+  }
 }

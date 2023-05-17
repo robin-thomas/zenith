@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import type { NewCampaignState } from './NewCampaign.types';
 
 const CampaignEnd: FC = () => {
-  const { values, setFieldValue, touched, errors, handleChange, handleBlur } = useFormikContext<NewCampaignState>();
+  const { values, setFieldValue, touched, errors, handleBlur } = useFormikContext<NewCampaignState>();
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -21,11 +21,11 @@ const CampaignEnd: FC = () => {
         minDate={dayjs().add(1, 'day').startOf('day') as unknown as string}
         slotProps={{
           textField: {
-            id: "endDate",
+            id: 'endDate',
             fullWidth: true,
-            variant: "standard",
-            margin: "dense",
-            helperText: touched.endDate ? errors.endDate : "",
+            variant: 'standard',
+            margin: 'dense',
+            helperText: touched.endDate ? errors.endDate : '',
             error: touched.endDate && Boolean(errors.endDate),
             onBlur: handleBlur,
           },
@@ -33,6 +33,6 @@ const CampaignEnd: FC = () => {
       />
     </LocalizationProvider>
   );
-}
+};
 
 export default CampaignEnd;

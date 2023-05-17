@@ -8,7 +8,7 @@ import type { NewCampaignState } from './NewCampaign.types';
 import type { NewCampaignActionsProps } from './NewCampaignActions.types';
 import { useAppContext } from '@/hooks/useAppContext';
 
-const NewCampaignActions: FC<NewCampaignActionsProps> = ({ activeStep, setActiveStep, onClose }) => {
+const NewCampaignActions: FC<NewCampaignActionsProps> = ({ activeStep, setActiveStep }) => {
   const { handleSubmit } = useFormikContext<NewCampaignState>();
   const { paymentProcessing } = useAppContext();
 
@@ -17,7 +17,7 @@ const NewCampaignActions: FC<NewCampaignActionsProps> = ({ activeStep, setActive
       return handleSubmit();
     }
     setActiveStep(index => index + 1);
-  }
+  };
 
   return activeStep < 3 ? (
     <DialogActions>

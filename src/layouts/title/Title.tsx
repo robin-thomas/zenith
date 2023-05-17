@@ -9,6 +9,6 @@ const Title: React.FC<TitleProps> = ({ title }) => (
   <div className={styles.title}>
     <span className={poppins.className}>{title}</span>
   </div>
-)
+);
 
 export default Title;
