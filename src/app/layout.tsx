@@ -1,12 +1,14 @@
-import './globals.css'
-import { Inter } from 'next/font/google'
+import './globals.css';
 
-const inter = Inter({ subsets: ['latin'] })
+import DataProvider from '@/store/DataProvider';
+import MetamaskProvider from '@/store/MetamaskProvider';
+
+import styles from './layout.module.css';
 
 export const metadata = {
   title: 'Zenith',
   description: 'Zenith',
-}
+};
 
 export default function RootLayout({
   children,
@@ -15,7 +17,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <DataProvider>
+          <MetamaskProvider>
+            <div className={styles.page}>
+              <div className={styles.content}>
+                <div className={styles.header}></div>
+                {children}
+              </div>
+            </div>
+          </MetamaskProvider>
+        </DataProvider>
+      </body>
     </html>
-  )
+  );
 }

@@ -1,6 +1,3 @@
-import { useState } from 'react';
-import type { FC } from 'react';
-
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useFormikContext } from 'formik';
 
@@ -10,7 +7,7 @@ import styles from './Payment.module.css';
 import { useAppContext } from '@/hooks/useAppContext';
 import { login as loginMetamask } from '@/utils/metamask';
 
-const Payment: FC<PaymentProps> = ({ setActiveStep }) => {
+const Payment: React.FC<PaymentProps> = ({ setActiveStep }) => {
   const { values } = useFormikContext<NewCampaignState>();
 
   const { wallet, paymentProcessing, setPaymentProcessing } = useAppContext();
@@ -26,7 +23,7 @@ const Payment: FC<PaymentProps> = ({ setActiveStep }) => {
       setPaymentProcessing(false);
       setActiveStep(index => index + 1);
     }, 2000);
-  }
+  };
 
   return (
     <>

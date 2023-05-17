@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import Link from 'next/link';
 
 import { useFormikContext } from 'formik';
@@ -17,9 +16,9 @@ const getUrlLabel = (url: string) => {
   }
 
   return PLACEHOLDER_URL;
-}
+};
 
-const Preview: FC = () => {
+const Preview: React.FC = () => {
   const { values } = useFormikContext<NewCampaignState>();
 
   return (
@@ -33,6 +32,6 @@ const Preview: FC = () => {
       <p className={styles.adurl}>{getUrlLabel(values.url)}</p>
     </>
   );
-}
+};
 
 export default Preview;

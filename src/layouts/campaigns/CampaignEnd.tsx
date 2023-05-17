@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -8,8 +6,8 @@ import dayjs from 'dayjs';
 
 import type { NewCampaignState } from './NewCampaign.types';
 
-const CampaignEnd: FC = () => {
-  const { values, setFieldValue, touched, errors, handleChange, handleBlur } = useFormikContext<NewCampaignState>();
+const CampaignEnd: React.FC = () => {
+  const { values, setFieldValue, touched, errors, handleBlur } = useFormikContext<NewCampaignState>();
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -21,11 +19,11 @@ const CampaignEnd: FC = () => {
         minDate={dayjs().add(1, 'day').startOf('day') as unknown as string}
         slotProps={{
           textField: {
-            id: "endDate",
+            id: 'endDate',
             fullWidth: true,
-            variant: "standard",
-            margin: "dense",
-            helperText: touched.endDate ? errors.endDate : "",
+            variant: 'standard',
+            margin: 'dense',
+            helperText: touched.endDate ? errors.endDate : '',
             error: touched.endDate && Boolean(errors.endDate),
             onBlur: handleBlur,
           },
@@ -33,6 +31,6 @@ const CampaignEnd: FC = () => {
       />
     </LocalizationProvider>
   );
-}
+};
 
 export default CampaignEnd;

@@ -1,11 +1,12 @@
+'use client';
+
 import { createContext, useMemo, useState } from 'react';
-import type { FC } from 'react';
 
 import type { IDataProviderContext, IDataProviderProps } from './DataProvider.types';
 
 const DataContext = createContext<IDataProviderContext>({});
 
-const DataProvider: FC<IDataProviderProps> = ({ children }) => {
+const DataProvider: React.FC<IDataProviderProps> = ({ children }) => {
   const [wallet, setWallet] = useState<any>();
   const [paymentProcessing, setPaymentProcessing] = useState(false);
 

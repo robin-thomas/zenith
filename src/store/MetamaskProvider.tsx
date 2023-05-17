@@ -1,13 +1,16 @@
+'use client';
+
 import { useEffect }  from 'react';
-import type { FC } from 'react';
+import { useRouter } from 'next/navigation';
 
 import detectEthereumProvider from '@metamask/detect-provider';
 
 import { useAppContext } from '@/hooks/useAppContext';
 import type { IMetamaskProviderProps } from './MetamaskProvider.types';
 
-const MetamaskProvider: FC<IMetamaskProviderProps> = ({ children }) => {
+const MetamaskProvider: React.FC<IMetamaskProviderProps> = ({ children }) => {
   const { wallet, setWallet } = useAppContext();
+  const router = useRouter();
 
   useEffect(() => {
     const refreshAccounts = (accounts: any) => {
@@ -16,7 +19,7 @@ const MetamaskProvider: FC<IMetamaskProviderProps> = ({ children }) => {
       } else {
         setWallet(undefined);
       }
-    }
+    };
 
     const getProvider = async () => {
       const provider = await detectEthereumProvider({ silent: true });
@@ -26,13 +29,27 @@ const MetamaskProvider: FC<IMetamaskProviderProps> = ({ children }) => {
 
         refreshAccounts(accounts);
 
-        window.ethereum.on('accountsChanged', refreshAccounts);
-        window.ethereum.on('chainChanged', () => setWallet(undefined));
+        // window.ethereum.on('accountsChanged', refreshAccounts);
+        // window.ethereum.on('chainChanged', () => setWallet(undefined));
       }
-    }
+    };
 
-    getProvider();
+    if (!window.sessionStorage.getItem('zenith.user.logout')) {
+      getProvider();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!wallet) {
+      router.push('/');
+    } else if (window.location.pathname !== '/') {
+      router.push(window.location.pathname);
+    } else {
+      router.push('/user/campaigns');
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wallet]);
 
   return <>{children}</>;
 };

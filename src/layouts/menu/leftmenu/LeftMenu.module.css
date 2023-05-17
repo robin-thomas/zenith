@@ -1,0 +1,29 @@
+.appname {
+  color: black !important;
+  margin-bottom: 2rem !important;
+  font-size: 1.25rem !important;
+  margin-left: 0.75rem !important;
+  margin-right: 0.75rem !important;
+}
+
+.subheader {
+  text-transform: uppercase !important;
+  font-size: 0.7em !important;
+  margin-bottom: -10px !important;
+  font-weight: 600 !important;
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.itemname {
+  color: rgba(0, 0, 0, 0.54) !important;
+}
+
+.appfooter {
+  position: absolute !important;
+  bottom: 5rem !important;
+  width: calc(100% - 1.55rem);
+  background: #8168eb !important;
+  /* background: #1976d2 !important; */
+  padding: 0.5rem !important;
+  border-radius: 0.25rem !important;
+}

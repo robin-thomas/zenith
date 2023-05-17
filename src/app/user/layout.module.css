@@ -1,0 +1,13 @@
+.container {
+  height: 100% !important;
+}
+
+.leftmenu {
+  padding: 2rem 1rem 3rem 0.75rem !important;
+  position: relative !important;
+  border-right: 0.008rem solid #bdbdbd !important;
+}
+
+.pagecontent {
+  padding: 2rem 5rem 3rem 3rem !important;
+}

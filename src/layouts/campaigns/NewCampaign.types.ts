@@ -1,8 +1,3 @@
-export interface NewCampaignProps {
-  open: boolean;
-  onClose: () => void;
-}
-
 export interface NewCampaignState {
   name: string;
   description: string;
