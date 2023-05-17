@@ -16,14 +16,14 @@ const CampaignEnd: React.FC = () => {
         onChange={(value) => setFieldValue('endDate', value)}
         format="YYYY-MM-DD"
         label="Campaign End"
-        minDate={dayjs().add(1, 'day').startOf('day') as unknown as string}
+        minDate={dayjs().add(1, 'day').startOf('day')}
         slotProps={{
           textField: {
             id: 'endDate',
             fullWidth: true,
             variant: 'standard',
             margin: 'dense',
-            helperText: touched.endDate ? errors.endDate : '',
+            helperText: touched.endDate ? errors.endDate as string: '',
             error: touched.endDate && Boolean(errors.endDate),
             onBlur: handleBlur,
           },
