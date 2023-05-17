@@ -1,10 +1,6 @@
 import { FC, useState, useEffect } from 'react';
 
 import Grid from '@mui/material/Unstable_Grid2';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import InputAdornment from '@mui/material/InputAdornment';
 import Tooltip from '@mui/material/Tooltip';
 import Stepper from '@mui/material/Stepper';
@@ -36,13 +32,6 @@ const validationSchema = YupObject({
 const NewCampaign: FC<NewCampaignProps> = ({ open, onClose }) => {
   const [activeStep, setActiveStep] = useState(0);
 
-  useEffect(() => {
-    if (activeStep === 3) {
-      setTimeout(() => onClose(), 2500);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeStep]);
-
   return (
     <Formik
       initialValues={{
@@ -58,25 +47,17 @@ const NewCampaign: FC<NewCampaignProps> = ({ open, onClose }) => {
         setActiveStep(index => index + 1);
       }}
     >
-      <Dialog
-        open={open}
-        onClose={(_, reason) => {
-          if (reason !== 'backdropClick') {
-            onClose();
-          }
-        }}
-        disableEscapeKeyDown
-      >
+      <>
         <Listener open={open} setActiveStep={setActiveStep} />
-        <DialogTitle>Create New Campaign</DialogTitle>
-        <DialogContent>
+        <p>Create New Campaign</p>
+        <>
           <Stepper activeStep={activeStep} orientation="vertical">
             <Step>
               <StepLabel>Details</StepLabel>
               <StepContent>
-                <DialogContentText>
+                <>
                   Fill in the details about your campaign.
-                </DialogContentText>
+                </>
                 <TextInput id="name" label="Campaign Name" placeholder={PLACEHOLDER_NAME} />
                 <TextInput id="description" rows={3} label="Campaign Description" placeholder={PLACEHOLDER_DESCRIPTION} />
                 <Grid container spacing={2}>
@@ -130,9 +111,9 @@ const NewCampaign: FC<NewCampaignProps> = ({ open, onClose }) => {
               </StepContent>
             </Step>
           </Stepper>
-        </DialogContent>
+        </>
         <NewCampaignActions activeStep={activeStep} setActiveStep={setActiveStep} onClose={onClose} />
-      </Dialog>
+      </>
     </Formik>
   );
 };

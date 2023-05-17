@@ -21,8 +21,6 @@ const NewCampaignActions: FC<NewCampaignActionsProps> = ({ activeStep, setActive
 
   return activeStep < 3 ? (
     <DialogActions>
-      <Button onClick={onClose} disabled={paymentProcessing}>Cancel</Button>
-      <div style={{ flex: '1 0 0' }} />
       <Button disabled={paymentProcessing || activeStep === 0} onClick={() => setActiveStep(index => index - 1)}>Previous</Button>
       <Button disabled={activeStep >= 2} onClick={onNextStep}>Next</Button>
     </DialogActions>

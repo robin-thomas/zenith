@@ -1,16 +1,21 @@
 .appname {
   color: black;
-  margin-bottom: 5rem;
+  margin-bottom: 2rem;
   font-size: 1.2rem;
   margin-left: 0.75rem;
   margin-right: 0.75rem;
 }
 
-.appmenu {
-  color: black;
-  font-size: 0.8rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
+.subheader {
+  text-transform: uppercase !important;
+  font-size: 0.7em !important;
+  margin-bottom: -10px !important;
+  font-weight: 600 !important;
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.itemname {
+  color: rgba(0, 0, 0, 0.54) !important;
 }
 
 .appfooter {

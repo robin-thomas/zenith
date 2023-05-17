@@ -1,15 +1,20 @@
 .page {
   height: 100vh !important;
   width: 100vw !important;
-  background: #f3f2f2 !important;
-  padding: 6rem !important;
+  padding: 1.5rem !important;
 }
 
 .content {
   background: white !important;
-  border-radius: 1.8rem !important;
+  border-radius: 0.5em !important;
   height: 100% !important;
   overflow: hidden !important;
+}
+
+.header {
+  height: 50px !important;
+  width: 100% !important;
+  border-bottom: 0.15rem solid #f6f9f6 !important;
 }
 
 .container {
@@ -17,11 +22,13 @@
 }
 
 .leftmenu {
-  background: #f8f9fb !important;
-  padding: 3rem 1rem !important;
+  padding: 2rem 1rem 3rem 1rem !important;
   position: relative !important;
+  border-right: 0.15rem solid #f6f9f6 !important;
 }
 
 .pagecontent {
-  padding: 3rem !important;
+  padding: 2rem 3rem 3rem 3rem !important;
+  /* height: 100% !important; */
+  /* overflow-y: auto !important; */
 }

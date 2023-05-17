@@ -1,44 +1,50 @@
 import { useState } from 'react';
-import type { FC } from 'react';
-import { Poppins, Rajdhani } from 'next/font/google';
+import { Poppins, Montserrat_Alternates } from 'next/font/google';
 import Link from 'next/link';
 
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Unstable_Grid2';
-import Stack from '@mui/material/Stack';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListSubheader from '@mui/material/ListSubheader';
 
 import { items } from '@/constants/leftmenu';
-import NewCampaign from '@/layouts/campaigns/NewCampaign';
 import styles from './LeftMenu.module.css';
 
 const poppins = Poppins({ weight: '300', subsets: ['latin'] });
-const rajdhani = Rajdhani({ weight: '700', subsets: ['latin'] });
+const montserrat_alternates = Montserrat_Alternates({ weight: '700', subsets: ['latin'] });
 
-const LeftMenu: FC = () => {
-  const [open, setOpen] = useState(false);
+const LeftMenu: React.FC = () => {
+  const [selectedLeftMenu, setSelectedLeftMenu] = useState('Analytics');
 
   return (
     <>
       <div className={styles.appname}>
-        <span className={rajdhani.className}>Zenith</span>
+        <span className={montserrat_alternates.className}>Zenith.</span>
       </div>
-      <Stack direction="column" spacing={4} className={styles.appmenu}>
+      <MenuList
+        subheader={
+          <ListSubheader component="div" className={styles.subheader}>
+            Menu
+          </ListSubheader>
+        }
+      >
         {items.map((item) => (
-          <Grid key={item.name} container alignItems="center">
-            <Grid md={3}>
-              {item.icon}
-            </Grid>
-            <Grid md={9}>
-              <Link href={item.href}>
-                <span className={poppins.className}>{item.name}</span>
-              </Link>
-            </Grid>
-          </Grid>
+          <Link key={item.name} href={item.href}>
+            <MenuItem
+              sx={{ marginTop: 1, marginBottom: 1 }}
+              selected={selectedLeftMenu === item.name}
+              onClick={() => setSelectedLeftMenu(item.name)}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText className={styles.itemname}>
+                <span className={poppins.className} style={{ fontSize: '0.8rem' }}>{item.name}</span>
+              </ListItemText>
+            </MenuItem>
+          </Link>
         ))}
-      </Stack>
+      </MenuList>
       <div className={styles.appfooter}>
-        <Button variant="contained" fullWidth onClick={() => setOpen(true)}>New Campaign</Button>
-        <NewCampaign open={open} onClose={() => setOpen(false)} />
       </div>
     </>
   );
