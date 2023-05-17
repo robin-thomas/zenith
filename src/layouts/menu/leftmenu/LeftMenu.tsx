@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Poppins, Montserrat_Alternates } from 'next/font/google';
 import Link from 'next/link';
+import Image from 'next/image';
 
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
@@ -50,6 +51,7 @@ const LeftMenu: React.FC = () => {
   return (
     <>
       <div className={styles.appname}>
+        <Image src="/logo.png" width="40" height="17" alt="logo" />&nbsp;
         <span className={montserrat_alternates.className}>Zenith.</span>
       </div>
       <Dialog open={open} onClose={handleClose}>
