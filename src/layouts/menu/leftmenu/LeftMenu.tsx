@@ -7,21 +7,55 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListSubheader from '@mui/material/ListSubheader';
+import Avatar from '@mui/material/Avatar';
+import LogoutIcon from '@mui/icons-material/Logout';
+import Grid from '@mui/material/Unstable_Grid2';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
 
 import { items } from '@/constants/leftmenu';
 import styles from './LeftMenu.module.css';
+import { Divider } from '@mui/material';
 
 const poppins = Poppins({ weight: '300', subsets: ['latin'] });
 const montserrat_alternates = Montserrat_Alternates({ weight: '700', subsets: ['latin'] });
 
 const LeftMenu: React.FC = () => {
+  const [open, setOpen] = useState(false);
   const [selectedLeftMenu, setSelectedLeftMenu] = useState('Analytics');
+
+  const handleClose = () => setOpen(false);
+  const onLogoutClick = () => setOpen(true);
+
+  const onLogout = async () => {
+    // TODO;
+
+    handleClose();
+  };
 
   return (
     <>
       <div className={styles.appname}>
         <span className={montserrat_alternates.className}>Zenith.</span>
       </div>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Logout?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to logout?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>No</Button>
+          <Button onClick={onLogout}>Yes</Button>
+        </DialogActions>
+      </Dialog>
       <MenuList
         subheader={
           <ListSubheader component="div" className={styles.subheader}>
@@ -43,8 +77,21 @@ const LeftMenu: React.FC = () => {
             </MenuItem>
           </Link>
         ))}
+        <Divider sx={{ marginTop: 2 }} />
       </MenuList>
       <div className={styles.appfooter}>
+        <Grid container justifyContent="space-between" alignItems="center">
+          <Grid>
+            <Avatar />
+          </Grid>
+          <Grid>
+            <Tooltip title="Logout" arrow>
+              <IconButton onClick={onLogoutClick}>
+                <LogoutIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        </Grid>
       </div>
     </>
   );

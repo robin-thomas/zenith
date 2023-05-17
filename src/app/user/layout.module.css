@@ -1,7 +1,6 @@
 .page {
   height: 100vh !important;
   width: 100vw !important;
-  padding: 1.5rem !important;
 }
 
 .content {
@@ -22,7 +21,7 @@
 }
 
 .leftmenu {
-  padding: 2rem 1rem 3rem 1rem !important;
+  padding: 2rem 1rem 3rem 0.75rem !important;
   position: relative !important;
   border-right: 0.008rem solid #bdbdbd !important;
 }

@@ -46,69 +46,66 @@ const NewCampaign: React.FC = () => {
       }}
     >
       <>
-        <p>Create New Campaign</p>
-        <>
-          <Stepper activeStep={activeStep} orientation="vertical">
-            <Step>
-              <StepLabel>Details</StepLabel>
-              <StepContent>
-                <>
-                  Fill in the details about your campaign.
-                </>
-                <TextInput id="name" label="Campaign Name" placeholder={PLACEHOLDER_NAME} />
-                <TextInput id="description" rows={3} label="Campaign Description" placeholder={PLACEHOLDER_DESCRIPTION} />
-                <Grid container spacing={2}>
-                  <Grid md={4}>
-                    <Tooltip arrow title="Budget for this campaign in Ethers (Ξ)">
-                      <TextInput
-                        type="number"
-                        id="budget"
-                        label="Budget"
-                        InputProps={{
-                          endAdornment: <InputAdornment position="end">Ξ</InputAdornment>,
-                        }}
-                      />
-                    </Tooltip>
-                  </Grid>
-                  <Grid md={4}>
+        <Stepper activeStep={activeStep} orientation="vertical">
+          <Step>
+            <StepLabel>Details</StepLabel>
+            <StepContent>
+              <>
+                Fill in the details about your campaign.
+              </>
+              <TextInput id="name" label="Campaign Name" placeholder={PLACEHOLDER_NAME} />
+              <TextInput id="description" rows={3} label="Campaign Description" placeholder={PLACEHOLDER_DESCRIPTION} />
+              <Grid container spacing={2}>
+                <Grid md={4}>
+                  <Tooltip arrow title="Budget for this campaign in Ethers (Ξ)">
                     <TextInput
-                      id="costPerClick"
-                      label="Cost per click"
                       type="number"
+                      id="budget"
+                      label="Budget"
                       InputProps={{
                         endAdornment: <InputAdornment position="end">Ξ</InputAdornment>,
                       }}
                     />
-                  </Grid>
-                  <Grid md={4}>
-                    <CampaignEnd />
-                  </Grid>
+                  </Tooltip>
                 </Grid>
-                <Tooltip arrow title="Users will be redirected here on clicking the ad">
-                  <TextInput id="url" label="Campaign URL" placeholder={PLACEHOLDER_URL} />
-                </Tooltip>
-              </StepContent>
-            </Step>
-            <Step>
-              <StepLabel>Preview</StepLabel>
-              <StepContent>
-                <Preview />
-              </StepContent>
-            </Step>
-            <Step>
-              <StepLabel>Payment</StepLabel>
-              <StepContent>
-                <Payment setActiveStep={setActiveStep} />
-              </StepContent>
-            </Step>
-            <Step>
-              <StepLabel>Confirmation</StepLabel>
-              <StepContent>
-                Your campaign has been created successfully!
-              </StepContent>
-            </Step>
-          </Stepper>
-        </>
+                <Grid md={4}>
+                  <TextInput
+                    id="costPerClick"
+                    label="Cost per click"
+                    type="number"
+                    InputProps={{
+                      endAdornment: <InputAdornment position="end">Ξ</InputAdornment>,
+                    }}
+                  />
+                </Grid>
+                <Grid md={4}>
+                  <CampaignEnd />
+                </Grid>
+              </Grid>
+              <Tooltip arrow title="Users will be redirected here on clicking the ad">
+                <TextInput id="url" label="Campaign URL" placeholder={PLACEHOLDER_URL} />
+              </Tooltip>
+            </StepContent>
+          </Step>
+          <Step>
+            <StepLabel>Preview</StepLabel>
+            <StepContent>
+              <Preview />
+            </StepContent>
+          </Step>
+          <Step>
+            <StepLabel>Payment</StepLabel>
+            <StepContent>
+              <Payment setActiveStep={setActiveStep} />
+            </StepContent>
+          </Step>
+          <Step>
+            <StepLabel>Confirmation</StepLabel>
+            <StepContent>
+              Your campaign has been created successfully!
+            </StepContent>
+          </Step>
+        </Stepper>
         <NewCampaignActions activeStep={activeStep} setActiveStep={setActiveStep} />
       </>
     </Formik>

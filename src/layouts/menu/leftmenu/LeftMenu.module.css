@@ -20,7 +20,9 @@
 
 .appfooter {
   position: absolute;
-  bottom: 0;
-  margin-bottom: 1rem;
-  width: 85%;
+  bottom: 5rem !important;
+  width: calc(100% - 1.55rem);
+  background: rgba(0,0,0,0.15) !important;
+  padding: 0.5rem !important;
+  border-radius: 0.25rem !important;
 }
