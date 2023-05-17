@@ -14,7 +14,7 @@
 .header {
   height: 50px !important;
   width: 100% !important;
-  border-bottom: 0.15rem solid #f6f9f6 !important;
+  border-bottom: 0.008rem solid #bdbdbd !important;
 }
 
 .container {
@@ -24,11 +24,9 @@
 .leftmenu {
   padding: 2rem 1rem 3rem 1rem !important;
   position: relative !important;
-  border-right: 0.15rem solid #f6f9f6 !important;
+  border-right: 0.008rem solid #bdbdbd !important;
 }
 
 .pagecontent {
   padding: 2rem 3rem 3rem 3rem !important;
-  /* height: 100% !important; */
-  /* overflow-y: auto !important; */
 }
