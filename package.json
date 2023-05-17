@@ -46,7 +46,7 @@
     "typescript": "^5.0.4"
   },
   "lint-staged": {
-    "**/*.js": [
+    "src/**/*.{js,jsx,ts,tsx,json}": [
       "prettier-eslint --write",
       "npm run lint"
     ]
