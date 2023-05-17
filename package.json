@@ -15,7 +15,7 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
-    "pre-commit": "lint-staged"
+    "pre-commit": "next lint --fix"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
@@ -44,18 +44,6 @@
     "eslint-config-next": "^13.4.2",
     "hardhat": "^2.14.0",
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.2",
-    "prettier": "^2.8.8",
-    "prettier-eslint": "^15.0.1",
     "typescript": "^5.0.4"
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json}": [
-      "prettier-eslint --write",
-      "npm run lint"
-    ]
-  },
-  "prettier": {
-    "printWidth": 120
   }
 }

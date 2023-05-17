@@ -4,6 +4,15 @@
     "no-unused-vars": "error",
     "semi": "error",
     "quotes": ["error", "single", { "avoidEscape": true }],
-    "no-var": "error"
+    "no-var": "error",
+    "max-len": [
+      "error",
+      {
+        "code": 120,
+        "tabWidth": 2,
+        "ignoreUrls": true,
+        "ignoreStrings": true
+      }
+    ]
   }
 }

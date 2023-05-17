@@ -26,9 +26,13 @@ import { Divider } from '@mui/material';
 const poppins = Poppins({ weight: '300', subsets: ['latin'] });
 const montserrat_alternates = Montserrat_Alternates({ weight: '700', subsets: ['latin'] });
 
+const getCurrentMenu = () => {
+  return items.find((item) => item.href === window.location.pathname)?.name ?? 'Analytics';
+};
+
 const LeftMenu: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const [selectedLeftMenu, setSelectedLeftMenu] = useState('Analytics');
+  const [selectedLeftMenu, setSelectedLeftMenu] = useState(getCurrentMenu());
 
   const handleClose = () => setOpen(false);
   const onLogoutClick = () => setOpen(true);
@@ -64,18 +68,20 @@ const LeftMenu: React.FC = () => {
         }
       >
         {items.map((item) => (
-          <Link key={item.name} href={item.href}>
-            <MenuItem
-              sx={{ marginTop: 1, marginBottom: 1 }}
-              selected={selectedLeftMenu === item.name}
-              onClick={() => setSelectedLeftMenu(item.name)}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText className={styles.itemname}>
-                <span className={poppins.className} style={{ fontSize: '0.8rem' }}>{item.name}</span>
-              </ListItemText>
-            </MenuItem>
-          </Link>
+          <Tooltip key={item.name} title={item.description} arrow>
+            <Link href={item.href}>
+              <MenuItem
+                sx={{ marginTop: 1, marginBottom: 1 }}
+                selected={selectedLeftMenu === item.name}
+                onClick={() => setSelectedLeftMenu(item.name)}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText className={styles.itemname}>
+                  <span className={poppins.className} style={{ fontSize: '0.8rem' }}>{item.name}</span>
+                </ListItemText>
+              </MenuItem>
+            </Link>
+          </Tooltip>
         ))}
         <Divider sx={{ marginTop: 2 }} />
       </MenuList>

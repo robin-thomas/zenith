@@ -7,6 +7,7 @@ export interface TextInputProps {
   label: string;
   placeholder?: string;
   rows?: number;
+  description?: string;
   type?: 'text' | 'number' | 'email' | 'password' | 'textarea';
   InputProps?: Partial<typeof TextField>;
 }

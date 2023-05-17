@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import Grid from '@mui/material/Unstable_Grid2';
 import InputAdornment from '@mui/material/InputAdornment';
-import Tooltip from '@mui/material/Tooltip';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
@@ -54,19 +53,18 @@ const NewCampaign: React.FC = () => {
                 Fill in the details about your campaign.
               </>
               <TextInput id="name" label="Campaign Name" placeholder={PLACEHOLDER_NAME} />
-              <TextInput id="description" rows={3} label="Campaign Description" placeholder={PLACEHOLDER_DESCRIPTION} />
+              <TextInput id="description" rows={2} label="Campaign Description" placeholder={PLACEHOLDER_DESCRIPTION} />
               <Grid container spacing={2}>
                 <Grid md={4}>
-                  <Tooltip arrow title="Budget for this campaign in Ethers (Ξ)">
-                    <TextInput
-                      type="number"
-                      id="budget"
-                      label="Budget"
-                      InputProps={{
-                        endAdornment: <InputAdornment position="end">Ξ</InputAdornment>,
-                      }}
-                    />
-                  </Tooltip>
+                  <TextInput
+                    type="number"
+                    id="budget"
+                    label="Budget"
+                    description="Budget for this campaign in Ethers (Ξ)"
+                    InputProps={{
+                      endAdornment: <InputAdornment position="end">Ξ</InputAdornment>,
+                    }}
+                  />
                 </Grid>
                 <Grid md={4}>
                   <TextInput
@@ -82,9 +80,12 @@ const NewCampaign: React.FC = () => {
                   <CampaignEnd />
                 </Grid>
               </Grid>
-              <Tooltip arrow title="Users will be redirected here on clicking the ad">
-                <TextInput id="url" label="Campaign URL" placeholder={PLACEHOLDER_URL} />
-              </Tooltip>
+              <TextInput
+                id="url"
+                label="Campaign URL"
+                placeholder={PLACEHOLDER_URL}
+                description="Users will be redirected here on clicking the ad"
+              />
             </StepContent>
           </Step>
           <Step>
