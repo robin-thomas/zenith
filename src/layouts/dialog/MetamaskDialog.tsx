@@ -18,7 +18,7 @@ import styles from './MetamaskDialog.module.css';
 
 const poppins = Poppins({ weight: '600', subsets: ['latin'] });
 
-const MetamaskDialog: React.FC<MetamaskDialogProps> = ({ open, error, txn, reset }) => {
+const MetamaskDialog: React.FC<MetamaskDialogProps> = ({ open, error, txn, resetHandler, successHandler }) => {
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
@@ -31,7 +31,8 @@ const MetamaskDialog: React.FC<MetamaskDialogProps> = ({ open, error, txn, reset
     if (activeStep === 1) {
       txn.wait().then(() => {
         setActiveStep(2);
-        reset?.();
+        successHandler?.();
+        resetHandler?.();
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

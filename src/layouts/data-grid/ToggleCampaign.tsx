@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 
 import type { ToggleCampaignProps } from './ToggleCampaign.types';
-import { toggleCampaignStatus } from '@/utils/metamask';
+import { toggleCampaignStatus as toggleCmpMetamask } from '@/utils/metamask';
 import MetamaskDialog from '@/layouts/dialog/MetamaskDialog';
 
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -23,7 +23,7 @@ const getHumanError = (err: Error) => {
   return err.message;
 };
 
-const ToggleCampaign: React.FC<ToggleCampaignProps> = ({ status, icon, campaignId }) => {
+const ToggleCampaign: React.FC<ToggleCampaignProps> = ({ status, icon, campaignId, toggleCampaignStatus }) => {
   const [open, setOpen] = useState(false);
   const [openMetamask, setOpenMetamask] = useState(false);
   const [error, setError] = useState<string>();
@@ -42,7 +42,7 @@ const ToggleCampaign: React.FC<ToggleCampaignProps> = ({ status, icon, campaignI
     setOpenMetamask(true);
 
     try {
-      const _txn = await toggleCampaignStatus(campaignId, status);
+      const _txn = await toggleCmpMetamask(campaignId, status);
       setTxn(_txn);
     } catch (err) {
       setError(getHumanError(err as Error));
@@ -62,7 +62,8 @@ const ToggleCampaign: React.FC<ToggleCampaignProps> = ({ status, icon, campaignI
         open={openMetamask}
         error={error}
         txn={txn}
-        reset={reset}
+        resetHandler={reset}
+        successHandler={toggleCampaignStatus}
       />
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
