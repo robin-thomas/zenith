@@ -38,7 +38,7 @@ const Campaigns: React.FC = () => {
             <StatCard
               icon={<AccountBalanceRoundedIcon />}
               title="Balance"
-              value={`Ξ ${remaingingFunds}`}
+              value={remaingingFunds !== undefined ? `Ξ ${remaingingFunds}` : undefined}
               description="Remainging funds in Ethers"
             />
             <StatCard icon={<AdsClickIcon />} title="Clicks" />
