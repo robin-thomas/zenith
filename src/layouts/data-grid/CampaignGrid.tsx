@@ -5,7 +5,7 @@ import type { CampaignGridProps } from './CampaignGrid.types';
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 50 },
-  { field: 'name', headerName: 'Name', width: 200 },
+  { field: 'name', headerName: 'Name', width: 150 },
   { field: 'url', headerName: 'URL', width: 150 },
   { field: 'budget', headerName: 'Budget', width: 100 },
   { field: 'remaining', headerName: 'Balance', width: 100 },
@@ -27,7 +27,7 @@ const CampaignGrid: React.FC<CampaignGridProps> = ({ rows }) => (
         },
       }}
       pageSizeOptions={[1]}
-      // checkboxSelection
+      checkboxSelection
       disableRowSelectionOnClick
     />
   </Box>
