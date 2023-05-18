@@ -21,7 +21,6 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         uint minCostPerClick;
         string name;
         string adURL;
-        string imgURL;
         bool active;
         uint startDatetime;
         uint endDatetime;
@@ -46,6 +45,7 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
 
     uint public numCampaigns = 0;
     uint public numAdClicks = 0;
+    uint public totalRewards = 0;
 
     address public oracleId;
     string public jobId;
@@ -77,8 +77,7 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         uint _minCostPerClick,
         uint _endDatetime,
         string memory _name,
-        string memory _adURL,
-        string memory _imgURL
+        string memory _adURL
     ) public payable returns (uint) {
         require(_budget > 0, "Budget must be greater than 0");
         require(msg.value == _budget, "Insufficient funds sent");
@@ -86,7 +85,6 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         require(_endDatetime >= block.timestamp + 1 days, "End datetime must be in the future");
         require(bytes(_name).length > 0, "Name cannot be empty");
         require(bytes(_adURL).length > 0, "Ad URL cannot be empty");
-        require(bytes(_imgURL).length > 0, "Image URL cannot be empty");
 
         Campaign memory campaign = Campaign({
             id: numCampaigns,
@@ -96,7 +94,6 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
             minCostPerClick: _minCostPerClick,
             name: _name,
             adURL: _adURL,
-            imgURL: _imgURL,
             active: true,
             startDatetime: block.timestamp,
             endDatetime: _endDatetime
@@ -182,6 +179,7 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
                 campaigns[_campaignId].remaining -= _costPerClick;
 
                 ++numAdClicks;
+                totalRewards += _costPerClick;
             }
         }
     }

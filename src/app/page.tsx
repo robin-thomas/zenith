@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Poppins } from 'next/font/google';
 
 import Logo from '@/layouts/logo/Logo';
@@ -21,12 +21,17 @@ const poppins = Poppins({ weight: '600', subsets: ['latin'] });
 
 interface StatProps {
   name: string;
+  value?: number | string;
 }
 
-const Stat: React.FC<StatProps> = ({ name }) => (
+const Stat: React.FC<StatProps> = ({ name, value }) => (
   <Stack alignItems="center">
     <span className={poppins.className}>{name}</span>
-    <Skeleton variant="rounded" width={175} height={60} />
+    {value !== undefined ? (
+      <span className={poppins.className}>{value}</span>
+    ) : (
+        <Skeleton variant="rounded" width={175} height={60} />
+    )}
   </Stack>
 );
 
@@ -34,6 +39,17 @@ const Home: React.FC = () => {
   const { setWallet } = useAppContext();
 
   const [loggingIn, setLoggingIn] = useState(false);
+  const [stats, setStats] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const fn = async () => {
+      const resp = await fetch('/api/stats');
+      const data = await resp.json();
+      setStats(data);
+    };
+
+    fn();
+  }, []);
 
   const login = async () => {
     setLoggingIn(true);
@@ -42,7 +58,6 @@ const Home: React.FC = () => {
       const accounts = await loginWithMetamask();
       if (accounts?.length > 0) {
         setWallet({ accounts });
-        setLoggingIn(false);
       }
     } catch (err) {
       setLoggingIn(false);
@@ -66,8 +81,8 @@ const Home: React.FC = () => {
       </Stack>
       <div className={styles.detailsContainer}></div>
       <Stack spacing={10} direction="row" justifyContent="center" className={styles.statsContainer} >
-        <Stat name="Campaigns" />
-        <Stat name="Ad Clicks" />
+        <Stat name="Campaigns" value={stats?.campaigns} />
+        <Stat name="Ad Clicks" value={stats?.adClicks} />
         <Stat name="Deposits" />
       </Stack>
       <Dialog open={loggingIn} disableEscapeKeyDown>

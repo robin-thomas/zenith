@@ -10,7 +10,6 @@ import ListSubheader from '@mui/material/ListSubheader';
 import Avatar from '@mui/material/Avatar';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import Grid from '@mui/material/Unstable_Grid2';
-import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -31,8 +30,17 @@ const getCurrentMenu = () => {
   return items.find((item) => item.href === window.location.pathname)?.name ?? 'Analytics';
 };
 
+const getAddress = (wallet: any, trim = false) => {
+  const address = wallet?.accounts?.[0];
+  if (trim) {
+    return `${address?.substr(0, 12)}...${address?.substr(-10)}`;
+  }
+
+  return address;
+};
+
 const LeftMenu: React.FC = () => {
-  const { setWallet } = useAppContext();
+  const { wallet, setWallet } = useAppContext();
 
   const [open, setOpen] = useState(false);
   const [selectedLeftMenu, setSelectedLeftMenu] = useState<string>();
@@ -88,18 +96,28 @@ const LeftMenu: React.FC = () => {
             </Link>
           </Tooltip>
         ))}
-        <Divider sx={{ marginTop: 2 }} />
+        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+        <MenuItem onClick={onLogoutClick}>
+          <ListItemIcon><LogoutRoundedIcon /></ListItemIcon>
+          <ListItemText className={styles.itemname}>
+            <span className={poppins.className} style={{ fontSize: '0.8rem' }}>Logout</span>
+          </ListItemText>
+        </MenuItem>
       </MenuList>
       <div className={styles.appfooter}>
-        <Grid container justifyContent="space-between" alignItems="center">
+        <Grid
+          container
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <Grid>
-            <Avatar sx={{ width: 30, height: 30 }} />
+            <Avatar sx={{ width: 30, height: 30, bgcolor: 'black' }} />
           </Grid>
-          <Grid>
-            <Tooltip title="Logout" arrow placement="top">
-              <IconButton onClick={onLogoutClick}>
-                <LogoutRoundedIcon fontSize="small" style={{ color: 'white' }} />
-              </IconButton>
+          <Grid md="auto">
+            <Tooltip title={getAddress(wallet)} arrow placement="top">
+              <div className={styles.address}>
+                <span className={poppins.className}>{getAddress(wallet, true)}</span>
+              </div>
             </Tooltip>
           </Grid>
         </Grid>

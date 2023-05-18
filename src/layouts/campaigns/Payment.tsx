@@ -5,24 +5,30 @@ import type { NewCampaignState } from './NewCampaign.types';
 import type { PaymentProps } from './Payment.types';
 import styles from './Payment.module.css';
 import { useAppContext } from '@/hooks/useAppContext';
-import { login as loginMetamask } from '@/utils/metamask';
+import { PLACEHOLDER_DESCRIPTION, PLACEHOLDER_NAME, PLACEHOLDER_URL } from '@/constants/campaign';
+import { pay } from '@/utils/metamask';
 
 const Payment: React.FC<PaymentProps> = ({ setActiveStep }) => {
   const { values } = useFormikContext<NewCampaignState>();
 
-  const { wallet, paymentProcessing, setPaymentProcessing } = useAppContext();
+  const { paymentProcessing, setPaymentProcessing } = useAppContext();
 
   const onClick = async () => {
     setPaymentProcessing(true);
 
-    if (!wallet) {
-      await loginMetamask();
-    }
+    const payload = {
+      name: values.name || PLACEHOLDER_NAME,
+      description: values.description || PLACEHOLDER_DESCRIPTION,
+      url: values.url || PLACEHOLDER_URL,
+      budget: values.budget,
+      costPerClick: values.costPerClick,
+      endDate: values.endDate.unix(),
+    };
 
-    setTimeout(() => {
-      setPaymentProcessing(false);
-      setActiveStep(index => index + 1);
-    }, 2000);
+    await pay(payload);
+
+    setPaymentProcessing(false);
+    setActiveStep(index => index + 1);
   };
 
   return (
