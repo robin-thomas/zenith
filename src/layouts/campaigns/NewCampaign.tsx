@@ -62,7 +62,7 @@ const NewCampaign: React.FC = () => {
                     label="Budget"
                     description="Budget for this campaign in Ethers (Ξ)"
                     InputProps={{
-                      endAdornment: <InputAdornment position="end">Ξ</InputAdornment>,
+                      startAdornment: <InputAdornment position="start">Ξ</InputAdornment>,
                     }}
                   />
                 </Grid>
@@ -72,7 +72,7 @@ const NewCampaign: React.FC = () => {
                     label="Cost per click"
                     type="number"
                     InputProps={{
-                      endAdornment: <InputAdornment position="end">Ξ</InputAdornment>,
+                      startAdornment: <InputAdornment position="start">Ξ</InputAdornment>,
                     }}
                   />
                 </Grid>

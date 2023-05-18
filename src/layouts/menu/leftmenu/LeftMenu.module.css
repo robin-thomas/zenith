@@ -22,7 +22,7 @@
   position: absolute !important;
   bottom: 5rem !important;
   width: calc(100% - 1.55rem);
-  background: #8168eb !important;
+  background: rgba(129, 104, 235, 0.8) !important;
   padding: 0.5rem !important;
   border-radius: 0.25rem !important;
 }
