@@ -53,3 +53,11 @@ a {
 .MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within {
   outline: none;
 }
+
+.MuiLinearProgress-root {
+  background-color: rgba(129, 104, 235, 0.4) !important;
+}
+
+.MuiLinearProgress-bar {
+  background-color: #8168eb !important;
+}
