@@ -9,7 +9,7 @@ const columns = [
   { field: 'url', headerName: 'URL', width: 150 },
   { field: 'budget', headerName: 'Budget', width: 100 },
   { field: 'remaining', headerName: 'Balance', width: 100 },
-  { field: 'clicks', headerName: 'Clicks', width: 50 },
+  { field: 'clicks', headerName: 'Clicks', width: 70 },
   { field: 'created', headerName: 'Created', width: 200 },
   { field: 'end', headerName: 'End', width: 200 },
 ];
