@@ -1,6 +1,7 @@
 import type { Dayjs } from 'dayjs';
 
 export interface CampaignGridData {
+  status: string;
   name: string;
   description: string;
   budget: number;

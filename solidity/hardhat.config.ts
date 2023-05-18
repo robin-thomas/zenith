@@ -1,11 +1,19 @@
 import { config as dotenvConfig } from 'dotenv';
-import { HardhatUserConfig } from 'hardhat/config';
+import type { HardhatUserConfig } from 'hardhat/config';
 import '@nomicfoundation/hardhat-toolbox';
 
 dotenvConfig();
 
 const config: HardhatUserConfig = {
-  solidity: '0.8.18',
+  solidity: {
+    version: '0.8.18',
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 1000,
+      },
+    },
+  },
   defaultNetwork: 'polygon_mumbai',
   networks: {
     polygon_mumbai: {

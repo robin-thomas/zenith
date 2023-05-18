@@ -1,8 +1,9 @@
+import { Fragment } from 'react';
 import { Poppins } from 'next/font/google';
 
 import WorldMap from 'react-svg-worldmap';
 import type { CountryContext } from 'react-svg-worldmap';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Unstable_Grid2';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -64,10 +65,10 @@ const Map: React.FC<MapProps> = ({ data }) => (
         <TableBody>
           <TableRow>
             {data.map((item) => (
-              <>
+              <Fragment key={item.country}>
                 <StyledTableCell>{item.country?.toUpperCase()}</StyledTableCell>
                 <StyledTableCell align="right">{item.value}</StyledTableCell>
-              </>
+              </Fragment>
             ))}
           </TableRow>
         </TableBody>
