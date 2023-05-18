@@ -9,10 +9,12 @@ import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import LinearProgress from '@mui/material/LinearProgress';
 
 import { login as loginWithMetamask } from '@/utils/metamask';
 import { useAppContext } from '@/hooks/useAppContext';
-import MetamaskDialog from '@/layouts/dialog/MetamaskDialog';
 
 const poppins = Poppins({ weight: '600', subsets: ['latin'] });
 
@@ -27,7 +29,7 @@ const Stat: React.FC<StatProps> = ({ name, value }) => (
     {value !== undefined ? (
       <span className={poppins.className}>{value}</span>
     ) : (
-        <Skeleton variant="rounded" width={175} height={60} />
+      <Skeleton variant="rounded" width={175} height={60} />
     )}
   </Stack>
 );
@@ -82,7 +84,14 @@ const Home: React.FC = () => {
         <Stat name="Ad Clicks" value={stats?.adClicks} />
         <Stat name="Deposits" />
       </Stack>
-      <MetamaskDialog open={loggingIn} />
+      <Dialog open={loggingIn} disableEscapeKeyDown>
+        <DialogContent>
+          <>
+            Waiting for MetaMask confirmation
+            <LinearProgress sx={{ marginTop: 1 }} />
+          </>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
