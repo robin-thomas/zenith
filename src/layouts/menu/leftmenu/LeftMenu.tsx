@@ -33,7 +33,7 @@ const getCurrentMenu = () => {
 const getAddress = (wallet: any, trim = false) => {
   const address = wallet?.accounts?.[0];
   if (trim) {
-    return `${address?.substr(0, 12)}...${address?.substr(-10)}`;
+    return `${address?.substr(0, 10)}...${address?.substr(-10)}`;
   }
 
   return address;
@@ -107,13 +107,13 @@ const LeftMenu: React.FC = () => {
       <div className={styles.appfooter}>
         <Grid
           container
-          justifyContent="space-between"
+          justifyContent="space-around"
           alignItems="center"
         >
           <Grid>
             <Avatar sx={{ width: 30, height: 30, bgcolor: 'black' }} />
           </Grid>
-          <Grid md="auto">
+          <Grid>
             <Tooltip title={getAddress(wallet)} arrow placement="top">
               <div className={styles.address}>
                 <span className={poppins.className}>{getAddress(wallet, true)}</span>
