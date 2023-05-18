@@ -20,7 +20,7 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         uint remaining;
         uint minCostPerClick;
         string name;
-        string adURL;
+        string url;
         bool active;
         uint startDatetime;
         uint endDatetime;
@@ -35,6 +35,11 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         bool paid;
         string country;
         bytes signature;
+    }
+
+    struct CampaignWithAdClicks {
+        Campaign campaign;
+        AdClick[] adClicks;
     }
 
     mapping(uint => Campaign) campaigns;
@@ -77,14 +82,14 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         uint _minCostPerClick,
         uint _endDatetime,
         string memory _name,
-        string memory _adURL
+        string memory _url
     ) public payable returns (uint) {
         require(_budget > 0, "Budget must be greater than 0");
         require(msg.value == _budget, "Insufficient funds sent");
         require(_minCostPerClick > 0, "Bid must be greater than 0");
         require(_endDatetime >= block.timestamp + 1 days, "End datetime must be in the future");
         require(bytes(_name).length > 0, "Name cannot be empty");
-        require(bytes(_adURL).length > 0, "Ad URL cannot be empty");
+        require(bytes(_url).length > 0, "URL cannot be empty");
 
         Campaign memory campaign = Campaign({
             id: numCampaigns,
@@ -93,7 +98,7 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
             remaining: _budget,
             minCostPerClick: _minCostPerClick,
             name: _name,
-            adURL: _adURL,
+            url: _url,
             active: true,
             startDatetime: block.timestamp,
             endDatetime: _endDatetime
@@ -117,13 +122,14 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         campaigns[campaignId].active = false;
     }
 
-    function getCampaignsOfAdvertiser() public view returns (Campaign[] memory) {
+    function getCampaignsOfAdvertiser() public view returns (CampaignWithAdClicks[] memory) {
         uint _numCampaigns = campaignsOfAdvertiser[msg.sender].length;
-        Campaign[] memory _campaigns = new Campaign[](_numCampaigns);
+        CampaignWithAdClicks[] memory _campaigns = new CampaignWithAdClicks[](_numCampaigns);
 
         for (uint _index = 0; _index < _numCampaigns; _index++) {
             uint _campaignId = campaignsOfAdvertiser[msg.sender][_index];
-            _campaigns[_index] = campaigns[_campaignId];
+            _campaigns[_index].campaign = campaigns[_campaignId];
+            _campaigns[_index].adClicks = getAdClicksOfCampaign(_campaignId);
         }
 
         return _campaigns;
@@ -219,6 +225,16 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         return campaign.active &&
             campaign.endDatetime > block.timestamp &&
             adClicks[_adClickId].displayTime == 0;
+    }
+
+    function getAdClicksOfCampaign(uint _campaignId) private view returns (AdClick[] memory) {
+        AdClick[] memory _adClicks = new AdClick[](adClicksOfCampaign[_campaignId].length);
+
+        for (uint _index = 0; _index < adClicksOfCampaign[_campaignId].length; _index++) {
+            _adClicks[_index] = adClicks[adClicksOfCampaign[_campaignId][_index]];
+        }
+
+        return _adClicks;
     }
 
     modifier isAdvertiser(uint campaignId) {

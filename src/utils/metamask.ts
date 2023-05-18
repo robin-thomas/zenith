@@ -2,7 +2,7 @@ import { providers, Contract, utils } from 'ethers';
 import detectEthereumProvider from '@metamask/detect-provider';
 import dayjs from 'dayjs';
 
-import AppContract from '../../artifacts/contracts/Zenith.sol/Zenith.json';
+import AppContract from '../../solidity/artifacts/contracts/Zenith.sol/Zenith.json';
 import type { IPay } from './metamask.types';
 
 const getContract = () => {

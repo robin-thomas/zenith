@@ -1,0 +1,7 @@
+# Hardhat files
+cache
+artifacts/**
+!artifacts/contracts
+artifacts/contracts/**
+!artifacts/contracts/Zenith.sol
+!artifacts/contracts/Zenith.sol/Zenith.json

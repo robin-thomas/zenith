@@ -1,6 +1,6 @@
 import { providers, Contract } from 'ethers';
 
-import Zenith from '../../artifacts/contracts/Zenith.sol/Zenith.json';
+import Zenith from '../../solidity/artifacts/contracts/Zenith.sol/Zenith.json';
 
 export const getContract = async () => {
   const provider = new providers.AlchemyProvider('maticmum', process.env.ALCHEMY_KEY as string);
