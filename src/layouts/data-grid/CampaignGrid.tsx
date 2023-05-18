@@ -26,7 +26,7 @@ const CampaignGrid: React.FC<CampaignGridProps> = ({ rows }) => {
 
     for (const row of data) {
       if (row.status === status) {
-        row.status = `${status.startsWith('true') ? 'false' : 'true'}_ ${campaignId}`;
+        row.status = `${status.startsWith('true') ? 'false' : 'true'}_${campaignId}`;
       }
     }
 

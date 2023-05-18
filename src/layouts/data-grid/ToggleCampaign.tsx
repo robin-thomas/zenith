@@ -34,7 +34,7 @@ const ToggleCampaign: React.FC<ToggleCampaignProps> = ({ status, icon, campaignI
       setOpenMetamask(false);
       setError(undefined);
       setTxn(undefined);
-    }, 5000);
+    }, 4000);
   };
 
   const onYes = async () => {

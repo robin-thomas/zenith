@@ -24,6 +24,8 @@ const MetamaskDialog: React.FC<MetamaskDialogProps> = ({ open, error, txn, reset
   useEffect(() => {
     if (txn) {
       setActiveStep(1);
+    } else {
+      setActiveStep(0);
     }
   }, [txn]);
 
