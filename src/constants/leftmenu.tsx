@@ -1,6 +1,7 @@
 import SignalCellularAltOutlinedIcon from '@mui/icons-material/SignalCellularAltOutlined';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import AddIcon from '@mui/icons-material/Add';
+import PolicyIcon from '@mui/icons-material/Policy';
 
 export const items = [
   {
@@ -14,6 +15,12 @@ export const items = [
     href: '/user/campaigns',
     icon: <SignalCellularAltOutlinedIcon fontSize="small" />,
     description: 'See analytics of your campaigns',
+  },
+  {
+    name: 'Watch an Ad',
+    href: '/user/ad',
+    icon: <PolicyIcon fontSize="small" />,
+    description: 'Get paid to watch an advertisement',
   },
   {
     name: 'Rewards',
