@@ -45,7 +45,7 @@ const Map: React.FC<MapProps> = ({ data }) => (
   <Grid container>
     <Grid md={8}>
       <WorldMap
-        size="responsive"
+        size="lg"
         color="black"
         valuePrefix="(Ad Clicks): "
         strokeOpacity={0}
