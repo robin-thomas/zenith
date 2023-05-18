@@ -29,12 +29,13 @@ const Campaigns: React.FC = () => {
         setCampaignGridData(campaigns.map((c: any, index: number) => ({
           id: index + 1,
           name: c.name,
-          url: c.adUrl, // TODO
+          url: c.url,
           budget: c.budget,
           remaining: c.remaining,
           clicks: 0, // TODO
           created: c.startDatetime,
           end: c.endDatetime,
+          status: `${c.active}_${c.id}`,
         })));
       }
     };
@@ -46,9 +47,9 @@ const Campaigns: React.FC = () => {
     <>
       <Title title="Campaigns" />
       <Grid container>
-        <Grid md={4}>
+        <Grid item md={5}>
           <Grid container spacing={1} justifyContent="flex-start">
-            <Grid md={5} sx={{ marginRight: 1, marginBottom: 1 }}>
+            <Grid item md={5} sx={{ marginRight: 1, marginBottom: 1 }}>
               <StatCard
                 icon={<AccountBalanceRoundedIcon />}
                 title="Balance"
@@ -56,15 +57,15 @@ const Campaigns: React.FC = () => {
                 description="Remainging funds in Ethers"
               />
             </Grid>
-            <Grid md={5}>
+            <Grid item md={5}>
               <StatCard icon={<AdsClickIcon />} title="Clicks" />
             </Grid>
-            <Grid md={5}>
+            <Grid item md={5}>
               <StatCard icon={<AddShoppingCartRoundedIcon />} title="Campaigns" value={campaignCount} />
             </Grid>
           </Grid>
         </Grid>
-        <Grid md={8}>
+        <Grid item md={7}>
           <Map
             data={[
               { country: 'us', value: 1 }
