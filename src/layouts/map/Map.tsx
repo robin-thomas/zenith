@@ -34,7 +34,7 @@ const StyledTableCell = styled(TableCell)(() => ({
   },
   '&': {
     fontSize: '0.8rem',
-    backgroundColor: 'rgba(129,104,235,0.5)',
+    backgroundColor: 'rgba(129,104,235,0.8)',
     borderColor: 'white',
     color: 'white',
     fontFamily: poppins.style.fontFamily,
