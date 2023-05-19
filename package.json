@@ -30,6 +30,7 @@
     "ethers": "^5.7.2",
     "formik": "^2.2.9",
     "next": "^13.4.2",
+    "nft.storage": "^7.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-svg-worldmap": "^2.0.0-alpha.16",

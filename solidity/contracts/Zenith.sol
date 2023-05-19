@@ -19,11 +19,9 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         uint budget;
         uint remaining;
         uint minCostPerClick;
-        string name;
-        string url;
-        bool active;
-        uint startDatetime;
         uint endDatetime;
+        string cid;
+        bool active;
     }
 
     struct AdClick {
@@ -81,15 +79,13 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         uint _budget,
         uint _minCostPerClick,
         uint _endDatetime,
-        string memory _name,
-        string memory _url
+        string memory _cid
     ) public payable returns (uint) {
         require(_budget > 0, "Budget must be greater than 0");
         require(msg.value == _budget, "Insufficient funds sent");
         require(_minCostPerClick > 0, "Bid must be greater than 0");
         require(_endDatetime >= block.timestamp + 1 days, "End datetime must be in the future");
-        require(bytes(_name).length > 0, "Name cannot be empty");
-        require(bytes(_url).length > 0, "URL cannot be empty");
+        require(bytes(_cid).length > 0, "Cid cannot be empty");
 
         Campaign memory campaign = Campaign({
             id: numCampaigns,
@@ -97,10 +93,8 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
             budget: _budget,
             remaining: _budget,
             minCostPerClick: _minCostPerClick,
-            name: _name,
-            url: _url,
+            cid: _cid,
             active: true,
-            startDatetime: block.timestamp,
             endDatetime: _endDatetime
         });
 

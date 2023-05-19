@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Poppins } from 'next/font/google';
 
 import Logo from '@/layouts/logo/Logo';
 import styles from './page.module.css';
@@ -16,8 +15,6 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { login as loginWithMetamask } from '@/utils/metamask';
 import { useAppContext } from '@/hooks/useAppContext';
 
-const poppins = Poppins({ weight: '600', subsets: ['latin'] });
-
 interface StatProps {
   name: string;
   value?: number | string;
@@ -25,9 +22,9 @@ interface StatProps {
 
 const Stat: React.FC<StatProps> = ({ name, value }) => (
   <Stack alignItems="center">
-    <span className={poppins.className}>{name}</span>
+    <span>{name}</span>
     {value !== undefined ? (
-      <span className={poppins.className}>{value}</span>
+      <span>{value}</span>
     ) : (
       <Skeleton variant="rounded" width={175} height={60} />
     )}

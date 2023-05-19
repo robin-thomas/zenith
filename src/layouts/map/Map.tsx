@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-import { Poppins } from 'next/font/google';
 
 import WorldMap from 'react-svg-worldmap';
 import type { CountryContext } from 'react-svg-worldmap';
@@ -12,8 +11,6 @@ import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
 
 import type { MapProps } from './Map.types';
-
-const poppins = Poppins({ weight: '500', subsets: ['latin'] });
 
 const stylingFunction = ({ countryValue, color }: CountryContext) => {
   const result = { fillOpacity: 1 } as any;
@@ -38,7 +35,6 @@ const StyledTableCell = styled(TableCell)(() => ({
     backgroundColor: 'rgba(129,104,235,0.8)',
     borderColor: 'white',
     color: 'white',
-    fontFamily: poppins.style.fontFamily,
   },
 }));
 
