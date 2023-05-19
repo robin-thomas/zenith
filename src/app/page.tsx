@@ -79,7 +79,10 @@ const Home: React.FC = () => {
       <Stack spacing={10} direction="row" justifyContent="center" className={styles.statsContainer} >
         <Stat name="Campaigns" value={stats?.campaigns} />
         <Stat name="Ad Clicks" value={stats?.adClicks} />
-        <Stat name="Deposits" />
+        <Stat
+          name="Deposits"
+          value={stats?.deposits !== undefined ? `Ξ ${stats?.deposits}` : undefined}
+        />
       </Stack>
       <Dialog open={loggingIn} disableEscapeKeyDown>
         <DialogContent>

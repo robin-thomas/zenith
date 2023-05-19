@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+import { utils } from 'ethers';
+
 import { getContract } from '@/utils/contract';
 
 export async function GET() {
@@ -7,11 +9,11 @@ export async function GET() {
 
   const campaigns = await contract.numCampaigns();
   const adClicks = await contract.numAdClicks();
-  // const totalRewards = await contract.totalRewards();
+  const deposits = await contract.provider.getBalance(contract.address);
 
   return NextResponse.json({
     campaigns: campaigns.toNumber(),
     adClicks: adClicks.toNumber(),
-    totalRewards: 0,
+    deposits: utils.formatEther(deposits),
   });
 }
