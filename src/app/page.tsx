@@ -14,6 +14,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 import { login as loginWithMetamask } from '@/utils/metamask';
 import { useAppContext } from '@/hooks/useAppContext';
+import { CURRENCY_SYMBOL } from '@/constants/app';
 
 interface StatProps {
   name: string;
@@ -81,7 +82,7 @@ const Home: React.FC = () => {
         <Stat name="Ad Clicks" value={stats?.adClicks} />
         <Stat
           name="Deposits"
-          value={stats?.deposits !== undefined ? `Ξ ${stats?.deposits}` : undefined}
+          value={stats?.deposits !== undefined ? `${CURRENCY_SYMBOL} ${stats?.deposits}` : undefined}
         />
       </Stack>
       <Dialog open={loggingIn} disableEscapeKeyDown>

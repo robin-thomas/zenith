@@ -7,6 +7,7 @@ import styles from './Payment.module.css';
 import { useAppContext } from '@/hooks/useAppContext';
 import { PLACEHOLDER_DESCRIPTION, PLACEHOLDER_NAME, PLACEHOLDER_URL } from '@/constants/campaign';
 import { pay } from '@/utils/metamask';
+import { CURRENCY_NAME } from '@/constants/app';
 
 const Payment: React.FC<PaymentProps> = ({ setActiveStep }) => {
   const { values } = useFormikContext<NewCampaignState>();
@@ -43,7 +44,7 @@ const Payment: React.FC<PaymentProps> = ({ setActiveStep }) => {
         onClick={onClick}
         loading={paymentProcessing}
       >
-        Pay {values.budget} Ether
+        Pay {values.budget} {CURRENCY_NAME}
       </LoadingButton>
     </>
   );

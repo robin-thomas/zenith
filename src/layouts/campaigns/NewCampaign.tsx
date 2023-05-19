@@ -16,13 +16,14 @@ import NewCampaignActions from '@/layouts/campaigns/NewCampaignActions';
 import Preview from '@/layouts/campaigns/Preview';
 import TextInput from '@/layouts/campaigns/TextInput';
 import { PLACEHOLDER_NAME, PLACEHOLDER_DESCRIPTION, PLACEHOLDER_URL } from '@/constants/campaign';
+import { CURRENCY_SYMBOL, CURRENCY_NAME } from '@/constants/app';
 
 const validationSchema = YupObject({
   name: YupString(),
   description: YupString(),
   url: YupString().url(),
-  budget: YupNumber().min(0.1, 'Atleast 0.1 Ether').required('Required'),
-  costPerClick: YupNumber().min(0.001, 'Atleast 0.001 Ether').required('Required'),
+  budget: YupNumber().min(0.1, `Atleast 0.1 ${CURRENCY_NAME}`).required('Required'),
+  costPerClick: YupNumber().min(0.001, `Atleast 0.001 ${CURRENCY_NAME}`).required('Required'),
   endDate: YupDate().min(dayjs().add(1, 'day').startOf('day'), 'Should be atleast tomorrow').required('Required'),
 });
 
@@ -60,9 +61,9 @@ const NewCampaign: React.FC = () => {
                     type="number"
                     id="budget"
                     label="Budget"
-                    description="Budget for this campaign in Ethers (Ξ)"
+                    description={`Budget for this campaign in ${CURRENCY_NAME}s (${CURRENCY_SYMBOL})`}
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">Ξ</InputAdornment>,
+                      startAdornment: <InputAdornment position="start">{CURRENCY_SYMBOL}</InputAdornment>,
                     }}
                   />
                 </Grid>
@@ -72,7 +73,7 @@ const NewCampaign: React.FC = () => {
                     label="Cost per click"
                     type="number"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">Ξ</InputAdornment>,
+                      startAdornment: <InputAdornment position="start">{CURRENCY_SYMBOL}</InputAdornment>,
                     }}
                   />
                 </Grid>
