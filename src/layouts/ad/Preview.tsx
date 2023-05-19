@@ -11,11 +11,16 @@ const getUrlLabel = (url: string) => {
   return url;
 };
 
-const Preview: React.FC<PreviewProps> = ({ name, url, description }) => (
+const Preview: React.FC<PreviewProps> = ({ name, url, description, onClick }) => (
   <>
-    <Link href={url} target="_blank">
-      <span className={styles.adname}>{name}</span>
-    </Link>
+    {onClick && (
+      <span onClick={onClick} className={styles.adname}>{name}</span>
+    )}
+    {!onClick && (
+      <Link href={url} target="_blank">
+        <span className={styles.adname}>{name}</span>
+      </Link>
+    )}
     <p className={styles.addescription}>{description}</p>
     <p className={styles.adurl}>{getUrlLabel(url)}</p>
   </>

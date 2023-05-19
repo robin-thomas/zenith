@@ -58,7 +58,7 @@ export const pay = async ({ budget, costPerClick, name, url, description, endDat
 };
 
 const toCampaign = (campaign: any) => ({
-  id: utils.formatEther(campaign.id),
+  id: campaign.id.toString(),
   budget: utils.formatEther(campaign.budget),
   remaining: utils.formatEther(campaign.remaining),
   costPerClick: utils.formatEther(campaign.minCostPerClick),
@@ -81,12 +81,11 @@ export const getCampaigns = async () => {
 
 export const toggleCampaignStatus = async (campaignId: string, status: 'pause' | 'start') => {
   const contract = getContract();
-  const _campaignId = utils.parseEther(campaignId);
 
   if (status === 'pause') {
-    return await contract.disableCampaign(_campaignId);
+    return await contract.disableCampaign(campaignId);
   }
-  return await contract.enableCampaign(_campaignId);
+  return await contract.enableCampaign(campaignId);
 };
 
 export const getAvailableAds = async () => {
@@ -102,7 +101,8 @@ export const getSignatureForAdClick = async (campaignId: string, displayTime: nu
   const provider = new providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
 
-  const hash = utils.solidityKeccak256(['uint256', 'uint256'], [utils.parseEther(campaignId), displayTime]);
+  const message = utils.solidityPack(['uint256', 'uint256'], [campaignId, displayTime]);
+  const hash = utils.solidityKeccak256(['bytes'], [message]);
   return await signer.signMessage(utils.arrayify(hash));
 };
 

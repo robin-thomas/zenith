@@ -1,5 +1,6 @@
 .adname {
   color: #8168eb !important;
+  cursor: pointer !important;
 }
 
 .adname:hover {
