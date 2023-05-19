@@ -1,9 +1,12 @@
-import './globals.css';
+import { Poppins } from 'next/font/google';
 
+import './globals.css';
 import DataProvider from '@/store/DataProvider';
 import MetamaskProvider from '@/store/MetamaskProvider';
 
 import styles from './layout.module.css';
+
+const poppins = Poppins({ weight: '500', subsets: ['latin'] });
 
 export const metadata = {
   title: 'Zenith',
@@ -20,7 +23,7 @@ export default function RootLayout({
       <head>
         <link rel="shortcut icon" href="/logo.png" />
       </head>
-      <body>
+      <body className={poppins.className}>
         <DataProvider>
           <MetamaskProvider>
             <div className={styles.page}>

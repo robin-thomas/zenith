@@ -1,36 +1,18 @@
-import Link from 'next/link';
-
 import { useFormikContext } from 'formik';
 
+import { default as PreviewAd } from '@/layouts/ad/Preview';
 import type { NewCampaignState } from './NewCampaign.types';
 import { PLACEHOLDER_NAME, PLACEHOLDER_DESCRIPTION, PLACEHOLDER_URL } from '@/constants/campaign';
-import styles from './Preview.module.css';
-
-const getUrlLabel = (url: string) => {
-  if (url) {
-    if (url.length > 65) {
-      return `${url.substring(0, 65)}...`;
-    }
-
-    return url;
-  }
-
-  return PLACEHOLDER_URL;
-};
 
 const Preview: React.FC = () => {
   const { values } = useFormikContext<NewCampaignState>();
 
   return (
-    <>
-      <Link href={values.url || PLACEHOLDER_URL} target="_blank">
-        <span className={styles.adname}>
-          {values.name || PLACEHOLDER_NAME}
-        </span>
-      </Link>
-      <p className={styles.addescription}>{values.description || PLACEHOLDER_DESCRIPTION}</p>
-      <p className={styles.adurl}>{getUrlLabel(values.url)}</p>
-    </>
+    <PreviewAd
+      name={values.name || PLACEHOLDER_NAME}
+      url={values.url || PLACEHOLDER_URL}
+      description={values.description || PLACEHOLDER_DESCRIPTION}
+    />
   );
 };
 

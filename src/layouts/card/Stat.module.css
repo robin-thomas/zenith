@@ -1,3 +1,7 @@
 .statsContainer {
   font-size: 2rem !important;
 }
+
+.title {
+  font-weight: 600 !important;
+}

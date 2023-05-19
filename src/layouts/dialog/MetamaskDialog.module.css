@@ -1,4 +1,10 @@
 .hashLink {
   color: #8168eb !important;
   cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+.txnHash {
+  font-weight: 600 !important;
+  display: block !important;
 }

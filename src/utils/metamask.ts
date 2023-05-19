@@ -45,23 +45,24 @@ export const pay = async ({ budget, costPerClick, name, url, endDate }: IPay) =>
   );
 };
 
+const toCampaign = (campaign: any) => ({
+  id: utils.formatEther(campaign.id),
+  budget: utils.formatEther(campaign.budget),
+  remaining: utils.formatEther(campaign.remaining),
+  costPerClick: utils.formatEther(campaign.minCostPerClick),
+  name: campaign.name,
+  url: campaign.url,
+  active: campaign.active,
+  clicks: [],
+  startDatetime: dayjs.unix(campaign.startDatetime.toNumber()).format('MMM D, YYYY hh:mm A'),
+  endDatetime: dayjs.unix(campaign.endDatetime.toNumber()).format('MMM D, YYYY hh:mm A'),
+});
+
 export const getCampaigns = async () => {
   const contract = getContract();
-
   const campaigns = await contract.getCampaignsOfAdvertiser();
 
-  return campaigns.map(({ campaign }: any) => ({
-    id: utils.formatEther(campaign.id),
-    budget: utils.formatEther(campaign.budget),
-    remaining: utils.formatEther(campaign.remaining),
-    costPerClick: utils.formatEther(campaign.minCostPerClick),
-    name: campaign.name,
-    url: campaign.url,
-    active: campaign.active,
-    clicks: [],
-    startDatetime: dayjs.unix(campaign.startDatetime.toNumber()).format('MMM D, YYYY hh:mm A'),
-    endDatetime: dayjs.unix(campaign.endDatetime.toNumber()).format('MMM D, YYYY hh:mm A'),
-  }));
+  return campaigns.map(({ campaign }: any) => toCampaign(campaign));
 };
 
 export const toggleCampaignStatus = async (campaignId: string, status: 'enable' | 'disable') => {
@@ -72,4 +73,11 @@ export const toggleCampaignStatus = async (campaignId: string, status: 'enable' 
     return await contract.disableCampaign(_campaignId);
   }
   return await contract.enableCampaign(_campaignId);
+};
+
+export const getAvailableAds = async () => {
+  const contract = getContract();
+
+  const ads = await contract.getAvailableCampaigns();
+  return ads.map(toCampaign);
 };

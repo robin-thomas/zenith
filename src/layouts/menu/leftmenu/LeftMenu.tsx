@@ -116,7 +116,7 @@ const LeftMenu: React.FC = () => {
           <Grid>
             <Tooltip title={getAddress(wallet)} arrow placement="top">
               <div className={styles.address}>
-                <span className={poppins.className}>{getAddress(wallet, true)}</span>
+                <span>{getAddress(wallet, true)}</span>
               </div>
             </Tooltip>
           </Grid>

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Poppins } from 'next/font/google';
 
 import LinearProgress from '@mui/material/LinearProgress';
 import Dialog from '@mui/material/Dialog';
@@ -15,8 +14,6 @@ import CardContent from '@mui/material/CardContent';
 
 import type { MetamaskDialogProps } from './MetamaskDialog.types';
 import styles from './MetamaskDialog.module.css';
-
-const poppins = Poppins({ weight: '600', subsets: ['latin'] });
 
 const MetamaskDialog: React.FC<MetamaskDialogProps> = ({ open, error, txn, resetHandler, successHandler }) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -55,7 +52,7 @@ const MetamaskDialog: React.FC<MetamaskDialogProps> = ({ open, error, txn, reset
               <StepLabel>Complete</StepLabel>
             </Step>
           </Stepper>
-          <Box sx={{ marginTop: 2, marginBottom: 2 }} />
+          <Box sx={{ marginTop: 2, marginBottom: 4 }} />
           {activeStep === 0 && error === undefined && (
             <>
               Waiting for MetaMask confirmation
@@ -73,8 +70,12 @@ const MetamaskDialog: React.FC<MetamaskDialogProps> = ({ open, error, txn, reset
               <LinearProgress sx={{ marginTop: 1 }} />
               <Card variant="outlined" sx={{ marginTop: 3 }}>
                 <CardContent>
-                  <span className={poppins.className}>Transaction Hash</span><br />
-                  <Link href={`${process.env.NEXT_PUBLIC_BLOCK_EXPLORER}/tx/${txn.hash}`} className={styles.hashLink} target="_blank">
+                  <span className={styles.txnHash}>Transaction Hash</span><br />
+                  <Link
+                    href={`${process.env.NEXT_PUBLIC_BLOCK_EXPLORER}/tx/${txn.hash}`}
+                    className={styles.hashLink}
+                    target="_blank"
+                  >
                     {txn.hash}
                   </Link>
                 </CardContent>
