@@ -79,11 +79,11 @@ export const getCampaigns = async () => {
   );
 };
 
-export const toggleCampaignStatus = async (campaignId: string, status: 'enable' | 'disable') => {
+export const toggleCampaignStatus = async (campaignId: string, status: 'pause' | 'start') => {
   const contract = getContract();
   const _campaignId = utils.parseEther(campaignId);
 
-  if (status === 'disable') {
+  if (status === 'pause') {
     return await contract.disableCampaign(_campaignId);
   }
   return await contract.enableCampaign(_campaignId);
@@ -96,6 +96,14 @@ export const getAvailableAds = async () => {
   return Promise.all(
     ads.map(toCampaign).map(getCampaignDetails)
   );
+};
+
+export const getSignatureForAdClick = async (campaignId: string, displayTime: number) => {
+  const provider = new providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  const hash = utils.solidityKeccak256(['uint256', 'uint256'], [utils.parseEther(campaignId), displayTime]);
+  return await signer.signMessage(utils.arrayify(hash));
 };
 
 const getCampaignDetails = async (campaign: any) => {

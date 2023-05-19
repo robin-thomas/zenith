@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 
 import LinearProgress from '@mui/material/LinearProgress';
 import Dialog from '@mui/material/Dialog';
@@ -9,11 +8,9 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 
+import TransactionHash from '@/layouts/dialog/TransactionHash';
 import type { MetamaskDialogProps } from './MetamaskDialog.types';
-import styles from './MetamaskDialog.module.css';
 
 const MetamaskDialog: React.FC<MetamaskDialogProps> = ({ open, error, txn, resetHandler, successHandler }) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -68,18 +65,13 @@ const MetamaskDialog: React.FC<MetamaskDialogProps> = ({ open, error, txn, reset
             <>
               Waiting for transaction to be mined
               <LinearProgress sx={{ marginTop: 1 }} />
-              <Card variant="outlined" sx={{ marginTop: 3 }}>
-                <CardContent>
-                  <span className={styles.txnHash}>Transaction Hash</span><br />
-                  <Link
-                    href={`${process.env.NEXT_PUBLIC_BLOCK_EXPLORER}/tx/${txn.hash}`}
-                    className={styles.hashLink}
-                    target="_blank"
-                  >
-                    {txn.hash}
-                  </Link>
-                </CardContent>
-              </Card>
+              <TransactionHash hash={txn.hash} />
+            </>
+          )}
+          {activeStep === 2 && error === undefined && (
+            <>
+              Transaction has been completed.
+              <TransactionHash hash={txn?.hash} />
             </>
           )}
         </DialogContent>
