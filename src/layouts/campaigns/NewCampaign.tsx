@@ -72,6 +72,7 @@ const NewCampaign: React.FC = () => {
                     id="costPerClick"
                     label="Cost per click"
                     type="number"
+                    description="Base cost per click. This will adjusted based on trufflation rate and PPP index."
                     InputProps={{
                       startAdornment: <InputAdornment position="start">{CURRENCY_SYMBOL}</InputAdornment>,
                     }}
@@ -102,7 +103,7 @@ const NewCampaign: React.FC = () => {
             </StepContent>
           </Step>
           <Step>
-            <StepLabel>Confirmation</StepLabel>
+            <StepLabel>Done</StepLabel>
             <StepContent>
               Your campaign has been created successfully!
             </StepContent>

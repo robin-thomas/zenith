@@ -1,4 +1,6 @@
-
+.txnHash {
+  font-weight: 600 !important;
+}
 
 .hashLink {
   color: #8168eb !important;

@@ -1,5 +1,5 @@
 export interface ToggleCampaignProps {
-  status: 'enable' | 'disable';
+  status: 'pause' | 'start';
   icon: React.ReactNode;
   campaignId: string;
   toggleCampaignStatus: () => void;

@@ -2,13 +2,15 @@ import { NextResponse } from 'next/server';
 
 import { NFTStorage, Blob } from 'nft.storage';
 
-export async function POST() {
+export async function POST(request: Request) {
   const client = new NFTStorage({ token: process.env.NFT_STORAGE_KEY as string });
 
+  const { name, description, url } = await request.json();
+
   const data = new Blob([JSON.stringify({
-    name: 'Chainlink: The Industry-Standard Web3 Services Platform',
-    description: 'Chainlink is a decentralized blockchain oracle network intended to be used to facilitate the transfer of tamper-proof data from off-chain sources to on-chain smart contracts.',
-    url: 'https://chain.link',
+    name,
+    description,
+    url,
     created: new Date().toISOString(),
   })]);
 
