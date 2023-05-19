@@ -2,34 +2,24 @@
 
 import { useState, useEffect } from 'react';
 
-import Logo from '@/layouts/logo/Logo';
-import styles from './page.module.css';
-import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import LinearProgress from '@mui/material/LinearProgress';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import AdsClickIcon from '@mui/icons-material/AdsClick';
+import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRounded';
+import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalanceRounded';
 
+import Logo from '@/layouts/logo/Logo';
+import styles from './page.module.css';
 import { login as loginWithMetamask } from '@/utils/metamask';
 import { useAppContext } from '@/hooks/useAppContext';
-
-interface StatProps {
-  name: string;
-  value?: number | string;
-}
-
-const Stat: React.FC<StatProps> = ({ name, value }) => (
-  <Stack alignItems="center">
-    <span>{name}</span>
-    {value !== undefined ? (
-      <span>{value}</span>
-    ) : (
-      <Skeleton variant="rounded" width={175} height={60} />
-    )}
-  </Stack>
-);
+import { APP_DESCRIPTION_SHORT, APP_DESCRIPTION_EXTRA, CURRENCY_SYMBOL } from '@/constants/app';
+import StatCard from '@/layouts/card/Stat';
 
 const Home: React.FC = () => {
   const { setWallet } = useAppContext();
@@ -75,12 +65,30 @@ const Home: React.FC = () => {
           </LoadingButton>
         </Tooltip>
       </Stack>
-      <div className={styles.detailsContainer}></div>
-      <Stack spacing={10} direction="row" justifyContent="center" className={styles.statsContainer} >
-        <Stat name="Campaigns" value={stats?.campaigns} />
-        <Stat name="Ad Clicks" value={stats?.adClicks} />
-        <Stat name="Deposits" />
-      </Stack>
+      <Grid container className={styles.detailsContainer} justifyContent="space-around">
+        <Grid item md={6}>
+          <div className={styles.description}>{APP_DESCRIPTION_SHORT}</div>
+          <div className={styles.descriptionExtra}>{APP_DESCRIPTION_EXTRA}</div>
+          <Button variant="contained" sx={{ marginTop: 2 }}>Learn More</Button>
+        </Grid>
+        <Grid item md={4}>
+          <Grid container spacing={1} justifyContent="flex-start">
+            <Grid item md={6} sx={{ marginRight: 1, marginBottom: 1 }}>
+              <StatCard
+                icon={<AccountBalanceRoundedIcon sx={{ color: '#8168eb' }} />}
+                title="Deposits"
+                value={stats?.deposits !== undefined ? `${CURRENCY_SYMBOL} ${stats?.deposits}` : undefined}
+              />
+            </Grid>
+            <Grid item md={6}>
+              <StatCard icon={<AdsClickIcon sx={{ color: '#8168eb' }} />} title="Ad Clicks" value={stats?.adClicks} />
+            </Grid>
+            <Grid item md={6}>
+              <StatCard icon={<AddShoppingCartRoundedIcon sx={{ color: '#8168eb' }} />} title="Campaigns" value={stats?.campaigns} />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
       <Dialog open={loggingIn} disableEscapeKeyDown>
         <DialogContent>
           <>

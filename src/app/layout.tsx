@@ -3,14 +3,15 @@ import { Poppins } from 'next/font/google';
 import './globals.css';
 import DataProvider from '@/store/DataProvider';
 import MetamaskProvider from '@/store/MetamaskProvider';
+import { APP_NAME } from '@/constants/app';
 
 import styles from './layout.module.css';
 
 const poppins = Poppins({ weight: '500', subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Zenith',
-  description: 'Zenith',
+  title: APP_NAME,
+  description: APP_NAME,
 };
 
 export default function RootLayout({

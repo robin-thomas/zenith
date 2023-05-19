@@ -38,9 +38,14 @@ a {
   border-bottom-color: #8168eb !important;
 }
 
+.MuiCardHeader-content span,
 .MuiStepIcon-root.Mui-active,
 .MuiStepIcon-root.Mui-completed {
   color: #8168eb !important;
+}
+
+.MuiPaper-outlined {
+  border-color: #8168eb !important;
 }
 
 .MuiMenuItem-root.Mui-selected {

@@ -13,6 +13,7 @@ import Map from '@/layouts/map/Map';
 import StatCard from '@/layouts/card/Stat';
 import CampaignGrid from '@/layouts/data-grid/CampaignGrid';
 import type { CampaignGridData } from '@/layouts/data-grid/CampaignGrid.types';
+import { CURRENCY_SYMBOL, CURRENCY_NAME } from '@/constants/app';
 
 const Campaigns: React.FC = () => {
   const [campaignCount, setCampaignCount] = useState<number>();
@@ -56,8 +57,8 @@ const Campaigns: React.FC = () => {
               <StatCard
                 icon={<AccountBalanceRoundedIcon />}
                 title="Balance"
-                value={remaingingFunds !== undefined ? `Ξ ${remaingingFunds}` : undefined}
-                description="Remainging funds in Ethers"
+                value={remaingingFunds !== undefined ? `${CURRENCY_SYMBOL} ${remaingingFunds}` : undefined}
+                description={`Remainging funds in ${CURRENCY_NAME}s`}
               />
             </Grid>
             <Grid item md={5}>
