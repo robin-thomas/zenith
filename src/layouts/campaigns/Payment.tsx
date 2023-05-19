@@ -1,5 +1,8 @@
+import { useState } from 'react';
+
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useFormikContext } from 'formik';
+import LinearProgress from '@mui/material/LinearProgress';
 
 import type { NewCampaignState } from './NewCampaign.types';
 import type { PaymentProps } from './Payment.types';
@@ -8,10 +11,12 @@ import { useAppContext } from '@/hooks/useAppContext';
 import { PLACEHOLDER_DESCRIPTION, PLACEHOLDER_NAME, PLACEHOLDER_URL } from '@/constants/campaign';
 import { pay } from '@/utils/metamask';
 import { CURRENCY_NAME } from '@/constants/app';
+import TransactionHash from '@/layouts/dialog/TransactionHash';
 
 const Payment: React.FC<PaymentProps> = ({ setActiveStep }) => {
   const { values } = useFormikContext<NewCampaignState>();
 
+  const [hash, setHash] = useState<string>();
   const { paymentProcessing, setPaymentProcessing } = useAppContext();
 
   const onClick = async () => {
@@ -26,11 +31,24 @@ const Payment: React.FC<PaymentProps> = ({ setActiveStep }) => {
       endDate: values.endDate.unix(),
     };
 
-    await pay(payload);
+    const txn = await pay(payload);
+    setHash(txn.hash);
+
+    await txn.wait();
 
     setPaymentProcessing(false);
     setActiveStep(index => index + 1);
   };
+
+  if (hash) {
+    return (
+      <>
+        Waiting for transaction to be mined
+        <LinearProgress sx={{ marginTop: 1 }} />
+        <TransactionHash hash={hash} />
+      </>
+    );
+  }
 
   return (
     <>

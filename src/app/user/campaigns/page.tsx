@@ -17,7 +17,7 @@ import { CURRENCY_SYMBOL, CURRENCY_NAME } from '@/constants/app';
 
 const Campaigns: React.FC = () => {
   const [campaignCount, setCampaignCount] = useState<number>();
-  const [remaingingFunds, setRemaingingFunds] = useState<number>();
+  const [remaingingFunds, setRemaingingFunds] = useState<string>();
   const [campaignGridData, setCampaignGridData] = useState<CampaignGridData[]>([]);
 
   useEffect(() => {
@@ -25,7 +25,11 @@ const Campaigns: React.FC = () => {
       const campaigns = await getCampaigns();
       if (campaigns?.length > 0) {
         setCampaignCount(campaigns.length);
-        setRemaingingFunds(campaigns.reduce((acc: number, c: any) => acc + Number.parseFloat(c.remaining), 0));
+        setRemaingingFunds(
+          campaigns
+            .reduce((acc: number, c: any) => acc + Number.parseFloat(c.remaining), 0)
+            .toPrecision(4)
+        );
 
         setCampaignGridData(campaigns.map((c: any, index: number) => ({
           id: index + 1,
@@ -40,7 +44,7 @@ const Campaigns: React.FC = () => {
         })));
       } else {
         setCampaignCount(0);
-        setRemaingingFunds(0);
+        setRemaingingFunds('0');
       }
     };
 

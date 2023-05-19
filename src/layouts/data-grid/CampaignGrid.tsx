@@ -71,18 +71,18 @@ const CampaignGrid: React.FC<CampaignGridProps> = ({ rows }) => {
   ];
 
   return (
-    <Box sx={{ height: 250, width: '100%' }}>
+    <Box sx={{ height: 265, width: '100%' }}>
       <DataGrid
         rows={data}
         columns={columns}
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: 1,
+              pageSize: 3,
             },
           },
         }}
-        pageSizeOptions={[1]}
+        pageSizeOptions={[2]}
         // checkboxSelection
         disableRowSelectionOnClick
       />
