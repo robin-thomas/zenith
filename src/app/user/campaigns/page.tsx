@@ -37,6 +37,9 @@ const Campaigns: React.FC = () => {
           end: c.endDatetime,
           status: `${c.active}_${c.id}`,
         })));
+      } else {
+        setCampaignCount(0);
+        setRemaingingFunds(0);
       }
     };
 

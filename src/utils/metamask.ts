@@ -30,15 +30,27 @@ export const login = async () => {
   }
 };
 
-export const pay = async ({ budget, costPerClick, name, url, endDate }: IPay) => {
+export const pay = async ({ budget, costPerClick, name, url, description, endDate }: IPay) => {
+  const resp = await fetch('/api/campaign', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name,
+      description,
+      url,
+    }),
+  });
+  const { cid } = await resp.json();
+
   const contract = getContract();
 
-  await contract.createCampaign(
+  return await contract.createCampaign(
     utils.parseEther(budget.toString()),
     utils.parseEther(costPerClick.toString()),
     endDate,
-    name,
-    url,
+    cid,
     {
       value: utils.parseEther(budget.toString()),
     }
@@ -50,11 +62,9 @@ const toCampaign = (campaign: any) => ({
   budget: utils.formatEther(campaign.budget),
   remaining: utils.formatEther(campaign.remaining),
   costPerClick: utils.formatEther(campaign.minCostPerClick),
-  name: campaign.name,
-  url: campaign.url,
   active: campaign.active,
+  cid: campaign.cid,
   clicks: [],
-  startDatetime: dayjs.unix(campaign.startDatetime.toNumber()).format('MMM D, YYYY hh:mm A'),
   endDatetime: dayjs.unix(campaign.endDatetime.toNumber()).format('MMM D, YYYY hh:mm A'),
 });
 
@@ -62,7 +72,11 @@ export const getCampaigns = async () => {
   const contract = getContract();
   const campaigns = await contract.getCampaignsOfAdvertiser();
 
-  return campaigns.map(({ campaign }: any) => toCampaign(campaign));
+  return Promise.all(
+    campaigns
+      .map(({ campaign }: any) => toCampaign(campaign))
+      .map(getCampaignDetails)
+  );
 };
 
 export const toggleCampaignStatus = async (campaignId: string, status: 'enable' | 'disable') => {
@@ -77,7 +91,23 @@ export const toggleCampaignStatus = async (campaignId: string, status: 'enable' 
 
 export const getAvailableAds = async () => {
   const contract = getContract();
-
   const ads = await contract.getAvailableCampaigns();
-  return ads.map(toCampaign);
+
+  return Promise.all(
+    ads.map(toCampaign).map(getCampaignDetails)
+  );
+};
+
+const getCampaignDetails = async (campaign: any) => {
+  const _url = process.env.NEXT_PUBLIC_IPFS_GATEWAY?.replace('{cid}', campaign.cid) as string;
+  const resp = await fetch(_url);
+  const { name, description, url, created } = await resp.json();
+
+  return {
+    ...campaign,
+    name,
+    description,
+    url,
+    startDatetime: dayjs(created).format('MMM D, YYYY hh:mm A'),
+  };
 };
