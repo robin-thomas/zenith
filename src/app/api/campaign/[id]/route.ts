@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 
+import { DqlSDK } from '@robinthomas/sxt-sdk';
+
 import { APP_NAME_CAPS } from '@/constants/app';
 import { TABLE_CAMPAIGN } from '@/constants/sxt';
-import { DqlSDK } from '@/../sxt-sdk/dist/index.js';
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   try {

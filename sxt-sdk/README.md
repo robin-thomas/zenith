@@ -1,10 +1,10 @@
 ```
-import { DdlSDK } from '@/../sxt-sdk/dist/index.js';
+import { DdlSDK } from '@robinthomas/stx-sdk';
 
 const sdk = new DdlSDK({ host: process.env.SXT_HOST });
 
 const data = await sdk.query(
-  `CREATE TABLE ${APP_NAME_CAPS}.${TABLE_CAMPAIGN} (
+  `CREATE TABLE ${SCHEMA}.${TABLE} (
     id VARCHAR PRIMARY KEY,
     name VARCHAR NOT NULL,
     detail VARCHAR NOT NULL,
@@ -18,5 +18,4 @@ const data = await sdk.query(
     publicKey: process.env.SXT_PUBLIC_KEY,
   }
 );
-
 ```

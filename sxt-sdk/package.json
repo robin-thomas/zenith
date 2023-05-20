@@ -1,6 +1,6 @@
 {
-  "name": "@zenith/sxt-sdk",
-  "version": "0.1.0",
+  "name": "@robinthomas/sxt-sdk",
+  "version": "0.3.0",
   "description": "NodeJS SDK for SxT",
   "author": "Robin Thomas <robinthomas2591@gmail.com>",
   "license": "MIT",
@@ -9,12 +9,24 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robin-thomas/zenith.git"
+  },
   "scripts": {
-    "build": "tsc"
+    "prebuild": "rimraf dist",
+    "build": "npm run build:node && npm run build:type",
+    "build:node": "esbuild src/index.ts --bundle --platform=node --target=node18 --outdir=dist --minify",
+    "build:type": "tsup src/index.ts --format esm --dts-only",
+    "prepublish": "npm run build",
+    "release": "npm publish --access public"
   },
   "devDependencies": {
     "@tsconfig/node18": "^2.0.1",
     "@types/node": "^20.2.1",
+    "esbuild": "^0.17.19",
+    "rimraf": "^5.0.1",
+    "tsup": "^6.7.0",
     "typescript": "^5.0.4"
   }
 }

@@ -1,9 +1,10 @@
 import { randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
 
+import { DmlSDK } from '@robinthomas/sxt-sdk';
+
 import { APP_NAME_CAPS } from '@/constants/app';
 import { TABLE_CAMPAIGN } from '@/constants/sxt';
-import { DmlSDK } from '@/../sxt-sdk/dist/index.js';
 
 export async function POST(request: Request) {
   const id = randomUUID();
