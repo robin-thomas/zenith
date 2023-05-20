@@ -1,0 +1,14 @@
+{
+  "extends": "@tsconfig/node18/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "declaration": true
+  },
+  "include": [
+    "src",
+    "fetch.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

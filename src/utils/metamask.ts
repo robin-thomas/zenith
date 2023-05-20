@@ -42,7 +42,7 @@ export const pay = async ({ budget, costPerClick, name, url, description, endDat
       url,
     }),
   });
-  const { cid } = await resp.json();
+  const { id } = await resp.json();
 
   const contract = getContract();
 
@@ -50,7 +50,7 @@ export const pay = async ({ budget, costPerClick, name, url, description, endDat
     utils.parseEther(budget.toString()),
     utils.parseEther(costPerClick.toString()),
     endDate,
-    cid,
+    id,
     {
       value: utils.parseEther(budget.toString()),
     }
@@ -107,8 +107,7 @@ export const getSignatureForAdClick = async (campaignId: string, displayTime: nu
 };
 
 const getCampaignDetails = async (campaign: any) => {
-  const _url = process.env.NEXT_PUBLIC_IPFS_GATEWAY?.replace('{cid}', campaign.cid) as string;
-  const resp = await fetch(_url);
+  const resp = await fetch('/api/campaign/' + campaign.cid);
   const { name, description, url, created } = await resp.json();
 
   return {
