@@ -44,7 +44,7 @@ const WatchAnAd: React.FC = () => {
 
   useEffect(() => {
     const fn = async () => {
-      const ads = await getAvailableAds();
+      const ads = await getAvailableAds(wallet.accounts[0]);
       if (ads?.length > 0) {
         setAd(ads[0]);
       } else {
@@ -52,8 +52,10 @@ const WatchAnAd: React.FC = () => {
       }
     };
 
-    fn();
-  }, []);
+    if (wallet?.accounts?.[0]) {
+      fn();
+    }
+  }, [wallet]);
 
   return (
     <>

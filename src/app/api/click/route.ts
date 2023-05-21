@@ -36,13 +36,19 @@ export async function POST(request: NextRequest) {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const timestamp = searchParams.get('t') ?? '0';
+  const clicker = searchParams.get('user');
 
   const sdk = new DqlSDK({ host: process.env.SXT_HOST as string });
 
   const resourceId = `${APP_NAME_CAPS}.${TABLE_CLICK}`;
 
+  let sqlText = `SELECT * FROM ${resourceId} WHERE viewed_time > '${timestamp}'`;
+  if (clicker) {
+    sqlText += ` AND clicker = '${clicker}'`;
+  }
+
   const data = await sdk.query(
-    `SELECT * FROM ${resourceId} WHERE viewed_time > '${timestamp}'`,
+    sqlText,
     {
       resourceId,
       biscuit: process.env.SXT_BISCUIT_CLICK as string,
@@ -52,5 +58,14 @@ export async function GET(request: Request) {
     }
   );
 
-  return NextResponse.json(data);
+  return NextResponse.json(data?.map(toClick));
 }
+
+const toClick = (click: any) => ({
+  campaignId: click.CAMPAIGN_ID,
+  advertiser: click.ADVERTISER,
+  clicker: click.CLICKER,
+  country: click.COUNTRY,
+  signature: click.SIGNATURE,
+  viewed: Number.parseInt(click.VIEWED_TIME),
+});

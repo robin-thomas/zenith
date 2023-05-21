@@ -89,9 +89,22 @@ export const toggleCampaignStatus = async (campaignId: string, status: 'pause' |
   return await contract.enableCampaign(campaignId);
 };
 
-export const getAvailableAds = async () => {
+export const getAvailableAds = async (address) => {
   const contract = getContract();
   const ads = await contract.getAvailableCampaigns();
+
+  const resp = await fetch(`/api/click?user=${address}`);
+  if (resp.ok) {
+    const clicks = await resp.json();
+    const campaignIds = clicks.map(({ campaignId }: any) => campaignId.toString());
+
+    return Promise.all(
+      ads
+        .map(toCampaign)
+        .filter(({ id }: { id: number }) => !campaignIds.includes(id))
+        .map(getCampaignDetails)
+    );
+  }
 
   return Promise.all(
     ads.map(toCampaign).map(getCampaignDetails)
