@@ -39,6 +39,10 @@ class BaseSDK {
     try {
       JSON.parse(data);
     } catch (err) {
+      if (res.ok) {
+        return;
+      }
+
       throw new Error(`Failed to execute query: ${res.status} ${res.statusText}`);
     }
 
