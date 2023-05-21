@@ -33,13 +33,16 @@ export async function POST(request: NextRequest) {
   throw new Error('Failed to register ad click');
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const timestamp = searchParams.get('t') ?? '0';
+
   const sdk = new DqlSDK({ host: process.env.SXT_HOST as string });
 
   const resourceId = `${APP_NAME_CAPS}.${TABLE_CLICK}`;
 
   const data = await sdk.query(
-    `SELECT * FROM ${resourceId}`,
+    `SELECT * FROM ${resourceId} WHERE viewed_time > '${timestamp}'`,
     {
       resourceId,
       biscuit: process.env.SXT_BISCUIT_CLICK as string,
