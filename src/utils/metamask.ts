@@ -89,7 +89,7 @@ export const toggleCampaignStatus = async (campaignId: string, status: 'pause' |
   return await contract.enableCampaign(campaignId);
 };
 
-export const getAvailableAds = async (address) => {
+export const getAvailableAds = async (address: string) => {
   const contract = getContract();
   const ads = await contract.getAvailableCampaigns();
 
