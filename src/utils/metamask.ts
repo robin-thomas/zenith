@@ -59,6 +59,7 @@ export const pay = async ({ budget, costPerClick, name, url, description, endDat
 
 const toCampaign = (campaign: any) => ({
   id: campaign.id.toString(),
+  advertiser: campaign.advertiser,
   budget: utils.formatEther(campaign.budget),
   remaining: utils.formatEther(campaign.remaining),
   costPerClick: utils.formatEther(campaign.minCostPerClick),

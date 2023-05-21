@@ -17,8 +17,9 @@ const resourceId = `${APP_NAME_CAPS}.${TABLE_CLICK}`;
       campaign_id INTEGER NOT NULL,
       clicker VARCHAR NOT NULL,
       advertiser VARCHAR NOT NULL,
-      country_code VARCHAR NOT NULL,
-      display_time VARCHAR NOT NULL,
+      country VARCHAR NOT NULL,
+      signature VARCHAR NOT NULL,
+      viewed_time VARCHAR NOT NULL,
       PRIMARY KEY(campaign_id, clicker)
     ) WITH \"public_key=${process.env.SXT_BISCUIT_PUBLIC_KEY},access_type=public_write\"`,
     {
