@@ -150,18 +150,13 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
 
     function recordAdClicks(AdClick[] memory _adClicks) external {
         for (uint _index = 0; _index < _adClicks.length; _index++) {
-            bytes32 messageHash = keccak256(
-                abi.encodePacked(
-                    address(this),
-                    _adClicks[_index].user,
-                    _adClicks[_index].campaignId,
-                    _adClicks[_index].displayTime,
-                    _adClicks[_index].country
-                )
+            address clicker = getClickerFromSignature(
+                _adClicks[_index].campaignId,
+                _adClicks[_index].displayTime,
+                _adClicks[_index].signature
             );
 
-            address _account = messageHash.toEthSignedMessageHash().recover(_adClicks[_index].signature);
-            if (_adClicks[_index].user == _account) {
+            if (_adClicks[_index].user == clicker) {
                 uint _costPerClick = costPerClicks[_adClicks[_index].country];
                 _costPerClick = Math.min(_costPerClick, campaigns[_adClicks[_index].campaignId].remaining);
 
@@ -229,6 +224,17 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         }
 
         return _adClicks;
+    }
+
+    function getClickerFromSignature(
+        uint campaignId,
+        uint displayTime,
+        bytes memory signature
+    ) private pure returns (address) {
+        bytes32 hash = keccak256(abi.encodePacked(campaignId, displayTime));
+        bytes32 message = ECDSA.toEthSignedMessageHash(hash);
+
+        return ECDSA.recover(message, signature);
     }
 
     modifier isAdvertiser(uint campaignId) {
