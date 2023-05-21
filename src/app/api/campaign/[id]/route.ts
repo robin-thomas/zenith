@@ -15,7 +15,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
       `SELECT * FROM ${resourceId} WHERE id='${params.id}'`,
       {
         resourceId,
-        biscuit: process.env.SXT_BISCUIT as string,
+        biscuit: process.env.SXT_BISCUIT_CAMPAIGN as string,
         userId: process.env.SXT_USER_ID as string,
         privateKey: process.env.SXT_PRIVATE_KEY as string,
         publicKey: process.env.SXT_PUBLIC_KEY as string,
