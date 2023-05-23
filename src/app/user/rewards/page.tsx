@@ -1,6 +1,6 @@
 'use client';
 
-import Title from '@/layouts/title/Title';
+import { Title } from '@/layouts/typography';
 
 const Rewards: React.FC = () => (
   <>

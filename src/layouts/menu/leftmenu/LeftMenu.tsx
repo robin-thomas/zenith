@@ -21,7 +21,7 @@ import Divider from '@mui/material/Divider';
 
 import { items } from '@/constants/leftmenu';
 import styles from './LeftMenu.module.css';
-import Logo from '@/layouts/logo/Logo';
+import { Logo } from '@/layouts/typography';
 import { useAppContext } from '@/hooks/useAppContext';
 
 const poppins = Poppins({ weight: '300', subsets: ['latin'] });

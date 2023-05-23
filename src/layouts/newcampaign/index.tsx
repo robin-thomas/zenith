@@ -10,11 +10,11 @@ import { Formik } from 'formik';
 import { object as YupObject, string as YupString, number as YupNumber, date as YupDate } from 'yup';
 import dayjs from 'dayjs';
 
-import Payment from '@/layouts/campaigns/Payment';
-import CampaignEnd from '@/layouts/campaigns/CampaignEnd';
-import NewCampaignActions from '@/layouts/campaigns/NewCampaignActions';
-import Preview from '@/layouts/campaigns/Preview';
-import TextInput from '@/layouts/campaigns/TextInput';
+import Payment from '@/layouts/newcampaign/payment/Payment';
+import CampaignEnd from '@/layouts/newcampaign/CampaignEnd';
+import NewCampaignActions from '@/layouts/newcampaign/actions/NewCampaignActions';
+import Preview from '@/layouts/newcampaign/Preview';
+import TextInput from '@/layouts/newcampaign/textinput/TextInput';
 import { PLACEHOLDER_NAME, PLACEHOLDER_DESCRIPTION, PLACEHOLDER_URL } from '@/constants/campaign';
 import { CURRENCY_SYMBOL, CURRENCY_NAME } from '@/constants/app';
 

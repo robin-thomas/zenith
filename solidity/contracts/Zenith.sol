@@ -13,6 +13,9 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
     using Chainlink for Chainlink.Request;
     using ECDSA for bytes32;
 
+    string private constant GET_CLICKS_URL =
+        "https://zenith-six.vercel.app/api/click";
+
     struct Campaign {
         uint id;
         address advertiser;

@@ -9,8 +9,8 @@ import StepLabel from '@mui/material/StepLabel';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 
-import TransactionHash from '@/layouts/dialog/TransactionHash';
-import type { MetamaskDialogProps } from './MetamaskDialog.types';
+import { TransactionHashCard } from '@/layouts/card';
+import type { MetamaskDialogProps } from './MetaMask.types';
 
 const MetamaskDialog: React.FC<MetamaskDialogProps> = ({ open, error, txn, resetHandler, successHandler }) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -31,7 +31,7 @@ const MetamaskDialog: React.FC<MetamaskDialogProps> = ({ open, error, txn, reset
         resetHandler?.();
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeStep]);
 
   return (
@@ -65,13 +65,13 @@ const MetamaskDialog: React.FC<MetamaskDialogProps> = ({ open, error, txn, reset
             <>
               Waiting for transaction to be mined
               <LinearProgress sx={{ marginTop: 1 }} />
-              <TransactionHash hash={txn.hash} />
+              <TransactionHashCard hash={txn.hash} />
             </>
           )}
           {activeStep === 2 && error === undefined && (
             <>
               Transaction has been completed.
-              <TransactionHash hash={txn?.hash} />
+              <TransactionHashCard hash={txn?.hash} />
             </>
           )}
         </DialogContent>

@@ -14,12 +14,12 @@ import AdsClickIcon from '@mui/icons-material/AdsClick';
 import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRounded';
 import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalanceRounded';
 
-import Logo from '@/layouts/logo/Logo';
+import { Logo } from '@/layouts/typography';
 import styles from './page.module.css';
 import { login as loginWithMetamask } from '@/utils/metamask';
 import { useAppContext } from '@/hooks/useAppContext';
 import { APP_DESCRIPTION_SHORT, APP_DESCRIPTION_EXTRA, CURRENCY_SYMBOL } from '@/constants/app';
-import StatCard from '@/layouts/card/Stat';
+import { StatsCard } from '@/layouts/card';
 
 const Home: React.FC = () => {
   const { setWallet } = useAppContext();
@@ -74,17 +74,17 @@ const Home: React.FC = () => {
         <Grid item md={4}>
           <Grid container spacing={1} justifyContent="flex-start">
             <Grid item md={6} sx={{ marginRight: 1, marginBottom: 1 }}>
-              <StatCard
+              <StatsCard
                 icon={<AccountBalanceRoundedIcon sx={{ color: '#8168eb' }} />}
                 title="Deposits"
                 value={stats?.deposits !== undefined ? `${CURRENCY_SYMBOL} ${stats?.deposits}` : undefined}
               />
             </Grid>
             <Grid item md={6}>
-              <StatCard icon={<AdsClickIcon sx={{ color: '#8168eb' }} />} title="Ad Clicks" value={stats?.adClicks} />
+              <StatsCard icon={<AdsClickIcon sx={{ color: '#8168eb' }} />} title="Ad Clicks" value={stats?.adClicks} />
             </Grid>
             <Grid item md={6}>
-              <StatCard icon={<AddShoppingCartRoundedIcon sx={{ color: '#8168eb' }} />} title="Campaigns" value={stats?.campaigns} />
+              <StatsCard icon={<AddShoppingCartRoundedIcon sx={{ color: '#8168eb' }} />} title="Campaigns" value={stats?.campaigns} />
             </Grid>
           </Grid>
         </Grid>

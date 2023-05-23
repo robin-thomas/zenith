@@ -2,17 +2,16 @@
 
 import { useEffect, useState } from 'react';
 
-import Title from '@/layouts/title/Title';
+import { Title } from '@/layouts/typography';
 import { getCampaigns } from '@/utils/metamask';
 import Grid from '@mui/material/Grid';
 import AdsClickIcon from '@mui/icons-material/AdsClick';
 import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRounded';
 import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalanceRounded';
 
-import Map from '@/layouts/map/Map';
-import StatCard from '@/layouts/card/Stat';
-import CampaignGrid from '@/layouts/data-grid/CampaignGrid';
-import type { CampaignGridData } from '@/layouts/data-grid/CampaignGrid.types';
+import { CampaignGrid, CampaignMap } from '@/layouts/data';
+import { StatsCard } from '@/layouts/card';
+import type { CampaignGridData } from '@/layouts/data/grid/CampaignGrid.types';
 import { CURRENCY_SYMBOL, CURRENCY_NAME } from '@/constants/app';
 
 const Campaigns: React.FC = () => {
@@ -58,7 +57,7 @@ const Campaigns: React.FC = () => {
         <Grid item md={5}>
           <Grid container spacing={1} justifyContent="flex-start">
             <Grid item md={5} sx={{ marginRight: 1, marginBottom: 1 }}>
-              <StatCard
+              <StatsCard
                 icon={<AccountBalanceRoundedIcon />}
                 title="Balance"
                 value={remaingingFunds !== undefined ? `${CURRENCY_SYMBOL} ${remaingingFunds}` : undefined}
@@ -66,15 +65,15 @@ const Campaigns: React.FC = () => {
               />
             </Grid>
             <Grid item md={5}>
-              <StatCard icon={<AdsClickIcon />} title="Clicks" />
+              <StatsCard icon={<AdsClickIcon />} title="Clicks" />
             </Grid>
             <Grid item md={5}>
-              <StatCard icon={<AddShoppingCartRoundedIcon />} title="Campaigns" value={campaignCount} />
+              <StatsCard icon={<AddShoppingCartRoundedIcon />} title="Campaigns" value={campaignCount} />
             </Grid>
           </Grid>
         </Grid>
         <Grid item md={7}>
-          <Map
+          <CampaignMap
             data={[
               { country: 'us', value: 1 }
             ]}

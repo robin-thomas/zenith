@@ -4,7 +4,6 @@ import './globals.css';
 import DataProvider from '@/store/DataProvider';
 import MetamaskProvider from '@/store/MetamaskProvider';
 import { APP_NAME } from '@/constants/app';
-
 import styles from './layout.module.css';
 
 const poppins = Poppins({ weight: '500', subsets: ['latin'] });

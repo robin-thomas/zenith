@@ -4,14 +4,14 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { useFormikContext } from 'formik';
 import LinearProgress from '@mui/material/LinearProgress';
 
-import type { NewCampaignState } from './NewCampaign.types';
+import type { NewCampaignState } from '@/layouts/newcampaign/index.types';
 import type { PaymentProps } from './Payment.types';
 import styles from './Payment.module.css';
 import { useAppContext } from '@/hooks/useAppContext';
 import { PLACEHOLDER_DESCRIPTION, PLACEHOLDER_NAME, PLACEHOLDER_URL } from '@/constants/campaign';
 import { pay } from '@/utils/metamask';
 import { CURRENCY_NAME } from '@/constants/app';
-import TransactionHash from '@/layouts/dialog/TransactionHash';
+import { TransactionHashCard } from '@/layouts/card';
 
 const Payment: React.FC<PaymentProps> = ({ setActiveStep }) => {
   const { values } = useFormikContext<NewCampaignState>();
@@ -45,7 +45,7 @@ const Payment: React.FC<PaymentProps> = ({ setActiveStep }) => {
       <>
         Waiting for transaction to be mined
         <LinearProgress sx={{ marginTop: 1 }} />
-        <TransactionHash hash={hash} />
+        <TransactionHashCard hash={hash} />
       </>
     );
   }
