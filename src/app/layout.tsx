@@ -29,7 +29,9 @@ export default function RootLayout({
             <div className={styles.page}>
               <div className={styles.content}>
                 <div className={styles.header}></div>
-                {children}
+                <div className={styles.contentContainer}>
+                  {children}
+                </div>
               </div>
             </div>
           </MetamaskProvider>

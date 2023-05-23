@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
@@ -52,7 +53,11 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" className={styles.logoContainer}>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Logo />
         <Tooltip arrow title="Login with MetamMask">
           <LoadingButton
@@ -69,7 +74,9 @@ const Home: React.FC = () => {
         <Grid item md={6}>
           <div className={styles.description}>{APP_DESCRIPTION_SHORT}</div>
           <div className={styles.descriptionExtra}>{APP_DESCRIPTION_EXTRA}</div>
-          <Button variant="contained" sx={{ marginTop: 2 }}>Learn More</Button>
+          <Link href="/about">
+            <Button variant="contained" sx={{ marginTop: 2 }}>Learn More</Button>
+          </Link>
         </Grid>
         <Grid item md={4}>
           <Grid container spacing={1} justifyContent="flex-start">

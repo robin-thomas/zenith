@@ -59,7 +59,7 @@ const LeftMenu: React.FC = () => {
   };
 
   return (
-    <>
+    <div className={styles.container}>
       <Logo />
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Logout?</DialogTitle>
@@ -122,7 +122,7 @@ const LeftMenu: React.FC = () => {
           </Grid>
         </Grid>
       </div>
-    </>
+    </div>
   );
 };
 
