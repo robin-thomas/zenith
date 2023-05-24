@@ -6,10 +6,10 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Skeleton from '@mui/material/Skeleton';
 
-import Preview from '@/layouts/ad/Preview';
-import Title from '@/layouts/title/Title';
+import { PreviewCard } from '@/layouts/card';
+import { Title } from '@/layouts/typography';
 import { getAvailableAds, getSignatureForAdClick } from '@/utils/metamask';
-import Advertisement from '@/layouts/dialog/Advertisement';
+import { AdvertisementDialog } from '@/layouts/dialog';
 import { useAppContext } from '@/hooks/useAppContext';
 
 const WatchAnAd: React.FC = () => {
@@ -72,10 +72,10 @@ const WatchAnAd: React.FC = () => {
       )}
       {ad && (
         <>
-          <Advertisement open={openAd} handleClose={handleCloseAd} onYes={handleViewAd} />
+          <AdvertisementDialog open={openAd} handleClose={handleCloseAd} onYes={handleViewAd} />
           <Card variant="outlined" sx={{ marginTop: 3 }}>
             <CardContent>
-              <Preview
+              <PreviewCard
                 name={ad.name}
                 url={ad.url}
                 description={ad.description}

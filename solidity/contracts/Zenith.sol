@@ -6,12 +6,15 @@ import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
-import '@openzeppelin/contracts/utils/math/SafeMath.sol';
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract Zenith is ChainlinkClient, ConfirmedOwner {
     using SafeMath for uint256;
     using Chainlink for Chainlink.Request;
     using ECDSA for bytes32;
+
+    string private constant GET_CLICKS_URL =
+        "https://zenith-six.vercel.app/api/click";
 
     struct Campaign {
         uint id;
@@ -55,7 +58,7 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
     uint256 public fee;
 
     mapping(bytes32 => string) public requests;
-    mapping (string => uint) costPerClicks;
+    mapping(string => uint) costPerClicks;
 
     event CampaignCreated(uint _campaigns, address _advertiser, uint _budget);
     event CampaignEnabled(uint _campaignId);
@@ -68,7 +71,7 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         uint _fee,
         address _token
     ) ConfirmedOwner(msg.sender) {
-	    setChainlinkToken(_token);
+        setChainlinkToken(_token);
 
         oracleId = _oracleId;
         jobId = _jobId;
@@ -84,7 +87,10 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         require(_budget > 0, "Budget must be greater than 0");
         require(msg.value == _budget, "Insufficient funds sent");
         require(_minCostPerClick > 0, "Bid must be greater than 0");
-        require(_endDatetime >= block.timestamp + 1 days, "End datetime must be in the future");
+        require(
+            _endDatetime >= block.timestamp + 1 days,
+            "End datetime must be in the future"
+        );
         require(bytes(_cid).length > 0, "Cid cannot be empty");
 
         Campaign memory campaign = Campaign({
@@ -116,9 +122,15 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         campaigns[campaignId].active = false;
     }
 
-    function getCampaignsOfAdvertiser() public view returns (CampaignWithAdClicks[] memory) {
+    function getCampaignsOfAdvertiser()
+        public
+        view
+        returns (CampaignWithAdClicks[] memory)
+    {
         uint _numCampaigns = campaignsOfAdvertiser[msg.sender].length;
-        CampaignWithAdClicks[] memory _campaigns = new CampaignWithAdClicks[](_numCampaigns);
+        CampaignWithAdClicks[] memory _campaigns = new CampaignWithAdClicks[](
+            _numCampaigns
+        );
 
         for (uint _index = 0; _index < _numCampaigns; _index++) {
             uint _campaignId = campaignsOfAdvertiser[msg.sender][_index];
@@ -150,31 +162,35 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
 
     function recordAdClicks(AdClick[] memory _adClicks) external {
         for (uint _index = 0; _index < _adClicks.length; _index++) {
-            bytes32 messageHash = keccak256(
-                abi.encodePacked(
-                    address(this),
-                    _adClicks[_index].user,
-                    _adClicks[_index].campaignId,
-                    _adClicks[_index].displayTime,
-                    _adClicks[_index].country
-                )
+            address clicker = getClickerFromSignature(
+                _adClicks[_index].campaignId,
+                _adClicks[_index].displayTime,
+                _adClicks[_index].signature
             );
 
-            address _account = messageHash.toEthSignedMessageHash().recover(_adClicks[_index].signature);
-            if (_adClicks[_index].user == _account) {
-                uint _costPerClick = costPerClicks[_adClicks[_index].country];
-                _costPerClick = Math.min(_costPerClick, campaigns[_adClicks[_index].campaignId].remaining);
-
+            if (_adClicks[_index].user == clicker) {
+                uint _id = numAdClicks;
                 uint _campaignId = _adClicks[_index].campaignId;
+                address _user = _adClicks[_index].user;
 
-                _adClicks[_index].id = numAdClicks;
+                if (rewardsOfUser[_user][_campaignId] > 0) {
+                    continue;
+                }
+
+                uint _costPerClick = costPerClicks[_adClicks[_index].country];
+                _costPerClick = Math.min(
+                    _costPerClick,
+                    campaigns[_campaignId].remaining
+                );
+
+                _adClicks[_index].id = _id;
                 _adClicks[_index].costPerClick = _costPerClick;
                 _adClicks[_index].paid = false;
 
-                adClicks[_adClicks[_index].id] = _adClicks[_index];
+                adClicks[_id] = _adClicks[_index];
 
-                adClicksOfCampaign[_campaignId].push(_adClicks[_index].id);
-                rewardsOfUser[_adClicks[_index].user][_campaignId] = _adClicks[_index].id;
+                adClicksOfCampaign[_campaignId].push(_id);
+                rewardsOfUser[_adClicks[_index].user][_campaignId] = _id;
 
                 campaigns[_campaignId].remaining -= _costPerClick;
 
@@ -188,7 +204,14 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         string memory _country,
         string memory multiplier
     ) public returns (bytes32 requestId) {
-        require(LinkTokenInterface(chainlinkTokenAddress()).transferFrom(msg.sender, address(this), fee), "LINK transfer failed");
+        require(
+            LinkTokenInterface(chainlinkTokenAddress()).transferFrom(
+                msg.sender,
+                address(this),
+                fee
+            ),
+            "LINK transfer failed"
+        );
 
         Chainlink.Request memory req = buildChainlinkRequest(
             bytes32(bytes(jobId)),
@@ -196,7 +219,10 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
             this.fulfillCPI.selector
         );
         req.add("service", "truflation/current");
-        req.add("data", string(abi.encodePacked("{\"location\":\"", _country, "\"}")));
+        req.add(
+            "data",
+            string(abi.encodePacked('{"location":"', _country, '"}'))
+        );
         req.add("abi", "uint256");
         req.add("multiplier", multiplier);
         req.add("refundTo", Strings.toHexString(uint160(msg.sender), 20));
@@ -206,7 +232,10 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         return sendChainlinkRequestTo(oracleId, req, fee);
     }
 
-    function fulfillCPI(bytes32 _requestId, uint256 _data) public recordChainlinkFulfillment(_requestId) {
+    function fulfillCPI(
+        bytes32 _requestId,
+        uint256 _data
+    ) public recordChainlinkFulfillment(_requestId) {
         string memory _country = requests[_requestId];
         costPerClicks[_country] = _data;
     }
@@ -216,23 +245,45 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
 
         uint _adClickId = rewardsOfUser[msg.sender][_campaignId];
 
-        return campaign.active &&
+        return
+            campaign.active &&
             campaign.endDatetime > block.timestamp &&
             adClicks[_adClickId].displayTime == 0;
     }
 
-    function getAdClicksOfCampaign(uint _campaignId) private view returns (AdClick[] memory) {
-        AdClick[] memory _adClicks = new AdClick[](adClicksOfCampaign[_campaignId].length);
+    function getAdClicksOfCampaign(
+        uint _campaignId
+    ) private view returns (AdClick[] memory) {
+        AdClick[] memory _adClicks = new AdClick[](
+            adClicksOfCampaign[_campaignId].length
+        );
 
-        for (uint _index = 0; _index < adClicksOfCampaign[_campaignId].length; _index++) {
-            _adClicks[_index] = adClicks[adClicksOfCampaign[_campaignId][_index]];
+        for (
+            uint _index = 0;
+            _index < adClicksOfCampaign[_campaignId].length;
+            _index++
+        ) {
+            _adClicks[_index] = adClicks[
+                adClicksOfCampaign[_campaignId][_index]
+            ];
         }
 
         return _adClicks;
     }
 
+    function getClickerFromSignature(
+        uint campaignId,
+        uint displayTime,
+        bytes memory signature
+    ) private pure returns (address) {
+        bytes32 hash = keccak256(abi.encodePacked(campaignId, displayTime));
+        bytes32 message = ECDSA.toEthSignedMessageHash(hash);
+
+        return ECDSA.recover(message, signature);
+    }
+
     modifier isAdvertiser(uint campaignId) {
-      require(msg.sender == campaigns[campaignId].advertiser);
-      _;
+        require(msg.sender == campaigns[campaignId].advertiser);
+        _;
     }
 }

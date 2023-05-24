@@ -1,7 +1,7 @@
 'use client';
 
-import Title from '@/layouts/title/Title';
-import NewCampaign from '@/layouts/campaigns/NewCampaign';
+import { Title } from '@/layouts/typography';
+import NewCampaign from '@/layouts/newcampaign';
 
 const Campaigns: React.FC = () => (
   <>

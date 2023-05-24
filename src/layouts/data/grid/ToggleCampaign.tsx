@@ -11,7 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 import type { ToggleCampaignProps } from './ToggleCampaign.types';
 import { toggleCampaignStatus as toggleCmpMetamask } from '@/utils/metamask';
-import MetamaskDialog from '@/layouts/dialog/MetamaskDialog';
+import MetamaskDialog from '@/layouts/dialog/metamask/MetaMask';
 
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 

@@ -3,7 +3,7 @@ import { useFormikContext } from 'formik';
 import Tooltip from '@mui/material/Tooltip';
 
 import type { TextInputProps } from './TextInput.types';
-import type { NewCampaignState } from './NewCampaign.types';
+import type { NewCampaignState } from '@/layouts/newcampaign/index.types';
 
 const TextInput: React.FC<TextInputProps> = ({ type, id, label, placeholder, rows, description, InputProps }) => {
   const { values, touched, errors, handleChange, handleBlur } = useFormikContext<NewCampaignState>();

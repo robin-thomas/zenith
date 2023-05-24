@@ -115,7 +115,7 @@ export const getSignatureForAdClick = async (campaignId: string, displayTime: nu
   const provider = new providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
 
-  const message = utils.solidityPack(['uint256', 'uint256'], [campaignId, displayTime]);
+  const message = utils.solidityPack(['uint256', 'uint256'], [Number.parseInt(campaignId), displayTime]);
   const hash = utils.solidityKeccak256(['bytes'], [message]);
   return await signer.signMessage(utils.arrayify(hash));
 };

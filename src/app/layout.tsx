@@ -4,7 +4,6 @@ import './globals.css';
 import DataProvider from '@/store/DataProvider';
 import MetamaskProvider from '@/store/MetamaskProvider';
 import { APP_NAME } from '@/constants/app';
-
 import styles from './layout.module.css';
 
 const poppins = Poppins({ weight: '500', subsets: ['latin'] });
@@ -30,7 +29,9 @@ export default function RootLayout({
             <div className={styles.page}>
               <div className={styles.content}>
                 <div className={styles.header}></div>
-                {children}
+                <div className={styles.contentContainer}>
+                  {children}
+                </div>
               </div>
             </div>
           </MetamaskProvider>

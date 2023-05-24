@@ -4,7 +4,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useFormikContext } from 'formik';
 import dayjs from 'dayjs';
 
-import type { NewCampaignState } from './NewCampaign.types';
+import type { NewCampaignState } from '@/layouts/newcampaign/index.types';
 
 const CampaignEnd: React.FC = () => {
   const { values, setFieldValue, touched, errors, handleBlur } = useFormikContext<NewCampaignState>();
@@ -23,7 +23,7 @@ const CampaignEnd: React.FC = () => {
             fullWidth: true,
             variant: 'standard',
             margin: 'dense',
-            helperText: touched.endDate ? errors.endDate as string: '',
+            helperText: touched.endDate ? errors.endDate as string : '',
             error: touched.endDate && Boolean(errors.endDate),
             onBlur: handleBlur,
           },

@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import { useFormikContext } from 'formik';
 
-import type { NewCampaignState } from './NewCampaign.types';
+import type { NewCampaignState } from '@/layouts/newcampaign/index.types';
 import type { NewCampaignActionsProps } from './NewCampaignActions.types';
 import { useAppContext } from '@/hooks/useAppContext';
 

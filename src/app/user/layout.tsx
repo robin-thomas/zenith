@@ -2,7 +2,7 @@
 
 import Grid from '@mui/material/Unstable_Grid2';
 
-import LeftMenu from '@/layouts/menu/leftmenu';
+import { LeftMenu } from '@/layouts/menu';
 import styles from './layout.module.css';
 
 export default function UserLayout({ children }: { children: React.ReactNode }) {

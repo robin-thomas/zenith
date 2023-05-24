@@ -1,6 +1,6 @@
 import TextField from '@mui/material/TextField';
 
-import type { NewCampaignState } from './NewCampaign.types';
+import type { NewCampaignState } from '@/layouts/newcampaign/index.types';
 
 export interface TextInputProps {
   id: keyof NewCampaignState;

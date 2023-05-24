@@ -21,7 +21,7 @@ import Divider from '@mui/material/Divider';
 
 import { items } from '@/constants/leftmenu';
 import styles from './LeftMenu.module.css';
-import Logo from '@/layouts/logo/Logo';
+import { Logo } from '@/layouts/typography';
 import { useAppContext } from '@/hooks/useAppContext';
 
 const poppins = Poppins({ weight: '300', subsets: ['latin'] });
@@ -59,7 +59,7 @@ const LeftMenu: React.FC = () => {
   };
 
   return (
-    <>
+    <div className={styles.container}>
       <Logo />
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Logout?</DialogTitle>
@@ -122,7 +122,7 @@ const LeftMenu: React.FC = () => {
           </Grid>
         </Grid>
       </div>
-    </>
+    </div>
   );
 };
 
