@@ -1,6 +1,6 @@
 {
   "name": "@robinthomas/sxt-sdk",
-  "version": "0.5.0",
+  "version": "0.5.3",
   "description": "NodeJS SDK for SxT",
   "author": "Robin Thomas <robinthomas2591@gmail.com>",
   "license": "MIT",

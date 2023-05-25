@@ -8,14 +8,14 @@ $ npm install @robinthomas/sxt-sdk
 
 ## Features
 
-1. Tiny 4KB bundled library
-2. Session management
+- Tiny 4KB bundled library
+- Zero dependencies
+- Session management
   - Uses refresh tokens to generate new access tokens
-3. SQL support for:
+- SQL support for:
   - [DDL](https://docs.spaceandtime.io/docs/sql-commands#ddl)
   - [DML](https://docs.spaceandtime.io/docs/sql-commands#dml)
   - [DQL](https://docs.spaceandtime.io/docs/sql-commands#dql)
-4. `.env` file support
 
 ## Pre-Requisites
 
@@ -48,7 +48,7 @@ Add the response of the above operation as `SXT_BISCUIT` to the `.env` file
 Example below shows how to create a new table.
 
 ```
-import { DdlSDK } from '@robinthomas/stx-sdk';
+import { DdlSDK } from '@robinthomas/sxt-sdk';
 import { config as dotenvConfig } from 'dotenv';
 
 dotenvConfig();
@@ -75,7 +75,7 @@ const data = await sdk.query(
 Example below shows how to insert data into a table.
 
 ```
-import { DmlSDK } from '@robinthomas/stx-sdk';
+import { DmlSDK } from '@robinthomas/sxt-sdk';
 import { config as dotenvConfig } from 'dotenv';
 
 dotenvConfig();
@@ -104,7 +104,7 @@ const sdk = new DmlSDK({ host: process.env.SXT_HOST });
 Example below shows how to read data from the table.
 
 ```
-import { DqlSDK } from '@robinthomas/stx-sdk';
+import { DqlSDK } from '@robinthomas/sxt-sdk';
 import { config as dotenvConfig } from 'dotenv';
 
 dotenvConfig();
