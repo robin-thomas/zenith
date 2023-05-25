@@ -1,3 +1,22 @@
+# SxT NodeJS SDK
+
+## Installation
+
+```
+$ npm install @robinthomas/sxt-sdk
+```
+
+## Features
+
+1. Tiny 4KB bundled library
+2. Session management
+  - Uses refresh tokens to generate new access tokens
+3. SQL support for:
+  - [DDL](https://docs.spaceandtime.io/docs/sql-commands#ddl)
+  - [DML](https://docs.spaceandtime.io/docs/sql-commands#dml)
+  - [DQL](https://docs.spaceandtime.io/docs/sql-commands#dql)
+4. `.env` file support
+
 ## Pre-Requisites
 
 1. Create an empty `.env` file

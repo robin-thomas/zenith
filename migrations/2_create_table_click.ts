@@ -14,7 +14,7 @@ const resourceId = `${APP_NAME_CAPS}.${TABLE_CLICK}`;
 (async () => {
   await sdk.query(
     `CREATE TABLE ${resourceId} (
-      campaign_id INTEGER NOT NULL,
+      campaign_id VARCHAR NOT NULL,
       clicker VARCHAR NOT NULL,
       advertiser VARCHAR NOT NULL,
       country VARCHAR NOT NULL,

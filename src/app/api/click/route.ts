@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
   const data = await sdk.query(
     `INSERT INTO ${resourceId}(campaign_id, advertiser, clicker, country, signature, viewed_time)
-      VALUES(${campaignId}, '${advertiser}', '${clicker}', '${country}', '${signature}', '${viewed}')`,
+      VALUES(${campaignId.toString()}, '${advertiser}', '${clicker}', '${country}', '${signature}', '${viewed}')`,
     {
       resourceId,
       biscuit: process.env.SXT_BISCUIT_CLICK as string,
@@ -44,7 +44,7 @@ export async function GET(request: Request) {
 
   let sqlText = `SELECT * FROM ${resourceId} WHERE viewed_time > '${timestamp}'`;
   if (clicker) {
-    sqlText += ` AND clicker = '${clicker}'`;
+    sqlText += ` AND clicker = '${clicker.toLowerCase()}'`;
   }
 
   const data = await sdk.query(
@@ -62,7 +62,7 @@ export async function GET(request: Request) {
 }
 
 const toClick = (click: any) => ({
-  campaignId: click.CAMPAIGN_ID,
+  campaignId: Number.parseInt(click.CAMPAIGN_ID),
   advertiser: click.ADVERTISER,
   clicker: click.CLICKER,
   country: click.COUNTRY,

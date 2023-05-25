@@ -4,7 +4,7 @@ import styles from './Preview.module.css';
 import type { PreviewProps } from './Preview.types';
 
 const getUrlLabel = (url: string) => {
-  if (url.length > 65) {
+  if (url?.length > 65) {
     return `${url.substring(0, 65)}...`;
   }
 

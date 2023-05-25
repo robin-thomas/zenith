@@ -42,7 +42,7 @@ const MetamaskProvider: React.FC<IMetamaskProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (!wallet) {
-      router.push(window.location.pathname ?? '/');
+      router.push(window.location.pathname === '/about' ? '/about' : '/');
     } else if (window.location.pathname !== '/') {
       router.push(window.location.pathname);
     } else {

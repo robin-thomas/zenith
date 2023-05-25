@@ -3,15 +3,18 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import dayjs from 'dayjs';
 
 import AppContract from '../../solidity/artifacts/contracts/Zenith.sol/Zenith.json';
+import TestContract from '../../solidity/artifacts/contracts/Lend.sol/Lend.json';
 import type { IPay } from './metamask.types';
+import { APP_NAME_CAPS } from '@/constants/app';
+import { TABLE_CLICK } from '@/constants/sxt';
 
-const getContract = () => {
+const getContract = (_contract?: any, _address?: string) => {
   const provider = new providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
 
   return new Contract(
-    process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as string,
-    AppContract.abi,
+    _address ?? process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as string,
+    _contract?.abi ?? AppContract.abi,
     signer
   );
 };
@@ -118,6 +121,26 @@ export const getSignatureForAdClick = async (campaignId: string, displayTime: nu
   const message = utils.solidityPack(['uint256', 'uint256'], [Number.parseInt(campaignId), displayTime]);
   const hash = utils.solidityKeccak256(['bytes'], [message]);
   return await signer.signMessage(utils.arrayify(hash));
+};
+
+export const requestRewards = async () => {
+  const contract = getContract(TestContract, process.env.NEXT_PUBLIC_TEST_CONTRACT as string);
+
+  return await contract.calculateRewards(
+    `${APP_NAME_CAPS}.${TABLE_CLICK}`,
+    {
+      gasLimit: 1000000,
+    }
+  );
+};
+
+export const getRewards = async () => {
+  const contract = getContract(TestContract, process.env.NEXT_PUBLIC_TEST_CONTRACT as string);
+
+  const response = await contract.getResponse();
+  const error = await contract.latestError();
+
+  return { response, error };
 };
 
 const getCampaignDetails = async (campaign: any) => {

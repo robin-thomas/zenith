@@ -52,7 +52,7 @@ const Home: React.FC = () => {
   };
 
   return (
-    <>
+    <div className={styles.mainContainer}>
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -104,7 +104,7 @@ const Home: React.FC = () => {
           </>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 };
 
