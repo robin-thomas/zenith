@@ -1,20 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
-import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
+import "./Utils.sol";
+import "./interfaces/UserRequest.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
+import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 
-contract Zenith is ChainlinkClient, ConfirmedOwner {
+contract Zenith is UserRequest {
     using SafeMath for uint256;
-    using Chainlink for Chainlink.Request;
     using ECDSA for bytes32;
 
-    string private constant GET_CLICKS_URL =
-        "https://zenith-six.vercel.app/api/click";
+    /** @dev https://github.com/SxT-Community/chainlink-hackathon/blob/main/README.md */
+    string public jobId = "bc97c680d2924f31a0581d947314cc64";
 
     struct Campaign {
         uint id;
@@ -28,14 +29,10 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
     }
 
     struct AdClick {
-        uint id;
-        uint campaignId;
+        uint clickedTime;
         uint costPerClick;
-        uint displayTime;
         address user;
-        bool paid;
         string country;
-        bytes signature;
     }
 
     struct CampaignWithAdClicks {
@@ -44,39 +41,25 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
     }
 
     mapping(uint => Campaign) campaigns;
-    mapping(uint => AdClick) adClicks;
-    mapping(uint => uint[]) adClicksOfCampaign;
+    mapping(uint => AdClick[]) adClicksOfCampaign;
     mapping(address => uint[]) campaignsOfAdvertiser;
     mapping(address => mapping(uint => uint)) rewardsOfUser;
+
+    mapping(address => uint) lastProcessed;
+    mapping(bytes32 => address) public requests;
 
     uint public numCampaigns = 0;
     uint public numAdClicks = 0;
     uint public totalRewards = 0;
 
-    address public oracleId;
-    string public jobId;
-    uint256 public fee;
-
-    mapping(bytes32 => string) public requests;
-    mapping(string => uint) costPerClicks;
-
     event CampaignCreated(uint _campaigns, address _advertiser, uint _budget);
     event CampaignEnabled(uint _campaignId);
     event CampaignDisabled(uint _campaignId);
-    event CampaignClickDataUpdated();
 
     constructor(
-        address _oracleId,
-        string memory _jobId,
-        uint _fee,
-        address _token
-    ) ConfirmedOwner(msg.sender) {
-        setChainlinkToken(_token);
-
-        oracleId = _oracleId;
-        jobId = _jobId;
-        fee = _fee;
-    }
+        ISxTRelayProxy sxtRelayAddress,
+        LinkTokenInterface chainlinkTokenAddress
+    ) UserRequest(sxtRelayAddress, chainlinkTokenAddress, msg.sender) {}
 
     function createCampaign(
         uint _budget,
@@ -116,10 +99,12 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
 
     function enableCampaign(uint campaignId) public isAdvertiser(campaignId) {
         campaigns[campaignId].active = true;
+        emit CampaignEnabled(campaignId);
     }
 
     function disableCampaign(uint campaignId) public isAdvertiser(campaignId) {
         campaigns[campaignId].active = false;
+        emit CampaignDisabled(campaignId);
     }
 
     function getCampaignsOfAdvertiser()
@@ -135,7 +120,7 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         for (uint _index = 0; _index < _numCampaigns; _index++) {
             uint _campaignId = campaignsOfAdvertiser[msg.sender][_index];
             _campaigns[_index].campaign = campaigns[_campaignId];
-            _campaigns[_index].adClicks = getAdClicksOfCampaign(_campaignId);
+            _campaigns[_index].adClicks = adClicksOfCampaign[_campaignId];
         }
 
         return _campaigns;
@@ -160,115 +145,102 @@ contract Zenith is ChainlinkClient, ConfirmedOwner {
         return _campaigns;
     }
 
-    function recordAdClicks(AdClick[] memory _adClicks) external {
-        for (uint _index = 0; _index < _adClicks.length; _index++) {
-            address clicker = getClickerFromSignature(
-                _adClicks[_index].campaignId,
-                _adClicks[_index].displayTime,
-                _adClicks[_index].signature
+    function isAvailableCampaign(uint _campaignId) private view returns (bool) {
+        Campaign memory campaign = campaigns[_campaignId];
+
+        return
+            campaign.active &&
+            campaign.endDatetime > block.timestamp &&
+            rewardsOfUser[msg.sender][_campaignId] == 0;
+    }
+
+    function triggerRetrieveRewards(
+        string memory _resourceId
+    ) external nonReentrant returns (bytes32 requestId) {
+        require(
+            getChainlinkToken().approve(
+                address(getSxTRelayContract().impl()),
+                getSxTRelayContract().feeInLinkToken()
+            ),
+            "UserRequest: Insufficient LINK allowance"
+        );
+
+        string memory _query = string(
+            abi.encodePacked(
+                "SELECT campaign_id, clicker, country, signature, viewed_time FROM ",
+                _resourceId,
+                " WHERE viewed_time > '",
+                Strings.toString(lastProcessed[msg.sender]),
+                "' AND clicker = '",
+                Strings.toHexString(uint160(msg.sender), 20),
+                "'"
+            )
+        );
+
+        requestId = getSxTRelayContract().requestQueryString2D(
+            _query,
+            _resourceId,
+            address(this),
+            this.recordAdClicks.selector,
+            jobId
+        );
+
+        requests[requestId] = msg.sender;
+        lastProcessed[msg.sender] = block.timestamp;
+    }
+
+    function recordAdClicks(
+        bytes32 _requestId,
+        string[][] calldata _data
+    ) external payable onlySxTRelay {
+        uint _rewards = 0;
+        address _user = requests[_requestId];
+
+        for (uint _index = 0; _index < _data.length; _index++) {
+            uint _campaignId = Utils.stringToUint(_data[_index][0]);
+            if (
+                rewardsOfUser[_user][_campaignId] > 0 ||
+                campaigns[_campaignId].remaining == 0
+            ) {
+                continue;
+            }
+
+            uint _displayTime = Utils.stringToUint(_data[_index][4]);
+            bytes memory _signature = Utils.hexStringToBytes(_data[_index][3]);
+            address _clicker = getClickerFromSignature(
+                _campaignId,
+                _displayTime,
+                _signature
             );
 
-            if (_adClicks[_index].user == clicker) {
-                uint _id = numAdClicks;
-                uint _campaignId = _adClicks[_index].campaignId;
-                address _user = _adClicks[_index].user;
-
-                if (rewardsOfUser[_user][_campaignId] > 0) {
-                    continue;
-                }
-
-                uint _costPerClick = costPerClicks[_adClicks[_index].country];
+            if (_user == _clicker) {
+                uint _costPerClick = campaigns[_campaignId].minCostPerClick;
                 _costPerClick = Math.min(
                     _costPerClick,
                     campaigns[_campaignId].remaining
                 );
 
-                _adClicks[_index].id = _id;
-                _adClicks[_index].costPerClick = _costPerClick;
-                _adClicks[_index].paid = false;
+                AdClick memory _adClick = AdClick({
+                    country: _data[_index][2],
+                    user: _user,
+                    clickedTime: _displayTime,
+                    costPerClick: _costPerClick
+                });
 
-                adClicks[_id] = _adClicks[_index];
-
-                adClicksOfCampaign[_campaignId].push(_id);
-                rewardsOfUser[_adClicks[_index].user][_campaignId] = _id;
+                adClicksOfCampaign[_campaignId].push(_adClick);
+                rewardsOfUser[_user][_campaignId] = _costPerClick;
 
                 campaigns[_campaignId].remaining -= _costPerClick;
 
                 ++numAdClicks;
+                _rewards += _costPerClick;
                 totalRewards += _costPerClick;
             }
         }
-    }
 
-    function requestCPI(
-        string memory _country,
-        string memory multiplier
-    ) public returns (bytes32 requestId) {
-        require(
-            LinkTokenInterface(chainlinkTokenAddress()).transferFrom(
-                msg.sender,
-                address(this),
-                fee
-            ),
-            "LINK transfer failed"
-        );
-
-        Chainlink.Request memory req = buildChainlinkRequest(
-            bytes32(bytes(jobId)),
-            address(this),
-            this.fulfillCPI.selector
-        );
-        req.add("service", "truflation/current");
-        req.add(
-            "data",
-            string(abi.encodePacked('{"location":"', _country, '"}'))
-        );
-        req.add("abi", "uint256");
-        req.add("multiplier", multiplier);
-        req.add("refundTo", Strings.toHexString(uint160(msg.sender), 20));
-
-        requests[requestId] = _country;
-
-        return sendChainlinkRequestTo(oracleId, req, fee);
-    }
-
-    function fulfillCPI(
-        bytes32 _requestId,
-        uint256 _data
-    ) public recordChainlinkFulfillment(_requestId) {
-        string memory _country = requests[_requestId];
-        costPerClicks[_country] = _data;
-    }
-
-    function isAvailableCampaign(uint _campaignId) private view returns (bool) {
-        Campaign memory campaign = campaigns[_campaignId];
-
-        uint _adClickId = rewardsOfUser[msg.sender][_campaignId];
-
-        return
-            campaign.active &&
-            campaign.endDatetime > block.timestamp &&
-            adClicks[_adClickId].displayTime == 0;
-    }
-
-    function getAdClicksOfCampaign(
-        uint _campaignId
-    ) private view returns (AdClick[] memory) {
-        AdClick[] memory _adClicks = new AdClick[](
-            adClicksOfCampaign[_campaignId].length
-        );
-
-        for (
-            uint _index = 0;
-            _index < adClicksOfCampaign[_campaignId].length;
-            _index++
-        ) {
-            _adClicks[_index] = adClicks[
-                adClicksOfCampaign[_campaignId][_index]
-            ];
+        if (_rewards > 0) {
+            payable(_user).transfer(_rewards);
         }
-
-        return _adClicks;
     }
 
     function getClickerFromSignature(

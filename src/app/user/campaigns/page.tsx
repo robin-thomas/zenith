@@ -15,6 +15,7 @@ import type { CampaignGridData } from '@/layouts/data/grid/CampaignGrid.types';
 import { CURRENCY_SYMBOL, CURRENCY_NAME } from '@/constants/app';
 
 const Campaigns: React.FC = () => {
+  const [adClickCount, setAdClickCount] = useState<number>();
   const [campaignCount, setCampaignCount] = useState<number>();
   const [remaingingFunds, setRemaingingFunds] = useState<string>();
   const [campaignGridData, setCampaignGridData] = useState<CampaignGridData[]>([]);
@@ -24,6 +25,7 @@ const Campaigns: React.FC = () => {
       const campaigns = await getCampaigns();
       if (campaigns?.length > 0) {
         setCampaignCount(campaigns.length);
+        setAdClickCount(campaigns.reduce((acc: number, c: any) => acc + c.clicks.length, 0));
         setRemaingingFunds(
           campaigns
             .reduce((acc: number, c: any) => acc + Number.parseFloat(c.remaining), 0)
@@ -36,13 +38,14 @@ const Campaigns: React.FC = () => {
           url: c.url,
           budget: c.budget,
           remaining: c.remaining,
-          clicks: 0, // TODO
+          clicks: c.clicks.length,
           created: c.startDatetime,
           end: c.endDatetime,
           status: `${c.active}_${c.id}`,
         })));
       } else {
         setCampaignCount(0);
+        setAdClickCount(0);
         setRemaingingFunds('0');
       }
     };
@@ -61,11 +64,11 @@ const Campaigns: React.FC = () => {
                 icon={<AccountBalanceRoundedIcon />}
                 title="Balance"
                 value={remaingingFunds !== undefined ? `${CURRENCY_SYMBOL} ${remaingingFunds}` : undefined}
-                description={`Remainging funds in ${CURRENCY_NAME}s`}
+                description={`Remainging funds in ${CURRENCY_NAME}`}
               />
             </Grid>
             <Grid item md={5}>
-              <StatsCard icon={<AdsClickIcon />} title="Clicks" />
+              <StatsCard icon={<AdsClickIcon />} title="Clicks" value={adClickCount} />
             </Grid>
             <Grid item md={5}>
               <StatsCard icon={<AddShoppingCartRoundedIcon />} title="Campaigns" value={campaignCount} />
