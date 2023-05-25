@@ -4,6 +4,8 @@ import dayjs from 'dayjs';
 
 import AppContract from '../../solidity/artifacts/contracts/Zenith.sol/Zenith.json';
 import type { IPay } from './metamask.types';
+import { APP_NAME_CAPS } from '@/constants/app';
+import { TABLE_CLICK } from '@/constants/sxt';
 
 const getContract = () => {
   const provider = new providers.Web3Provider(window.ethereum);
@@ -75,7 +77,10 @@ export const getCampaigns = async () => {
 
   return Promise.all(
     campaigns
-      .map(({ campaign }: any) => toCampaign(campaign))
+      .map(({ campaign, adClicks }: any) => ({
+        ...toCampaign(campaign),
+        clicks: adClicks,
+      }))
       .map(getCampaignDetails)
   );
 };
@@ -118,6 +123,17 @@ export const getSignatureForAdClick = async (campaignId: string, displayTime: nu
   const message = utils.solidityPack(['uint256', 'uint256'], [Number.parseInt(campaignId), displayTime]);
   const hash = utils.solidityKeccak256(['bytes'], [message]);
   return await signer.signMessage(utils.arrayify(hash));
+};
+
+export const requestRewards = async () => {
+  const contract = getContract();
+
+  return await contract.triggerRetrieveRewards(
+    `${APP_NAME_CAPS}.${TABLE_CLICK}`,
+    {
+      gasLimit: 1000000,
+    }
+  );
 };
 
 const getCampaignDetails = async (campaign: any) => {
