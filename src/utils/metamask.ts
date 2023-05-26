@@ -136,6 +136,11 @@ export const requestRewards = async () => {
   );
 };
 
+export const getLastProcessed = async () => {
+  const contract = getContract();
+  return await contract.lastProcessed();
+};
+
 const getCampaignDetails = async (campaign: any) => {
   const resp = await fetch('/api/campaign/' + campaign.cid);
   const { name, description, url, created } = await resp.json();

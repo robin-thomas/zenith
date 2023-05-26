@@ -254,6 +254,19 @@ contract Zenith is UserRequest {
         return ECDSA.recover(message, signature);
     }
 
+    function getLastProcessed() public view returns (uint) {
+        return lastProcessed[msg.sender];
+    }
+
+    function getRewardsOfUser() public view returns (uint) {
+        uint _rewards = 0;
+        for (uint _campaignId = 0; _campaignId < numCampaigns; _campaignId++) {
+            _rewards += rewardsOfUser[msg.sender][_campaignId];
+        }
+
+        return _rewards;
+    }
+
     modifier isAdvertiser(uint campaignId) {
         require(msg.sender == campaigns[campaignId].advertiser);
         _;

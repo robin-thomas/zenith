@@ -29,7 +29,7 @@ const Campaigns: React.FC = () => {
         setRemaingingFunds(
           campaigns
             .reduce((acc: number, c: any) => acc + Number.parseFloat(c.remaining), 0)
-            .toPrecision(4)
+            .toFixed(4)
         );
 
         setCampaignGridData(campaigns.map((c: any, index: number) => ({

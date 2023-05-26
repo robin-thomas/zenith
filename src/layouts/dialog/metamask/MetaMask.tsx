@@ -12,7 +12,9 @@ import Alert from '@mui/material/Alert';
 import { TransactionHashCard } from '@/layouts/card';
 import type { MetamaskDialogProps } from './MetaMask.types';
 
-const MetamaskDialog: React.FC<MetamaskDialogProps> = ({ open, error, txn, resetHandler, successHandler }) => {
+const MetamaskDialog: React.FC<MetamaskDialogProps> = ({
+  successMessage, open, error, txn, resetHandler, successHandler
+}) => {
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
@@ -70,7 +72,7 @@ const MetamaskDialog: React.FC<MetamaskDialogProps> = ({ open, error, txn, reset
           )}
           {activeStep === 2 && error === undefined && (
             <>
-              Transaction has been completed.
+              {successMessage ?? 'Transaction has been completed.'}
               <TransactionHashCard hash={txn?.hash} />
             </>
           )}
