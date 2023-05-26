@@ -12,6 +12,8 @@ import Skeleton from '@mui/material/Skeleton';
 import AdsClickIcon from '@mui/icons-material/AdsClick';
 import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalanceRounded';
 import RedeemIcon from '@mui/icons-material/Redeem';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 
 import { Title } from '@/layouts/typography';
 import { getRewardDetails, getLastProcessed, requestRewards } from '@/utils/metamask';
@@ -95,7 +97,11 @@ const Rewards: React.FC = () => {
       ) : showRewardsBtn === undefined ? (
         <Skeleton variant="rectangular" height={60} />
       ) : (
-        <p>There are no pending rewards.</p>
+        <Card variant="outlined" sx={{ marginTop: 3 }}>
+          <CardContent>
+                <p>There are no pending rewards.</p>
+          </CardContent>
+        </Card>
       )}
       <Grid container sx={{ mt: 1 }} spacing={3}>
         <Grid item md={3}>
