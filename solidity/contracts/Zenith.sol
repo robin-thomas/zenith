@@ -260,8 +260,11 @@ contract Zenith is UserRequest {
         uint _rewards = 0;
         uint _adClicks = 0;
         for (uint _campaignId = 0; _campaignId < numCampaigns; _campaignId++) {
-            _rewards += rewardsOfUser[msg.sender][_campaignId];
-            ++_adClicks;
+            uint _reward = rewardsOfUser[msg.sender][_campaignId];
+            if (_reward > 0) {
+                _rewards += _reward;
+                ++_adClicks;
+            }
         }
 
         return RewardWithAdClicks({reward: _rewards, adClicks: _adClicks});
