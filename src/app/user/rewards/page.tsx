@@ -35,8 +35,6 @@ const Rewards: React.FC = () => {
 
   useEffect(() => {
     const fn = async () => {
-      getRewardDetails().then(setReward);
-
       const address = wallet.accounts[0];
       const timestamp = await getLastProcessed();
 
@@ -51,6 +49,7 @@ const Rewards: React.FC = () => {
     };
 
     if (wallet) {
+      getRewardDetails().then(setReward);
       fn();
     }
   }, [wallet]);
