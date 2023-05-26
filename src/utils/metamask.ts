@@ -101,22 +101,23 @@ export const getAvailableAds = async (address: string) => {
   const contract = getContract();
   const ads = await contract.getAvailableCampaigns();
 
+  let campaigns = ads.map(toCampaign);
+
   const resp = await fetch(`/api/click?user=${address}`);
   if (resp.ok) {
     const clicks = await resp.json();
     const campaignIds = clicks.map(({ campaignId }: any) => campaignId.toString());
 
-    return Promise.all(
-      ads
-        .map(toCampaign)
-        .filter(({ id }: { id: number }) => !campaignIds.includes(id))
-        .map(getCampaignDetails)
-    );
+    campaigns = campaigns
+      .filter(({ id }: { id: number }) => !campaignIds.includes(id));
   }
 
-  return Promise.all(
-    ads.map(toCampaign).map(getCampaignDetails)
-  );
+  const campaignDetails = await getCampaignDetails(campaigns.map(({ cid }: any) => cid));
+
+  return campaigns.map((campaign: any) => ({
+    ...campaign,
+    ...campaignDetails[campaign.cid],
+  }));
 };
 
 export const getSignatureForAdClick = async (campaignId: string, displayTime: number) => {
