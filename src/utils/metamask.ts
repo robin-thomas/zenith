@@ -138,7 +138,19 @@ export const requestRewards = async () => {
 
 export const getLastProcessed = async () => {
   const contract = getContract();
-  return await contract.lastProcessed();
+  const lastProcessed = await contract.getLastProcessed();
+
+  return lastProcessed.toNumber();
+};
+
+export const getRewardDetails = async () => {
+  const contract = getContract();
+  const details = await contract.getRewardsOfUser();
+
+  return {
+    reward: utils.formatEther(details.reward),
+    adClicks: details.adClicks.toNumber(),
+  };
 };
 
 const getCampaignDetails = async (campaign: any) => {

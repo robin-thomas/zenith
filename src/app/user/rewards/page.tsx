@@ -14,16 +14,18 @@ import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalanceRounded
 import RedeemIcon from '@mui/icons-material/Redeem';
 
 import { Title } from '@/layouts/typography';
-import { requestRewards } from '@/utils/metamask';
+import { getRewardDetails, getLastProcessed, requestRewards } from '@/utils/metamask';
 import { useAppContext } from '@/hooks/useAppContext';
 import { StatsCard } from '@/layouts/card';
 import { MetaMaskDialog } from '@/layouts/dialog';
 import { getHumanError } from '@/utils/utils';
+import { CURRENCY_SYMBOL } from '@/constants/app';
 
 const Rewards: React.FC = () => {
   const [txn, setTxn] = useState<any>();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string>();
+  const [reward, setReward] = useState<any>();
   const [openMetaMask, setOpenMetaMask] = useState(false);
   const [showRewardsBtn, setShowRewardsBtn] = useState<boolean>();
 
@@ -31,9 +33,12 @@ const Rewards: React.FC = () => {
 
   useEffect(() => {
     const fn = async () => {
-      const address = wallet.accounts[0];
+      getRewardDetails().then(setReward);
 
-      const resp = await fetch(`/api/click?user=${address}`);
+      const address = wallet.accounts[0];
+      const timestamp = await getLastProcessed();
+
+      const resp = await fetch(`/api/click?user=${address}&t=${timestamp}`);
       const clicks = await resp.json();
 
       if (clicks?.length > 0) {
@@ -88,18 +93,20 @@ const Rewards: React.FC = () => {
           </Button>
         </>
       ) : showRewardsBtn === undefined ? (
-        <Skeleton variant="rectangular" width={200} height={50} />
-      ) : null}
+        <Skeleton variant="rectangular" height={60} />
+      ) : (
+        <p>There are no pending rewards.</p>
+      )}
       <Grid container sx={{ mt: 1 }} spacing={3}>
         <Grid item md={3}>
           <StatsCard
             icon={<AccountBalanceRoundedIcon />}
             title="Received"
-            value={0}
+            value={reward?.reward !== undefined ? `${CURRENCY_SYMBOL} ${reward?.reward}` : undefined}
           />
         </Grid>
         <Grid item md={3}>
-          <StatsCard icon={<AdsClickIcon />} title="Clicks" value={0} />
+          <StatsCard icon={<AdsClickIcon />} title="Clicks" value={reward?.adClicks} />
         </Grid>
       </Grid>
       <Dialog open={open} onClose={handleClose}>
