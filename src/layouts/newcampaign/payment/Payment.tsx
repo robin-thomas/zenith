@@ -44,7 +44,7 @@ const Payment: React.FC<PaymentProps> = ({ setActiveStep }) => {
     return (
       <>
         Waiting for transaction to be mined
-        <LinearProgress sx={{ marginTop: 1 }} />
+        <LinearProgress sx={{ mt: 1 }} />
         <TransactionHashCard hash={hash} />
       </>
     );
@@ -58,7 +58,7 @@ const Payment: React.FC<PaymentProps> = ({ setActiveStep }) => {
       <LoadingButton
         variant="contained"
         color="primary"
-        sx={{ marginTop: 1 }}
+        sx={{ mt: 1 }}
         onClick={onClick}
         loading={paymentProcessing}
       >

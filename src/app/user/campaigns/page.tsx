@@ -76,7 +76,7 @@ const Campaigns: React.FC = () => {
       <Grid container>
         <Grid item md={5}>
           <Grid container spacing={1} justifyContent="flex-start">
-            <Grid item md={5} sx={{ marginRight: 1, marginBottom: 1 }}>
+            <Grid item md={5} sx={{ mr: 1, mb: 1 }}>
               <StatsCard
                 icon={<AccountBalanceRoundedIcon />}
                 title="Balance"

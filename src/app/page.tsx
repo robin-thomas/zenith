@@ -62,7 +62,7 @@ const Home: React.FC = () => {
         <Tooltip arrow title="Login with MetamMask">
           <LoadingButton
             variant="contained"
-            sx={{ marginTop: -5 }}
+            sx={{ mt: -5 }}
             onClick={login}
             loading={loggingIn}
           >
@@ -75,12 +75,12 @@ const Home: React.FC = () => {
           <div className={styles.description}>{APP_DESCRIPTION_SHORT}</div>
           <div className={styles.descriptionExtra}>{APP_DESCRIPTION_EXTRA}</div>
           <Link href="/about">
-            <Button variant="contained" sx={{ marginTop: 2 }}>Learn More</Button>
+            <Button variant="contained" sx={{ mt: 2 }}>Learn More</Button>
           </Link>
         </Grid>
         <Grid item md={4}>
           <Grid container spacing={1} justifyContent="flex-start">
-            <Grid item md={6} sx={{ marginRight: 1, marginBottom: 1 }}>
+            <Grid item md={6} sx={{ mr: 1, mb: 1 }}>
               <StatsCard
                 icon={<AccountBalanceRoundedIcon sx={{ color: '#8168eb' }} />}
                 title="Deposits"
@@ -100,7 +100,7 @@ const Home: React.FC = () => {
         <DialogContent>
           <>
             Waiting for MetaMask confirmation
-            <LinearProgress sx={{ marginTop: 1 }} />
+            <LinearProgress sx={{ mt: 1 }} />
           </>
         </DialogContent>
       </Dialog>

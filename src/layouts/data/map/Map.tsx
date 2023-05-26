@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { useEffect, useState } from 'react';
 
 import WorldMap from 'react-svg-worldmap';
 import type { CountryContext } from 'react-svg-worldmap';
@@ -38,39 +38,51 @@ const StyledTableCell = styled(TableCell)(() => ({
   },
 }));
 
-const Map: React.FC<MapProps> = ({ data }) => (
-  <Grid container>
-    <Grid md={8}>
-      <WorldMap
-        size="lg"
-        color="black"
-        valuePrefix="(Ad Clicks): "
-        strokeOpacity={0}
-        styleFunction={stylingFunction}
-        data={data}
-      />
+const Map: React.FC<MapProps> = ({ data }) => {
+  const [tableData, setTableData] = useState<any[]>();
+
+  useEffect(() => {
+    if (data?.length > 0) {
+      setTableData(data.sort((a, b) => b.value - a.value).slice(0, 5));
+    } else {
+      setTableData(undefined);
+    }
+  }, [data]);
+
+  return (
+    <Grid container>
+      <Grid md={8}>
+        <WorldMap
+          size="lg"
+          color="black"
+          valuePrefix="(Ad Clicks): "
+          strokeOpacity={0}
+          styleFunction={stylingFunction}
+          data={data}
+        />
+      </Grid>
+      <Grid md={4}>
+        {tableData && (
+          <Table>
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Top Countries</StyledTableCell>
+                <StyledTableCell align="right">Ad Clicks</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {tableData.map((item) => (
+                <TableRow key={item.country}>
+                  <StyledTableCell>{item.country?.toUpperCase()}</StyledTableCell>
+                  <StyledTableCell align="right">{item.value}</StyledTableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </Grid>
     </Grid>
-    <Grid md={4}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Top Countries</StyledTableCell>
-            <StyledTableCell align="right">Ad Clicks</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            {data.map((item) => (
-              <Fragment key={item.country}>
-                <StyledTableCell>{item.country?.toUpperCase()}</StyledTableCell>
-                <StyledTableCell align="right">{item.value}</StyledTableCell>
-              </Fragment>
-            ))}
-          </TableRow>
-        </TableBody>
-      </Table>
-    </Grid>
-  </Grid>
-);
+  );
+};
 
 export default Map;

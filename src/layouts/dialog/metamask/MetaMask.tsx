@@ -51,11 +51,11 @@ const MetamaskDialog: React.FC<MetamaskDialogProps> = ({
               <StepLabel>Complete</StepLabel>
             </Step>
           </Stepper>
-          <Box sx={{ marginTop: 2, marginBottom: 4 }} />
+          <Box sx={{ mt: 2, mb: 4 }} />
           {activeStep === 0 && error === undefined && (
             <>
               Waiting for MetaMask confirmation
-              <LinearProgress sx={{ marginTop: 1 }} />
+              <LinearProgress sx={{ mt: 1 }} />
             </>
           )}
           {activeStep === 0 && error !== undefined && (
@@ -66,7 +66,7 @@ const MetamaskDialog: React.FC<MetamaskDialogProps> = ({
           {activeStep === 1 && error === undefined && (
             <>
               Waiting for transaction to be mined
-              <LinearProgress sx={{ marginTop: 1 }} />
+              <LinearProgress sx={{ mt: 1 }} />
               <TransactionHashCard hash={txn.hash} />
             </>
           )}

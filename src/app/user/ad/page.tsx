@@ -64,7 +64,7 @@ const WatchAnAd: React.FC = () => {
         <Skeleton variant="rounded" height={125} />
       )}
       {ad === null && (
-        <Card variant="outlined" sx={{ marginTop: 3 }}>
+        <Card variant="outlined" sx={{ mt: 3 }}>
           <CardContent>
             <p>There are no ads available to watch at this time.</p>
           </CardContent>
@@ -73,7 +73,7 @@ const WatchAnAd: React.FC = () => {
       {ad && (
         <>
           <AdvertisementDialog open={openAd} handleClose={handleCloseAd} onYes={handleViewAd} />
-          <Card variant="outlined" sx={{ marginTop: 3 }}>
+          <Card variant="outlined" sx={{ mt: 3 }}>
             <CardContent>
               <PreviewCard
                 name={ad.name}
