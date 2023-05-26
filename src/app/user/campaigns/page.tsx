@@ -18,6 +18,7 @@ const Campaigns: React.FC = () => {
   const [adClickCount, setAdClickCount] = useState<number>();
   const [campaignCount, setCampaignCount] = useState<number>();
   const [remaingingFunds, setRemaingingFunds] = useState<string>();
+  const [mapData, setMapData] = useState<any[]>();
   const [campaignGridData, setCampaignGridData] = useState<CampaignGridData[]>();
 
   useEffect(() => {
@@ -30,6 +31,21 @@ const Campaigns: React.FC = () => {
           campaigns
             .reduce((acc: number, c: any) => acc + Number.parseFloat(c.remaining), 0)
             .toFixed(4)
+        );
+
+        const clicks = campaigns
+          .map((c: any) => c.clicks)
+          .flat(1)
+          .reduce((acc: any, c: any) => ({
+            ...acc,
+            [c.country]: acc[c.country] ? acc[c.country] + 1 : 1,
+          }), {});
+        setMapData(
+          Object.keys(clicks)
+            .map((key: string) => ({
+              country: key,
+              value: clicks[key],
+            }))
         );
 
         setCampaignGridData(campaigns.map((c: any, index: number) => ({
@@ -77,11 +93,7 @@ const Campaigns: React.FC = () => {
           </Grid>
         </Grid>
         <Grid item md={7}>
-          <CampaignMap
-            data={[
-              { country: 'us', value: 1 }
-            ]}
-          />
+          <CampaignMap data={mapData ?? []} />
         </Grid>
       </Grid>
       {campaignGridData && <CampaignGrid rows={campaignGridData} />}
