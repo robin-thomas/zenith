@@ -4,4 +4,5 @@ export interface MetamaskDialogProps {
   txn?: any;
   resetHandler?: () => void;
   successHandler?: () => void;
+  successMessage?: string;
 };

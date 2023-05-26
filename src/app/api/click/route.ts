@@ -7,7 +7,9 @@ import { APP_NAME_CAPS } from '@/constants/app';
 import { TABLE_CLICK } from '@/constants/sxt';
 
 export async function POST(request: NextRequest) {
-  const country = request.geo?.country;
+  const { searchParams } = new URL(request.url);
+  const country = searchParams.get('country') || 'us';
+
   const { campaignId, advertiser, clicker, signature, viewed } = await request.json();
 
   const sdk = new DmlSDK({ host: process.env.SXT_HOST as string });

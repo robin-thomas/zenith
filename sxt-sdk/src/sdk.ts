@@ -21,7 +21,8 @@ class BaseSDK {
       .replace(/  +/g, ' ')
     ;
 
-    const res = await fetch(`${this.authSDK.host}${this.path}`, {
+    const url = `${this.authSDK.host}${this.path}`;
+    const _options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -32,7 +33,12 @@ class BaseSDK {
         sqlText: _sqlText,
         ...queryOptions.resourceId && { resourceId: queryOptions.resourceId },
       }),
-    });
+    };
+
+    // eslint-disable-next-line no-console
+    console.log(`Sending POST request to ${url} with:`, _options);
+
+    const res = await fetch(`${this.authSDK.host}${this.path}`, _options);
 
     const data = await res.text();
 

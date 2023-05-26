@@ -40,6 +40,11 @@ contract Zenith is UserRequest {
         AdClick[] adClicks;
     }
 
+    struct RewardWithAdClicks {
+        uint reward;
+        uint adClicks;
+    }
+
     mapping(uint => Campaign) campaigns;
     mapping(uint => AdClick[]) adClicksOfCampaign;
     mapping(address => uint[]) campaignsOfAdvertiser;
@@ -241,6 +246,28 @@ contract Zenith is UserRequest {
         if (_rewards > 0) {
             payable(_user).transfer(_rewards);
         }
+    }
+
+    function getLastProcessed() public view returns (uint) {
+        return lastProcessed[msg.sender];
+    }
+
+    function getRewardsOfUser()
+        public
+        view
+        returns (RewardWithAdClicks memory)
+    {
+        uint _rewards = 0;
+        uint _adClicks = 0;
+        for (uint _campaignId = 0; _campaignId < numCampaigns; _campaignId++) {
+            uint _reward = rewardsOfUser[msg.sender][_campaignId];
+            if (_reward > 0) {
+                _rewards += _reward;
+                ++_adClicks;
+            }
+        }
+
+        return RewardWithAdClicks({reward: _rewards, adClicks: _adClicks});
     }
 
     function getClickerFromSignature(

@@ -11,17 +11,8 @@ import Tooltip from '@mui/material/Tooltip';
 
 import type { ToggleCampaignProps } from './ToggleCampaign.types';
 import { toggleCampaignStatus as toggleCmpMetamask } from '@/utils/metamask';
-import MetamaskDialog from '@/layouts/dialog/metamask/MetaMask';
-
-const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
-
-const getHumanError = (err: Error) => {
-  if (err.message.includes('ACTION_REJECTED')) {
-    return 'You have cancelled the transaction!';
-  }
-
-  return err.message;
-};
+import { MetaMaskDialog } from '@/layouts/dialog';
+import { capitalize, getHumanError } from '@/utils/utils';
 
 const ToggleCampaign: React.FC<ToggleCampaignProps> = ({ status, icon, campaignId, toggleCampaignStatus }) => {
   const [open, setOpen] = useState(false);
@@ -58,7 +49,7 @@ const ToggleCampaign: React.FC<ToggleCampaignProps> = ({ status, icon, campaignI
       <Tooltip title={`${capitalize(status)} this campaign`} arrow>
         <IconButton onClick={handleOpen}>{icon}</IconButton>
       </Tooltip>
-      <MetamaskDialog
+      <MetaMaskDialog
         open={openMetamask}
         error={error}
         txn={txn}

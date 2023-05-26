@@ -73,16 +73,19 @@ const toCampaign = (campaign: any) => ({
 
 export const getCampaigns = async () => {
   const contract = getContract();
-  const campaigns = await contract.getCampaignsOfAdvertiser();
+  const campaigns = (await contract.getCampaignsOfAdvertiser())
+    .map(({ campaign, adClicks }: any) => ({
+      ...toCampaign(campaign),
+      clicks: adClicks,
+    }));
 
-  return Promise.all(
-    campaigns
-      .map(({ campaign, adClicks }: any) => ({
-        ...toCampaign(campaign),
-        clicks: adClicks,
-      }))
-      .map(getCampaignDetails)
-  );
+  const campaignIds = campaigns.map(({ cid }: any) => cid);
+  const campaignDetails = await getCampaignDetails(campaignIds);
+
+  return campaigns.map((campaign: any) => ({
+    ...campaign,
+    ...campaignDetails[campaign.cid],
+  }));
 };
 
 export const toggleCampaignStatus = async (campaignId: string, status: 'pause' | 'start') => {
@@ -98,22 +101,23 @@ export const getAvailableAds = async (address: string) => {
   const contract = getContract();
   const ads = await contract.getAvailableCampaigns();
 
+  let campaigns = ads.map(toCampaign);
+
   const resp = await fetch(`/api/click?user=${address}`);
   if (resp.ok) {
     const clicks = await resp.json();
     const campaignIds = clicks.map(({ campaignId }: any) => campaignId.toString());
 
-    return Promise.all(
-      ads
-        .map(toCampaign)
-        .filter(({ id }: { id: number }) => !campaignIds.includes(id))
-        .map(getCampaignDetails)
-    );
+    campaigns = campaigns
+      .filter(({ id }: { id: number }) => !campaignIds.includes(id));
   }
 
-  return Promise.all(
-    ads.map(toCampaign).map(getCampaignDetails)
-  );
+  const campaignDetails = await getCampaignDetails(campaigns.map(({ cid }: any) => cid));
+
+  return campaigns.map((campaign: any) => ({
+    ...campaign,
+    ...campaignDetails[campaign.cid],
+  }));
 };
 
 export const getSignatureForAdClick = async (campaignId: string, displayTime: number) => {
@@ -136,15 +140,34 @@ export const requestRewards = async () => {
   );
 };
 
-const getCampaignDetails = async (campaign: any) => {
-  const resp = await fetch('/api/campaign/' + campaign.cid);
-  const { name, description, url, created } = await resp.json();
+export const getLastProcessed = async () => {
+  const contract = getContract();
+  const lastProcessed = await contract.getLastProcessed();
+
+  return lastProcessed.toNumber();
+};
+
+export const getRewardDetails = async () => {
+  const contract = getContract();
+  const details = await contract.getRewardsOfUser();
 
   return {
-    ...campaign,
-    name,
-    description,
-    url,
-    startDatetime: dayjs(created).format('MMM D, YYYY hh:mm A'),
+    reward: utils.formatEther(details.reward),
+    adClicks: details.adClicks.toNumber(),
   };
+};
+
+const getCampaignDetails = async (campaignIds: string[]) => {
+  const resp = await fetch(`/api/campaign?ids=${campaignIds.join(',')}`);
+  const json = await resp.json();
+
+  return json.reduce((acc: any, { id, name, description, url, created }: any) => ({
+    ...acc,
+    [id]: {
+      name,
+      description,
+      url,
+      startDatetime: created ? dayjs(created).format('MMM D, YYYY hh:mm A') : null,
+    }
+  }), {});
 };
