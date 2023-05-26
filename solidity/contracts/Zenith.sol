@@ -40,6 +40,11 @@ contract Zenith is UserRequest {
         AdClick[] adClicks;
     }
 
+    struct RewardWithAdClicks {
+        uint reward;
+        uint adClicks;
+    }
+
     mapping(uint => Campaign) campaigns;
     mapping(uint => AdClick[]) adClicksOfCampaign;
     mapping(address => uint[]) campaignsOfAdvertiser;
@@ -243,6 +248,25 @@ contract Zenith is UserRequest {
         }
     }
 
+    function getLastProcessed() public view returns (uint) {
+        return lastProcessed[msg.sender];
+    }
+
+    function getRewardsOfUser()
+        public
+        view
+        returns (RewardWithAdClicks memory)
+    {
+        uint _rewards = 0;
+        uint _adClicks = 0;
+        for (uint _campaignId = 0; _campaignId < numCampaigns; _campaignId++) {
+            _rewards += rewardsOfUser[msg.sender][_campaignId];
+            ++_adClicks;
+        }
+
+        return RewardWithAdClicks({reward: _rewards, adClicks: _adClicks});
+    }
+
     function getClickerFromSignature(
         uint campaignId,
         uint displayTime,
@@ -252,19 +276,6 @@ contract Zenith is UserRequest {
         bytes32 message = ECDSA.toEthSignedMessageHash(hash);
 
         return ECDSA.recover(message, signature);
-    }
-
-    function getLastProcessed() public view returns (uint) {
-        return lastProcessed[msg.sender];
-    }
-
-    function getRewardsOfUser() public view returns (uint) {
-        uint _rewards = 0;
-        for (uint _campaignId = 0; _campaignId < numCampaigns; _campaignId++) {
-            _rewards += rewardsOfUser[msg.sender][_campaignId];
-        }
-
-        return _rewards;
     }
 
     modifier isAdvertiser(uint campaignId) {
