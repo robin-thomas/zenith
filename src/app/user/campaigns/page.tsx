@@ -18,7 +18,7 @@ const Campaigns: React.FC = () => {
   const [adClickCount, setAdClickCount] = useState<number>();
   const [campaignCount, setCampaignCount] = useState<number>();
   const [remaingingFunds, setRemaingingFunds] = useState<string>();
-  const [campaignGridData, setCampaignGridData] = useState<CampaignGridData[]>(undefined);
+  const [campaignGridData, setCampaignGridData] = useState<CampaignGridData[]>();
 
   useEffect(() => {
     const fn = async () => {

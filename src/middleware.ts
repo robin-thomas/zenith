@@ -8,3 +8,7 @@ export async function middleware(req: NextRequest) {
 
   return NextResponse.rewrite(url);
 }
+
+export const config = {
+  matcher: '/api/click',
+};
