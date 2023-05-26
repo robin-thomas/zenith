@@ -84,7 +84,7 @@ const LeftMenu: React.FC = () => {
           <Tooltip key={item.name} title={item.description} arrow>
             <Link href={item.href}>
               <MenuItem
-                sx={{ marginTop: 1, marginBottom: 1 }}
+                sx={{ mt: 1, mb: 1 }}
                 selected={selectedLeftMenu === item.name}
                 onClick={() => setSelectedLeftMenu(item.name)}
               >
@@ -96,7 +96,7 @@ const LeftMenu: React.FC = () => {
             </Link>
           </Tooltip>
         ))}
-        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+        <Divider sx={{ mt: 2, mb: 2 }} />
         <MenuItem onClick={onLogoutClick}>
           <ListItemIcon><LogoutRoundedIcon /></ListItemIcon>
           <ListItemText className={styles.itemname}>

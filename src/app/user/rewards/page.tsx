@@ -96,7 +96,7 @@ const Rewards: React.FC = () => {
       ) : showRewardsBtn === undefined ? (
         <Skeleton variant="rectangular" height={60} />
       ) : (
-        <Card variant="outlined" sx={{ marginTop: 3 }}>
+        <Card variant="outlined" sx={{ mt: 3 }}>
           <CardContent>
                 <p>There are no pending rewards.</p>
           </CardContent>

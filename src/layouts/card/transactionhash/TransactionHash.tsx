@@ -6,7 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import styles from './TransactionHash.module.css';
 
 const TransactionHash = ({ hash }: { hash: string }) => (
-  <Card variant="outlined" sx={{ marginTop: 3 }}>
+  <Card variant="outlined" sx={{ mt: 3 }}>
     <CardContent>
       <span className={styles.txnHash}>Transaction Hash</span><br />
       <Link
