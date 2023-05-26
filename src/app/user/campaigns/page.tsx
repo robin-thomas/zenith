@@ -18,7 +18,7 @@ const Campaigns: React.FC = () => {
   const [adClickCount, setAdClickCount] = useState<number>();
   const [campaignCount, setCampaignCount] = useState<number>();
   const [remaingingFunds, setRemaingingFunds] = useState<string>();
-  const [campaignGridData, setCampaignGridData] = useState<CampaignGridData[]>([]);
+  const [campaignGridData, setCampaignGridData] = useState<CampaignGridData[]>(undefined);
 
   useEffect(() => {
     const fn = async () => {
@@ -47,6 +47,7 @@ const Campaigns: React.FC = () => {
         setCampaignCount(0);
         setAdClickCount(0);
         setRemaingingFunds('0');
+        setCampaignGridData([]);
       }
     };
 
@@ -83,7 +84,7 @@ const Campaigns: React.FC = () => {
           />
         </Grid>
       </Grid>
-      <CampaignGrid rows={campaignGridData} />
+      {campaignGridData && <CampaignGrid rows={campaignGridData} />}
     </>
   );
 };

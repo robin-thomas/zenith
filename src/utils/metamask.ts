@@ -162,6 +162,6 @@ const getCampaignDetails = async (campaign: any) => {
     name,
     description,
     url,
-    startDatetime: dayjs(created).format('MMM D, YYYY hh:mm A'),
+    startDatetime: created ? dayjs(created).format('MMM D, YYYY hh:mm A') : null,
   };
 };
