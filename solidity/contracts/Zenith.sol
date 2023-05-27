@@ -11,6 +11,9 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 
+/**
+ * @dev Main app contract.
+ */
 contract Zenith is UserRequest {
     using SafeMath for uint256;
     using ECDSA for bytes32;
@@ -20,6 +23,9 @@ contract Zenith is UserRequest {
 
     Truflation truflationContract;
 
+    /**
+     * @dev Store the details of a campaign.
+     */
     struct Campaign {
         uint id;
         address advertiser;
@@ -31,6 +37,9 @@ contract Zenith is UserRequest {
         bool active;
     }
 
+    /**
+     * @dev Store the details of an ad click.
+     */
     struct AdClick {
         uint clickedTime;
         uint costPerClick;
@@ -48,12 +57,34 @@ contract Zenith is UserRequest {
         uint adClicks;
     }
 
+    /**
+     * @dev lookup a campaign by its id.
+     */
     mapping(uint => Campaign) campaigns;
+
+    /**
+     * @dev lookup of all ad clicks made for a campaign.
+     */
     mapping(uint => AdClick[]) adClicksOfCampaign;
+
+    /**
+     * @dev lookup of all campaigns created by an advertiser.
+     */
     mapping(address => uint[]) campaignsOfAdvertiser;
+
+    /**
+     * @dev lookup of all ad clicks paid out to a user.
+     */
     mapping(address => mapping(uint => uint)) rewardsOfUser;
 
+    /**
+     * @dev store the last time a user's ad clicks were retrived from SxT.
+     */
     mapping(address => uint) lastProcessed;
+
+    /**
+     * @dev mapping of Chainlink request ID to the address of a user who requested reward.
+     */
     mapping(bytes32 => address) public requests;
 
     uint public numCampaigns = 0;
@@ -72,6 +103,15 @@ contract Zenith is UserRequest {
         truflationContract = Truflation(truflationContractAddress);
     }
 
+    /**
+     * @dev Create a new campaign.
+     *
+     * @param _budget The total budget of the campaign.
+     * @param _baseCostPerClick The base cost per click of the campaign.
+     * @param _endDatetime The end datetime of the campaign.
+     * @param _cid The cid of the campaign to lookup the campaign details from SxT.
+     * @return The id of the campaign.
+     */
     function createCampaign(
         uint _budget,
         uint _baseCostPerClick,
@@ -87,7 +127,7 @@ contract Zenith is UserRequest {
         );
         require(bytes(_cid).length > 0, "Cid cannot be empty");
 
-        Campaign memory campaign = Campaign({
+        Campaign memory _campaign = Campaign({
             id: numCampaigns,
             advertiser: msg.sender,
             budget: _budget,
@@ -98,26 +138,43 @@ contract Zenith is UserRequest {
             endDatetime: _endDatetime
         });
 
-        campaigns[campaign.id] = campaign;
-        campaignsOfAdvertiser[campaign.advertiser].push(campaign.id);
+        campaigns[_campaign.id] = _campaign;
+        campaignsOfAdvertiser[_campaign.advertiser].push(_campaign.id);
 
         numCampaigns++;
 
-        emit CampaignCreated(campaign.id, msg.sender, _budget);
+        emit CampaignCreated(_campaign.id, msg.sender, _budget);
 
-        return campaign.id;
+        return _campaign.id;
     }
 
-    function enableCampaign(uint campaignId) public isAdvertiser(campaignId) {
-        campaigns[campaignId].active = true;
-        emit CampaignEnabled(campaignId);
+    /**
+     * @dev Enable a campaign.
+     *
+     * @param _campaignId The id of the campaign.
+     */
+    function enableCampaign(uint _campaignId) public isAdvertiser(_campaignId) {
+        campaigns[_campaignId].active = true;
+        emit CampaignEnabled(_campaignId);
     }
 
-    function disableCampaign(uint campaignId) public isAdvertiser(campaignId) {
-        campaigns[campaignId].active = false;
-        emit CampaignDisabled(campaignId);
+    /**
+     * @dev Disable a campaign.
+     *
+     * @param _campaignId The id of the campaign.
+     */
+    function disableCampaign(
+        uint _campaignId
+    ) public isAdvertiser(_campaignId) {
+        campaigns[_campaignId].active = false;
+        emit CampaignDisabled(_campaignId);
     }
 
+    /**
+     * @dev Get all campaigns of an advertiser.
+     *
+     * @return An array of campaigns.
+     */
     function getCampaignsOfAdvertiser()
         public
         view
@@ -137,6 +194,11 @@ contract Zenith is UserRequest {
         return _campaigns;
     }
 
+    /**
+     * @dev Get all campaigns available for a user to click.
+     *
+     * @return An array of campaigns.
+     */
     function getAvailableCampaigns() public view returns (Campaign[] memory) {
         uint _numCampaigns = 0;
         for (uint _campaignId = 0; _campaignId < numCampaigns; _campaignId++) {
@@ -156,18 +218,30 @@ contract Zenith is UserRequest {
         return _campaigns;
     }
 
+    /**
+     * @dev Check if a campaign is available for a user to click.
+     *
+     * @param _campaignId The id of the campaign.
+     * @return True if the campaign is available for a user to click.
+     */
     function isAvailableCampaign(uint _campaignId) private view returns (bool) {
-        Campaign memory campaign = campaigns[_campaignId];
+        Campaign memory _campaign = campaigns[_campaignId];
 
         return
-            campaign.active &&
-            campaign.endDatetime > block.timestamp &&
+            _campaign.active &&
+            _campaign.endDatetime > block.timestamp &&
             rewardsOfUser[msg.sender][_campaignId] == 0;
     }
 
+    /**
+     * @dev Get all pending ad clicks of a user from SxT
+     *
+     * @param _resourceId The resource id of the ad clicks table in SxT.
+     * @return _requestId The Chainlink request id.
+     */
     function triggerRetrieveRewards(
         string memory _resourceId
-    ) external nonReentrant returns (bytes32 requestId) {
+    ) external nonReentrant returns (bytes32 _requestId) {
         require(
             getChainlinkToken().approve(
                 address(getSxTRelayContract().impl()),
@@ -188,7 +262,7 @@ contract Zenith is UserRequest {
             )
         );
 
-        requestId = getSxTRelayContract().requestQueryString2D(
+        _requestId = getSxTRelayContract().requestQueryString2D(
             _query,
             _resourceId,
             address(this),
@@ -196,10 +270,19 @@ contract Zenith is UserRequest {
             jobId
         );
 
-        requests[requestId] = msg.sender;
+        requests[_requestId] = msg.sender;
         lastProcessed[msg.sender] = block.timestamp;
     }
 
+    /**
+     * @dev Record pending ad clicks of a user from SxT.
+     *
+     * @param _requestId The Chainlink request id.
+     * @param _data The ad clicks data in 2D array form.
+     *
+     * Requirements:
+     * - can be called only by the SxT relay contract.
+     */
     function recordAdClicks(
         bytes32 _requestId,
         string[][] calldata _data
@@ -257,10 +340,18 @@ contract Zenith is UserRequest {
         }
     }
 
+    /**
+     * @dev Get the last processed reward request of a user.
+     */
     function getLastProcessed() public view returns (uint) {
         return lastProcessed[msg.sender];
     }
 
+    /**
+     * @dev Calculate the total rewards paid to a user.
+     *
+     * @return The rewards of a user.
+     */
     function getRewardsOfUser()
         public
         view
@@ -279,27 +370,47 @@ contract Zenith is UserRequest {
         return RewardWithAdClicks({reward: _rewards, adClicks: _adClicks});
     }
 
+    /**
+     * @dev Request update of CPI using Truflation.
+     *
+     * @param _country The country to update CPI.
+     * @return _requestId The Chainlink request id.
+     */
     function requestCPI(
-        string memory country_
-    ) public returns (bytes32 requestId) {
-        return truflationContract.requestCPI(country_);
+        string memory _country
+    ) public returns (bytes32 _requestId) {
+        return truflationContract.requestCPI(_country);
     }
 
+    /**
+     * @dev Retrieve the signer from an ethereum signature
+     *
+     * @param _campaignId The id of the campaign.
+     * @param _displayTime The time the ad was displayed.
+     * @param _signature The signature of the clicker.
+     * @return The address of the clicker from the signature.
+     */
     function getClickerFromSignature(
-        uint campaignId,
-        uint displayTime,
-        bytes memory signature
+        uint _campaignId,
+        uint _displayTime,
+        bytes memory _signature
     ) private pure returns (address) {
-        bytes32 hash = keccak256(abi.encodePacked(campaignId, displayTime));
-        bytes32 message = ECDSA.toEthSignedMessageHash(hash);
+        bytes32 _hash = keccak256(abi.encodePacked(_campaignId, _displayTime));
+        bytes32 _message = ECDSA.toEthSignedMessageHash(_hash);
 
-        return ECDSA.recover(message, signature);
+        return ECDSA.recover(_message, _signature);
     }
 
+    /**
+     * @dev Withdraw LINK from this contract.
+     *
+     * Requirements:
+     * - can be called only by the owner.
+     */
     function withdrawLink() public onlyOwner {
-        LinkTokenInterface link = getChainlinkToken();
+        LinkTokenInterface _link = getChainlinkToken();
         require(
-            link.transfer(msg.sender, link.balanceOf(address(this))),
+            _link.transfer(msg.sender, _link.balanceOf(address(this))),
             "Unable to transfer"
         );
     }
