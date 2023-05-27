@@ -225,8 +225,10 @@ contract Zenith is UserRequest {
             );
 
             if (_user == _clicker) {
-                uint _costPerClick = campaigns[_campaignId].baseCostPerClick *
-                    getCPI(_data[_index][2]);
+                uint _costPerClick = truflationContract.multiplyByCPI(
+                    campaigns[_campaignId].baseCostPerClick,
+                    _data[_index][2]
+                );
                 _costPerClick = Math.min(
                     _costPerClick,
                     campaigns[_campaignId].remaining
@@ -281,10 +283,6 @@ contract Zenith is UserRequest {
         string memory country_
     ) public returns (bytes32 requestId) {
         return truflationContract.requestCPI(country_);
-    }
-
-    function getCPI(string memory country_) public view returns (uint) {
-        return truflationContract.getCPI(country_);
     }
 
     function getClickerFromSignature(

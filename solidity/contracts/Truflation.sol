@@ -47,12 +47,16 @@ contract Truflation is ChainlinkClient, ConfirmedOwner {
         bytes memory _data
     ) public recordChainlinkFulfillment(_requestId) {
         string memory _country = requests[_requestId];
-        cpi[_country] = 1 ether + Utils.stringToUint(string(_data));
+        cpi[_country] = (1e18 + Utils.stringToUint(string(_data))) / 1e14;
     }
 
-    function getCPI(string memory country_) public view returns (uint) {
+    function multiplyByCPI(uint amount_, string memory country_) public view returns (uint) {
+        return amount_ * getCPI(country_) / 1e4;
+    }
+
+    function getCPI(string memory country_) private view returns (uint) {
         if (cpi[country_] == 0) {
-            return 1 ether;
+            return 1e4;
         } else {
             return cpi[country_];
         }

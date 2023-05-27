@@ -30,5 +30,5 @@ const resourceId = `${APP_NAME_CAPS}.${TABLE_CLICK}`;
     }
   );
 
-  console.log('Table created successfully');
+  console.log(`${resourceId} table created successfully`);
 })();
