@@ -1,48 +1,65 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Zenith
 
-## Getting Started
+## Inspiration
+Advertising and Blockchain are two areas I'm pretty much interested in. Advertising, because that's what my daily work entails. Blockchain, because I love smart contracts and their decentralized aspect. Trying to bring both these worlds a bit closer is what inspired me to build Zenith.
 
-First, run the development server:
+## What it does
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## How I built it
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Frontend
+The web app is built using React and NextJS and is hosted on Vercel.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `Material UI` = the react component library used to build the app
+- `Ethers.js` = for interacting with the Polygon Mumbai smart contracts
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Backend
+Backend is comprised of a few APIs hosted on Vercel.
 
-## Learn More
+- `/api/campaigns`
+  - `GET` = search for campaign metadata in SxT
+  - `POST` = create a new campaign metadata in SxT, which returns a cid that is stored in `Zenith.sol`
+- `/api/click`
+  - `POST` = store ad click data in SxT
+  - `GET` = search for pending ad clicks of a user (used by the Chainlink Oracle request)
+- `/api/stats`
+  - `GET` = get stats of like total campaigns, ad clicks and current deposit value
 
-To learn more about Next.js, take a look at the following resources:
+### Blockchain
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+There are two smart contracts deployed on the Polygon Mumbai testnet:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- `Zenith.sol` = the main smart contract that stores campaigns, ad clicks and rewards
+- `Truflation.sol` = stores the current year-over-year CPI of all countries supported by Truflation
 
-## Deploy on Vercel
+## Challenges I ran into
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Working with SxT in NodeJS wasn't easy due to the lack of an SDK, and hence I built one myself, released as npm package [@robinthomas/sxt-sdk](https://www.npmjs.com/package/@robinthomas/sxt-sdk). Refer to [source code](https://github.com/robin-thomas/zenith/tree/main/sxt-sdk). But I did find few issues with SxT reported under:
+  - https://github.com/SxT-Community/chainlink-hackathon/issues/1
+  - https://github.com/SxT-Community/chainlink-hackathon/issues/2
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- SxT and Truflation wasn't working properly in a single smart contract because of diamond inheritance problem. As such, I created two smart contracts with separate deployments to solve this.
 
-## Hardhat
+- Debugging smart contract errors was no easy task. It took a few iterations and deployments of the solidity code to get it all working fine.
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+- SxT fulfillment function in Mumbai has a gas limit of 500k gwei, which depending on the size of the 2D array might not be enough.
 
-Try running some of the following tasks:
+- Truflation Oracle fulfillment wasn't happening in Mumbai testnet. On debugging, I found that its due to the lack of MATIC in a Truflation contract [0x776f1c12afa523941fd697639eb27d7726f9e482](https://mumbai.polygonscan.com/address/0x776f1c12afa523941fd697639eb27d7726f9e482). Thanks to [Chainlink Faucet](https://faucets.chain.link/mumbai), funded the contract with some MATIC and it started working fine.
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
+## Accomplishments that I'm proud of
+
+- SxT SDK. Created a NodeJS SDK for SxT to make it easy to interact with SxT in NodeJS (supports DDL, DML, DQL).
+
+- The cost per ad click, which is calculated using the base cost per click from the campaign, the current year-over-year CPI of the country and the PPP of the user's country.
+
+- UI/UX. Clean and modern responsive design created from scratch.
+
+## What I learnt
+
+- Though I had been a Solidity learner for quite some time, this hackathon has helped me learn more, with respect to solidity code, debugging, testnets, oracles, and so on.
+
+## What's next for Zenith
+
+- Add support for more countries and currencies.
+- Add support for more ad types like video, audio, etc.
+- Add support for more ad metrics like impressions, conversions, etc.
