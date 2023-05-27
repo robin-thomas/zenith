@@ -15,7 +15,9 @@ library Utils {
         revert("fail");
     }
 
-    function hexStringToBytes(string memory s) internal pure returns (bytes memory) {
+    function hexStringToBytes(
+        string memory s
+    ) internal pure returns (bytes memory) {
         bytes memory ss = bytes(s);
         bytes memory r = new bytes(ss.length / 2);
         for (uint i = 0; i < ss.length / 2; ++i) {
@@ -38,5 +40,13 @@ library Utils {
             }
         }
         return result;
+    }
+
+    function bytesToInt256(
+        bytes memory _bytes
+    ) internal pure returns (int256 value) {
+        assembly {
+            value := mload(add(_bytes, 0x20))
+        }
     }
 }

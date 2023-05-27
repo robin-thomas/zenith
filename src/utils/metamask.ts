@@ -64,7 +64,7 @@ const toCampaign = (campaign: any) => ({
   advertiser: campaign.advertiser,
   budget: utils.formatEther(campaign.budget),
   remaining: utils.formatEther(campaign.remaining),
-  costPerClick: utils.formatEther(campaign.minCostPerClick),
+  costPerClick: utils.formatEther(campaign.baseCostPerClick),
   active: campaign.active,
   cid: campaign.cid,
   clicks: [],

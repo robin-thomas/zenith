@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "./Truflation.sol";
 import "./Utils.sol";
 import "./interfaces/UserRequest.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -17,12 +18,14 @@ contract Zenith is UserRequest {
     /** @dev https://github.com/SxT-Community/chainlink-hackathon/blob/main/README.md */
     string public jobId = "bc97c680d2924f31a0581d947314cc64";
 
+    Truflation truflationContract;
+
     struct Campaign {
         uint id;
         address advertiser;
         uint budget;
         uint remaining;
-        uint minCostPerClick;
+        uint baseCostPerClick;
         uint endDatetime;
         string cid;
         bool active;
@@ -63,18 +66,21 @@ contract Zenith is UserRequest {
 
     constructor(
         ISxTRelayProxy sxtRelayAddress,
-        LinkTokenInterface chainlinkTokenAddress
-    ) UserRequest(sxtRelayAddress, chainlinkTokenAddress, msg.sender) {}
+        LinkTokenInterface chainlinkTokenAddress,
+        address truflationContractAddress
+    ) UserRequest(sxtRelayAddress, chainlinkTokenAddress, msg.sender) {
+        truflationContract = Truflation(truflationContractAddress);
+    }
 
     function createCampaign(
         uint _budget,
-        uint _minCostPerClick,
+        uint _baseCostPerClick,
         uint _endDatetime,
         string memory _cid
     ) public payable returns (uint) {
         require(_budget > 0, "Budget must be greater than 0");
         require(msg.value == _budget, "Insufficient funds sent");
-        require(_minCostPerClick > 0, "Bid must be greater than 0");
+        require(_baseCostPerClick > 0, "Bid must be greater than 0");
         require(
             _endDatetime >= block.timestamp + 1 days,
             "End datetime must be in the future"
@@ -86,7 +92,7 @@ contract Zenith is UserRequest {
             advertiser: msg.sender,
             budget: _budget,
             remaining: _budget,
-            minCostPerClick: _minCostPerClick,
+            baseCostPerClick: _baseCostPerClick,
             cid: _cid,
             active: true,
             endDatetime: _endDatetime
@@ -219,7 +225,8 @@ contract Zenith is UserRequest {
             );
 
             if (_user == _clicker) {
-                uint _costPerClick = campaigns[_campaignId].minCostPerClick;
+                uint _costPerClick = campaigns[_campaignId].baseCostPerClick *
+                    getCPI(_data[_index][2]);
                 _costPerClick = Math.min(
                     _costPerClick,
                     campaigns[_campaignId].remaining
@@ -270,6 +277,16 @@ contract Zenith is UserRequest {
         return RewardWithAdClicks({reward: _rewards, adClicks: _adClicks});
     }
 
+    function requestCPI(
+        string memory country_
+    ) public returns (bytes32 requestId) {
+        return truflationContract.requestCPI(country_);
+    }
+
+    function getCPI(string memory country_) public view returns (uint) {
+        return truflationContract.getCPI(country_);
+    }
+
     function getClickerFromSignature(
         uint campaignId,
         uint displayTime,
@@ -279,6 +296,14 @@ contract Zenith is UserRequest {
         bytes32 message = ECDSA.toEthSignedMessageHash(hash);
 
         return ECDSA.recover(message, signature);
+    }
+
+    function withdrawLink() public onlyOwner {
+        LinkTokenInterface link = getChainlinkToken();
+        require(
+            link.transfer(msg.sender, link.balanceOf(address(this))),
+            "Unable to transfer"
+        );
     }
 
     modifier isAdvertiser(uint campaignId) {
