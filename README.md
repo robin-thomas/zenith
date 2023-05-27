@@ -5,6 +5,30 @@ Advertising and Blockchain are two areas I'm pretty much interested in. Advertis
 
 ## What it does
 
+Zenith is a decentralized advertising platform that allows advertisers to create campaigns and reward users for clicking on their ads, eliminating the need for middlemen.
+
+When a campaign is created, campaign metadata like `name`, `description`, `url` and `created_time` are stored in SxT. An identifier is returned which is stored in the smart contract. The advertiser can enable or disable a campaign at any time.
+
+A user can click on an ad only once per campaign, and shall see only active campaigns.
+
+When a user clicks on an ad, the ad click data like `campaign_id`, `user_address`, `click_time` and `country` are stored in SxT. The country detection happen through Vercel.
+
+When the user requests pending rewards from ad clicks, this triggers a request to the SxT through Chainlink Oracle, and retrieve all pending ad clicks of this user. The smart contract (inside Oracle fulfillment) will then verify the signature of the ad clicks, and only valid ad clicks will be rewarded.
+
+### Calculation of rewards
+
+The cost of an ad click is calculated using the following formula:
+
+```
+cost per click = (current year-over-year CPI of the country) * (base cost per click set in campaign)
+```
+
+Example: if the yoy CPI of USA is 2.88%, and the base cost per click is 0.002 MATIC, then the cost of an ad click in US will be 0.0020576 MATIC.
+
+The current year-over-year CPI of all countries supported are fetched from Truflation once a day. If the CPI of a country is not available, then the cost of an ad click will be the base cost per click.
+
+Once the rewards are calculated, they are transferred from the smart contract to the user's wallet.
+
 ## How I built it
 
 ### Frontend
