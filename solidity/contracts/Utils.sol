@@ -15,7 +15,9 @@ library Utils {
         revert("fail");
     }
 
-    function hexStringToBytes(string memory s) internal pure returns (bytes memory) {
+    function hexStringToBytes(
+        string memory s
+    ) internal pure returns (bytes memory) {
         bytes memory ss = bytes(s);
         bytes memory r = new bytes(ss.length / 2);
         for (uint i = 0; i < ss.length / 2; ++i) {

@@ -22,5 +22,5 @@ const resourceId = `${APP_NAME_CAPS}.${TABLE_CLICK}`;
     }
   );
 
-  console.log('Table dropped successfully');
+  console.log(`${resourceId} table dropped successfully`);
 })();
