@@ -41,12 +41,4 @@ library Utils {
         }
         return result;
     }
-
-    function bytesToInt256(
-        bytes memory _bytes
-    ) internal pure returns (int256 value) {
-        assembly {
-            value := mload(add(_bytes, 0x20))
-        }
-    }
 }
