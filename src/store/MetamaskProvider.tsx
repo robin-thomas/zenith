@@ -16,6 +16,16 @@ const MetamaskProvider: React.FC<IMetamaskProviderProps> = ({ children }) => {
   const router = useRouter();
 
   useEffect(() => {
+    window.ethereum.on('accountsChanged', accountChanged);
+    window.ethereum.on('chainChanged', accountChanged);
+
+    return () => {
+      window.ethereum.removeListener('accountsChanged', accountChanged);
+      window.ethereum.removeListener('chainChanged', accountChanged);
+    };
+  }, []);
+
+  useEffect(() => {
     const refreshAccounts = (accounts: any) => {
       if (accounts?.length > 0) {
         setWallet({ accounts });
@@ -33,9 +43,6 @@ const MetamaskProvider: React.FC<IMetamaskProviderProps> = ({ children }) => {
           const accounts = await provider.send('eth_accounts', []);
 
           refreshAccounts(accounts);
-
-          window.ethereum.on('accountsChanged', accountChanged);
-          window.ethereum.on('chainChanged', accountChanged);
         }
       }
     };
@@ -43,11 +50,6 @@ const MetamaskProvider: React.FC<IMetamaskProviderProps> = ({ children }) => {
     if (!window.sessionStorage.getItem('zenith.user.logout')) {
       getProvider();
     }
-
-    return () => {
-      window.ethereum.removeListener('accountsChanged', accountChanged);
-      window.ethereum.removeListener('chainChanged', accountChanged);
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
