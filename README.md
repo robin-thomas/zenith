@@ -31,7 +31,7 @@ A user can click on an ad only once per campaign, and shall see only active camp
 
 When a user clicks on an ad, the ad click data like `campaign_id`, `user_address`, `click_time` and `country` are stored in SxT. The country detection happen through Vercel.
 
-When the user requests pending rewards from ad clicks, this triggers a request to the SxT through Chainlink Oracle, and retrieve all pending ad clicks of this user. The smart contract (inside Oracle fulfillment) will then verify the signature of the ad clicks, and only valid ad clicks will be rewarded.
+When the user requests pending rewards from ad clicks, this triggers a request to the SxT through [Chainlink Direct Requests](https://docs.spaceandtime.io/docs/chainlink-direct-requests), and retrieve all pending ad clicks of this user. The smart contract (inside Oracle fulfillment) will then verify the signature of the ad clicks, and only valid ad clicks will be rewarded.
 
 ### Calculation of rewards
 
@@ -46,6 +46,27 @@ Example: if the yoy CPI of USA is 2.88%, and the base cost per click is 0.002 MA
 The current year-over-year CPI of all countries supported are fetched from Truflation once a day. If the CPI of a country is not available, then the cost of an ad click will be the base cost per click.
 
 Once the rewards are calculated, they are transferred from the smart contract to the user's wallet.
+
+## How to run it locally
+
+You need to have the NodeJS v18 installed in your system. You can use NVM to install it:
+
+```sh
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+
+$ nvm install 18
+$ node -v
+v18.16.0
+
+$ nvm use 18
+$ npm ci
+```
+
+Then use below command to run it locally:
+
+```sh
+$ npm run dev
+```
 
 ## How I built it
 

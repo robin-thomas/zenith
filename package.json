@@ -21,7 +21,6 @@
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
-    "@metamask/detect-provider": "^2.0.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.129",
     "@mui/material": "^5.13.0",
@@ -29,7 +28,7 @@
     "@mui/x-date-pickers": "^6.4.0",
     "@robinthomas/sxt-sdk": "^0.5.4",
     "dayjs": "^1.11.7",
-    "ethers": "^5.7.2",
+    "ethers": "^6.4.0",
     "formik": "^2.2.9",
     "next": "^13.4.4",
     "react": "^18.2.0",

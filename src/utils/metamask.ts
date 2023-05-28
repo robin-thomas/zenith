@@ -1,15 +1,14 @@
-import { providers, Contract, utils } from 'ethers';
-import detectEthereumProvider from '@metamask/detect-provider';
+import { Contract, BrowserProvider, parseEther, formatEther, solidityPackedKeccak256, getBytes } from 'ethers';
 import dayjs from 'dayjs';
 
 import AppContract from '../../solidity/artifacts/contracts/Zenith.sol/Zenith.json';
 import type { IPay } from './metamask.types';
-import { APP_NAME_CAPS } from '@/constants/app';
+import { APP_NAME_CAPS, CHAIN_ID } from '@/constants/app';
 import { TABLE_CLICK } from '@/constants/sxt';
 
-const getContract = () => {
-  const provider = new providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+const getContract = async () => {
+  const provider = new BrowserProvider(window.ethereum);
+  const signer = await provider.getSigner();
 
   return new Contract(
     process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as string,
@@ -18,17 +17,23 @@ const getContract = () => {
   );
 };
 
-export const login = async () => {
-  const provider = await detectEthereumProvider({ silent: true });
+export const login = async (): Promise<string[] | undefined> => {
+  const provider = new BrowserProvider(window.ethereum);
 
   if (provider) {
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const accounts = await provider.send('eth_requestAccounts', []);
 
-    if (accounts?.length > 0) {
-      window.sessionStorage.removeItem('zenith.user.logout');
+    const chainId = await provider.send('eth_chainId', []);
+    if (chainId === CHAIN_ID) {
+      if (accounts?.length > 0) {
+        window.sessionStorage.removeItem('zenith.user.logout');
+      }
+
+      return accounts;
+    } else {
+      await provider.send('wallet_switchEthereumChain', [{ chainId: CHAIN_ID }]);
+      return login();
     }
-
-    return accounts;
   }
 };
 
@@ -46,15 +51,15 @@ export const pay = async ({ budget, costPerClick, name, url, description, endDat
   });
   const { id } = await resp.json();
 
-  const contract = getContract();
+  const contract = await getContract();
 
   return await contract.createCampaign(
-    utils.parseEther(budget.toString()),
-    utils.parseEther(costPerClick.toString()),
+    parseEther(budget.toString()),
+    parseEther(costPerClick.toString()),
     endDate,
     id,
     {
-      value: utils.parseEther(budget.toString()),
+      value: parseEther(budget.toString()),
     }
   );
 };
@@ -62,17 +67,17 @@ export const pay = async ({ budget, costPerClick, name, url, description, endDat
 const toCampaign = (campaign: any) => ({
   id: campaign.id.toString(),
   advertiser: campaign.advertiser,
-  budget: utils.formatEther(campaign.budget),
-  remaining: Number.parseFloat(utils.formatEther(campaign.remaining)),
-  costPerClick: Number.parseFloat(utils.formatEther(campaign.baseCostPerClick)),
+  budget: formatEther(campaign.budget),
+  remaining: Number.parseFloat(formatEther(campaign.remaining)),
+  costPerClick: Number.parseFloat(formatEther(campaign.baseCostPerClick)),
   active: campaign.active,
   cid: campaign.cid,
   clicks: [],
-  endDatetime: dayjs.unix(campaign.endDatetime.toNumber()).format('MMM D, YYYY hh:mm A'),
+  endDatetime: dayjs.unix(Number(campaign.endDatetime)).format('MMM D, YYYY hh:mm A'),
 });
 
 export const getCampaigns = async () => {
-  const contract = getContract();
+  const contract = await getContract();
   const campaigns = (await contract.getCampaignsOfAdvertiser())
     .map(({ campaign, adClicks }: any) => ({
       ...toCampaign(campaign),
@@ -89,7 +94,7 @@ export const getCampaigns = async () => {
 };
 
 export const toggleCampaignStatus = async (campaignId: string, status: 'pause' | 'start') => {
-  const contract = getContract();
+  const contract = await getContract();
 
   if (status === 'pause') {
     return await contract.disableCampaign(campaignId);
@@ -98,7 +103,7 @@ export const toggleCampaignStatus = async (campaignId: string, status: 'pause' |
 };
 
 export const getAnAd = async (address: string) => {
-  const contract = getContract();
+  const contract = await getContract();
   const ads = await contract.getAvailableCampaigns();
 
   let campaigns = ads.map(toCampaign);
@@ -134,16 +139,15 @@ export const getAnAd = async (address: string) => {
 };
 
 export const getSignatureForAdClick = async (campaignId: string, displayTime: number) => {
-  const provider = new providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+  const provider = new BrowserProvider(window.ethereum);
+  const signer = await provider.getSigner();
 
-  const message = utils.solidityPack(['uint256', 'uint256'], [Number.parseInt(campaignId), displayTime]);
-  const hash = utils.solidityKeccak256(['bytes'], [message]);
-  return await signer.signMessage(utils.arrayify(hash));
+  const hash = solidityPackedKeccak256(['uint256', 'uint256'], [Number.parseInt(campaignId), displayTime]);
+  return await signer.signMessage(getBytes(hash));
 };
 
 export const requestRewards = async () => {
-  const contract = getContract();
+  const contract = await getContract();
 
   return await contract.triggerRetrieveRewards(
     `${APP_NAME_CAPS}.${TABLE_CLICK}`,
@@ -154,19 +158,19 @@ export const requestRewards = async () => {
 };
 
 export const getLastProcessed = async () => {
-  const contract = getContract();
+  const contract = await getContract();
   const lastProcessed = await contract.getLastProcessed();
 
-  return lastProcessed.toNumber();
+  return Number(lastProcessed);
 };
 
 export const getRewardDetails = async () => {
-  const contract = getContract();
+  const contract = await getContract();
   const details = await contract.getRewardsOfUser();
 
   return {
-    reward: utils.formatEther(details.reward),
-    adClicks: details.adClicks.toNumber(),
+    reward: formatEther(details.reward),
+    adClicks: Number(details.adClicks),
   };
 };
 
