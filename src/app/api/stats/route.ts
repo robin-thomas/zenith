@@ -14,6 +14,6 @@ export async function GET() {
   return NextResponse.json({
     campaigns: campaigns.toNumber(),
     adClicks: adClicks.toNumber(),
-    deposits: utils.formatEther(deposits),
+    deposits: Number.parseFloat(utils.formatEther(deposits)).toFixed(4),
   });
 }

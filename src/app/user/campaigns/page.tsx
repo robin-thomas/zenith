@@ -78,17 +78,17 @@ const Campaigns: React.FC = () => {
           <Grid container spacing={1} justifyContent="flex-start">
             <Grid item md={5} sx={{ mr: 1, mb: 1 }}>
               <StatsCard
-                icon={<AccountBalanceRoundedIcon />}
+                icon={<AccountBalanceRoundedIcon sx={{ color: '#8168eb' }} />}
                 title="Balance"
                 value={remaingingFunds !== undefined ? `${CURRENCY_SYMBOL} ${remaingingFunds}` : undefined}
                 description={`Remainging funds in ${CURRENCY_NAME}`}
               />
             </Grid>
             <Grid item md={5}>
-              <StatsCard icon={<AdsClickIcon />} title="Clicks" value={adClickCount} />
+              <StatsCard icon={<AdsClickIcon sx={{ color: '#8168eb' }} />} title="Clicks" value={adClickCount} />
             </Grid>
             <Grid item md={5}>
-              <StatsCard icon={<AddShoppingCartRoundedIcon />} title="Campaigns" value={campaignCount} />
+              <StatsCard icon={<AddShoppingCartRoundedIcon sx={{ color: '#8168eb' }} />} title="Campaigns" value={campaignCount} />
             </Grid>
           </Grid>
         </Grid>
