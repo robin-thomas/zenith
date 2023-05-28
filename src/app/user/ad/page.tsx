@@ -1,21 +1,25 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Skeleton from '@mui/material/Skeleton';
+import { Button } from '@mui/material';
 
 import { PreviewCard } from '@/layouts/card';
 import { Title } from '@/layouts/typography';
 import { getAvailableAds, getSignatureForAdClick } from '@/utils/metamask';
 import { AdvertisementDialog } from '@/layouts/dialog';
 import { useAppContext } from '@/hooks/useAppContext';
+import { PASSPORT_THRESHOLD } from '@/constants/passport';
 
 const WatchAnAd: React.FC = () => {
   const { wallet } = useAppContext();
 
   const [ad, setAd] = useState<any>();
+  const [score, setScore] = useState<number | null>();
   const [openAd, setOpenAd] = useState(false);
 
   const handleOpenAd = () => setOpenAd(true);
@@ -44,6 +48,19 @@ const WatchAnAd: React.FC = () => {
 
   useEffect(() => {
     const fn = async () => {
+      const resp = await fetch(`/api/passport/score/${wallet.accounts[0]}`);
+      const data = await resp.json();
+
+      setScore(data?.score ?? null);
+    };
+
+    if (wallet && score === undefined) {
+      fn();
+    }
+  }, [wallet, score]);
+
+  useEffect(() => {
+    const fn = async () => {
       const ads = await getAvailableAds(wallet.accounts[0]);
       if (ads?.length > 0) {
         setAd(ads[0]);
@@ -52,16 +69,57 @@ const WatchAnAd: React.FC = () => {
       }
     };
 
-    if (wallet?.accounts?.[0]) {
+    if (score && score >= PASSPORT_THRESHOLD) {
       fn();
     }
-  }, [wallet]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [score]);
+
+  const submitPassport = async () => {
+    const passportResp = await fetch('/api/passport', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        address: wallet.accounts[0],
+      }),
+    });
+
+    await passportResp.json();
+
+    setTimeout(() => setScore(undefined), 1000);
+  };
 
   return (
     <>
       <Title title="Watch an Ad" />
-      {ad === undefined && (
+      {(score === undefined && ad === undefined) || (score && score >= PASSPORT_THRESHOLD && ad === undefined) && (
         <Skeleton variant="rounded" height={125} />
+      )}
+      {(score === null || (score && score < PASSPORT_THRESHOLD)) && (
+        <Card variant="outlined" sx={{ mt: 3 }}>
+          <CardContent>
+            <p>
+              Gitcoin Passport is an identity protocol that proves your trustworthiness without
+              needing to collect personally identifiable information.
+            </p>
+            <br />
+            <p>
+              You get score by adding stamps to your passport. Once you have added enough stamps,
+              submit your passport to recalculate your score.<br />
+            </p>
+            <br />
+            <i>NOTE: You need to have a minimum score of &apos;{PASSPORT_THRESHOLD}&apos; to watch an ad.</i>
+            <br />
+            <Link href="https://passport.gitcoin.co/#/dashboard" target="_blank">
+              <Button variant="contained" sx={{ mt: 2 }}>Configure your passport</Button>
+            </Link>
+            <Button variant="contained" sx={{ mt: 2, ml: 2 }} onClick={submitPassport}>
+              Submit your passport
+            </Button>
+          </CardContent>
+        </Card>
       )}
       {ad === null && (
         <Card variant="outlined" sx={{ mt: 3 }}>
