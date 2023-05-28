@@ -18,8 +18,20 @@ body,
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+  color: #8168eb !important;
+  text-decoration: none !important;
+}
+
+a:hover:not(:has(li.MuiMenuItem-root))  {
+  text-decoration: underline !important;
+}
+
+.MuiAlert-root {
+  border-color: #8168eb !important;
+}
+
+.MuiAlert-icon {
+  color: #8168eb !important;
 }
 
 .MuiCardHeader-title {

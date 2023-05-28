@@ -7,7 +7,19 @@ Advertising and Blockchain are two areas I'm pretty much interested in. Advertis
 
 Zenith is a decentralized advertising platform that allows advertisers to create campaigns and reward users for clicking on their ads, eliminating the need for middlemen.
 
-When a campaign is created, campaign metadata like `name`, `description`, `url` and `created_time` are stored in SxT. An identifier is returned which is stored in the smart contract. The advertiser can enable or disable a campaign at any time.
+To create a campaign, an advertiser need to provide the budget (which will be transferred to the smart contract) and base cost per click. Campaign metadata like `name`, `description`, `url` and `created_time` are stored in SxT. A SxT identifier to this metadata is returned which is stored in the smart contract.
+
+The advertiser can enable or disable a campaign at any time.
+
+### Decentralised Auction
+
+The auction process is run everytime there is an availability to show an ad. The auction winner is the advertiser who has the highest bid, which is calculated by below formula:
+
+```
+bid = 0.7 * base cost per click + 0.2 * Gitcoin Passport score + 0.1 * remaining balance of campaign.
+```
+
+This bid is used only to determine the auction winner. The cost per click is calculated using a different formula ([explained here](#calculation-of-rewards)).
 
 ### Ad Clicks
 

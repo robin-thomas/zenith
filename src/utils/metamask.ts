@@ -63,8 +63,8 @@ const toCampaign = (campaign: any) => ({
   id: campaign.id.toString(),
   advertiser: campaign.advertiser,
   budget: utils.formatEther(campaign.budget),
-  remaining: utils.formatEther(campaign.remaining),
-  costPerClick: utils.formatEther(campaign.baseCostPerClick),
+  remaining: Number.parseFloat(utils.formatEther(campaign.remaining)),
+  costPerClick: Number.parseFloat(utils.formatEther(campaign.baseCostPerClick)),
   active: campaign.active,
   cid: campaign.cid,
   clicks: [],
@@ -97,7 +97,7 @@ export const toggleCampaignStatus = async (campaignId: string, status: 'pause' |
   return await contract.enableCampaign(campaignId);
 };
 
-export const getAvailableAds = async (address: string) => {
+export const getAnAd = async (address: string) => {
   const contract = getContract();
   const ads = await contract.getAvailableCampaigns();
 
@@ -114,10 +114,23 @@ export const getAvailableAds = async (address: string) => {
 
   const campaignDetails = await getCampaignDetails(campaigns.map(({ cid }: any) => cid));
 
-  return campaigns.map((campaign: any) => ({
-    ...campaign,
-    ...campaignDetails[campaign.cid],
-  }));
+  const advertisers = campaigns.map(({ advertiser }: any) => advertiser);
+  const reputation = await getReputation(advertisers);
+
+  const campaignsWithDetails = campaigns
+    .map((campaign: any) => ({
+      ...campaign,
+      ...campaignDetails[campaign.cid],
+    }))
+    .sort((a: any, b: any) => {
+      const weightedSumA = a.costPerClick * 0.7 + (reputation[a.advertiser] ?? 0) * 0.2 + a.remaining * 0.1;
+      const weightedSumB = b.costPerClick * 0.7 + (reputation[b.advertiser] ?? 0) * 0.2 + b.remaining * 0.1;
+
+      return weightedSumB - weightedSumA;
+    })
+    ;
+
+  return campaignsWithDetails?.[0];
 };
 
 export const getSignatureForAdClick = async (campaignId: string, displayTime: number) => {
@@ -155,6 +168,21 @@ export const getRewardDetails = async () => {
     reward: utils.formatEther(details.reward),
     adClicks: details.adClicks.toNumber(),
   };
+};
+
+const getReputation = async (advertisers: string[]) => {
+  const reputation = {} as any;
+
+  for (const advertiser of advertisers) {
+    try {
+      const resp = await fetch(`/api/passport/score/${advertiser}`);
+      const { score } = await resp.json();
+
+      reputation[advertiser] = score;
+    } catch (err) { }
+  }
+
+  return reputation;
 };
 
 const getCampaignDetails = async (campaignIds: string[]) => {
