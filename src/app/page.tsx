@@ -43,7 +43,7 @@ const Home: React.FC = () => {
 
     try {
       const accounts = await loginWithMetamask();
-      if (accounts?.length > 0) {
+      if (accounts && accounts.length > 0) {
         setWallet({ accounts });
       }
     } catch (err) {
