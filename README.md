@@ -19,7 +19,7 @@ The auction process is run everytime there is an availability to show an ad. The
 bid = 0.7 * base cost per click + 0.2 * Gitcoin Passport score + 0.1 * remaining balance of campaign.
 ```
 
-This bid is used only to determine the auction winner. The cost per click is calculated using a different formula (explained in #calculation-of-rewards).
+This bid is used only to determine the auction winner. The cost per click is calculated using a different formula ([explained here](#calculation-of-rewards)).
 
 ### Ad Clicks
 
