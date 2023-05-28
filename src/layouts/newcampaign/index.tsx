@@ -94,7 +94,7 @@ const NewCampaign: React.FC = () => {
           <Step>
             <StepLabel>Details</StepLabel>
             <StepContent>
-              <Tooltip title="Higher your trust score, better your chances at winning the bidding auction" arrow>
+              <Tooltip title="Higher your Gitcoin Passport Score, better your chances at winning the bidding auction" arrow>
                 <Alert
                   severity="info"
                   variant="outlined"

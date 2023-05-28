@@ -8,6 +8,7 @@ import CardContent from '@mui/material/CardContent';
 import Skeleton from '@mui/material/Skeleton';
 import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Alert from '@mui/material/Alert';
 
 import { PreviewCard } from '@/layouts/card';
 import { Title } from '@/layouts/typography';
@@ -105,40 +106,49 @@ const WatchAnAd: React.FC = () => {
         <Skeleton variant="rounded" height={125} />
       )}
       {(score === null || (score && score < PASSPORT_THRESHOLD)) && (
-        <Card variant="outlined" sx={{ mt: 3 }}>
-          <CardContent>
-            <p>
-              Gitcoin Passport is an identity protocol that proves your trustworthiness without
-              needing to collect personally identifiable information.
-            </p>
-            <br />
-            <p>
-              You get score by adding stamps to your passport. Once you have added enough stamps,
-              submit your passport to recalculate your score.<br />
-            </p>
-            <br />
-            <i>NOTE: You need to have a minimum score of &apos;{PASSPORT_THRESHOLD}&apos; to watch an ad.</i>
-            <br />
-            <Link href="https://passport.gitcoin.co/#/dashboard" target="_blank">
-              <Button variant="contained" sx={{ mt: 2 }}>Configure your passport</Button>
-            </Link>
-            <LoadingButton
-              variant="contained"
-              sx={{ mt: 2, ml: 2 }}
-              onClick={submitPassport}
-              loading={submittingPassport}
+        <Alert
+          severity="info"
+          variant="outlined">
+          <p>
+            <Link
+              href="https://support.gitcoin.co/gitcoin-knowledge-base/gitcoin-passport/what-is-gitcoin-passport"
+              target="_blank"
             >
-              Submit your passport
-            </LoadingButton>
-          </CardContent>
-        </Card>
+              Gitcoin Passport
+            </Link>
+            &nbsp;is an identity protocol that proves your trustworthiness without
+            needing to collect personally identifiable information. <br /><br />You get score by&nbsp;
+            <Link
+              href="https://support.gitcoin.co/gitcoin-knowledge-base/gitcoin-passport/common-questions/how-is-gitcoin-passports-score-calculated"
+              target="_blank"
+            >
+              adding stamps
+            </Link>
+            &nbsp;to your passport. Once you have added enough stamps, submit your passport to recalculate your score.
+          </p>
+          <br />
+          <b>NOTE: You need to have a minimum score of &apos;{PASSPORT_THRESHOLD}&apos; to watch an ad.</b>
+          <br />
+          <Link href="https://passport.gitcoin.co/#/dashboard" target="_blank">
+            <Button variant="contained" size="small" sx={{ mt: 2 }}>Configure your passport</Button>
+          </Link>
+          <LoadingButton
+            size="small"
+            variant="contained"
+            sx={{ mt: 2, ml: 2 }}
+            onClick={submitPassport}
+            loading={submittingPassport}
+          >
+            Submit your passport
+          </LoadingButton>
+        </Alert>
       )}
       {ad === null && (
-        <Card variant="outlined" sx={{ mt: 3 }}>
-          <CardContent>
-            <p>There are no ads available to watch at this time.</p>
-          </CardContent>
-        </Card>
+        <Alert
+          severity="info"
+          variant="outlined">
+          There are no ads available to watch at this time.
+        </Alert>
       )}
       {ad && (
         <>
