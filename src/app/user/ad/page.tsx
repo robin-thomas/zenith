@@ -12,7 +12,7 @@ import Alert from '@mui/material/Alert';
 
 import { PreviewCard } from '@/layouts/card';
 import { Title } from '@/layouts/typography';
-import { getAvailableAds, getSignatureForAdClick } from '@/utils/metamask';
+import { getAnAd, getSignatureForAdClick } from '@/utils/metamask';
 import { AdvertisementDialog } from '@/layouts/dialog';
 import { useAppContext } from '@/hooks/useAppContext';
 import { PASSPORT_THRESHOLD } from '@/constants/passport';
@@ -64,12 +64,8 @@ const WatchAnAd: React.FC = () => {
 
   useEffect(() => {
     const fn = async () => {
-      const ads = await getAvailableAds(wallet.accounts[0]);
-      if (ads?.length > 0) {
-        setAd(ads[0]);
-      } else {
-        setAd(null);
-      }
+      const ad = await getAnAd(wallet.accounts[0]);
+      setAd(ad ?? null);
     };
 
     if (score && score >= PASSPORT_THRESHOLD) {
