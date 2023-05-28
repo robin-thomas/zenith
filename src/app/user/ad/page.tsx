@@ -6,7 +6,8 @@ import Link from 'next/link';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Skeleton from '@mui/material/Skeleton';
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 import { PreviewCard } from '@/layouts/card';
 import { Title } from '@/layouts/typography';
@@ -21,6 +22,7 @@ const WatchAnAd: React.FC = () => {
   const [ad, setAd] = useState<any>();
   const [score, setScore] = useState<number | null>();
   const [openAd, setOpenAd] = useState(false);
+  const [submittingPassport, setSubmittingPassport] = useState(false);
 
   const handleOpenAd = () => setOpenAd(true);
   const handleCloseAd = () => setOpenAd(false);
@@ -76,6 +78,8 @@ const WatchAnAd: React.FC = () => {
   }, [score]);
 
   const submitPassport = async () => {
+    setSubmittingPassport(true);
+
     const passportResp = await fetch('/api/passport', {
       method: 'POST',
       headers: {
@@ -88,7 +92,10 @@ const WatchAnAd: React.FC = () => {
 
     await passportResp.json();
 
-    setTimeout(() => setScore(undefined), 1000);
+    setTimeout(() => {
+      setSubmittingPassport(false);
+      setScore(undefined);
+    }, 1000);
   };
 
   return (
@@ -115,9 +122,14 @@ const WatchAnAd: React.FC = () => {
             <Link href="https://passport.gitcoin.co/#/dashboard" target="_blank">
               <Button variant="contained" sx={{ mt: 2 }}>Configure your passport</Button>
             </Link>
-            <Button variant="contained" sx={{ mt: 2, ml: 2 }} onClick={submitPassport}>
+            <LoadingButton
+              variant="contained"
+              sx={{ mt: 2, ml: 2 }}
+              onClick={submitPassport}
+              loading={submittingPassport}
+            >
               Submit your passport
-            </Button>
+            </LoadingButton>
           </CardContent>
         </Card>
       )}
