@@ -5,12 +5,20 @@ import { DmlSDK, DqlSDK } from '@robinthomas/sxt-sdk';
 
 import { APP_NAME_CAPS } from '@/constants/app';
 import { TABLE_CLICK } from '@/constants/sxt';
+import { getPassportScore } from '@/utils/passport';
+import { PASSPORT_THRESHOLD } from '@/constants/passport';
 
 export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const country = searchParams.get('country') || 'us';
 
   const { campaignId, advertiser, clicker, signature, viewed } = await request.json();
+
+  // Verify the score is above threshold.
+  const score = await getPassportScore(clicker);
+  if (!score || score < PASSPORT_THRESHOLD) {
+    return NextResponse.json({ error: 'not enough score' }, { status: 400 });
+  }
 
   const sdk = new DmlSDK({ host: process.env.SXT_HOST as string });
 
