@@ -47,6 +47,27 @@ The current year-over-year CPI of all countries supported are fetched from Trufl
 
 Once the rewards are calculated, they are transferred from the smart contract to the user's wallet.
 
+## How to run it locally
+
+You need to have the NodeJS v18 installed in your system. You can use NVM to install it:
+
+```sh
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+
+$ nvm install 18
+$ node -v
+v18.16.0
+
+$ nvm use 18
+$ npm ci
+```
+
+Then use below command to run it locally:
+
+```sh
+$ npm run dev
+```
+
 ## How I built it
 
 ### Frontend
