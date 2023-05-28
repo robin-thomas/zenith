@@ -9,6 +9,12 @@ Zenith is a decentralized advertising platform that allows advertisers to create
 
 When a campaign is created, campaign metadata like `name`, `description`, `url` and `created_time` are stored in SxT. An identifier is returned which is stored in the smart contract. The advertiser can enable or disable a campaign at any time.
 
+### Ad Clicks
+
+Only users with a [Gitcoin Passport](https://passport.gitcoin.co/#/dashboard) having a minimum score of 15 (same score used for [Gitcoin Grants](https://explorer.gitcoin.co/#/)) can click on ads. This is to prevent users from creating multiple accounts and clicking on ads to earn more rewards.
+
+Users can increase their Gitcoin Passport score by adding stamps to their passport. Once they have added enough stamps, they can submit their passport to recalculate their score. Read more about Gitcoin Passport stamps [here](https://support.gitcoin.co/gitcoin-knowledge-base/gitcoin-passport/common-questions/how-is-gitcoin-passports-score-calculated).
+
 A user can click on an ad only once per campaign, and shall see only active campaigns.
 
 When a user clicks on an ad, the ad click data like `campaign_id`, `user_address`, `click_time` and `country` are stored in SxT. The country detection happen through Vercel.
@@ -46,6 +52,10 @@ Backend is comprised of a few APIs hosted on Vercel.
 - `/api/click`
   - `POST` = store ad click data in SxT
   - `GET` = search for pending ad clicks of a user (used by the Chainlink Oracle request)
+- `/api/passport/score/:address`
+  - `GET` = get the Gitcoin passport score of a user
+- `/api/passport`
+  - `POST` = submit passport of a user to recalculate the score
 - `/api/stats`
   - `GET` = get stats of like total campaigns, ad clicks and current deposit value
 
