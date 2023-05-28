@@ -15,7 +15,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 
@@ -62,7 +61,6 @@ const LeftMenu: React.FC = () => {
     <div className={styles.container}>
       <Logo />
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Logout?</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Are you sure you want to logout?

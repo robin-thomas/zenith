@@ -26,6 +26,14 @@ a:hover::not(.MuiMenuItem-root) {
   text-decoration: underline !important;
 }
 
+.MuiAlert-root {
+  border-color: #8168eb !important;
+}
+
+.MuiAlert-icon {
+  color: #8168eb !important;
+}
+
 .MuiCardHeader-title {
   color:rgba(0, 0, 0, 0.54) !important;
 }
