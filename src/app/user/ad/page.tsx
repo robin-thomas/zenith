@@ -127,7 +127,7 @@ const WatchAnAd: React.FC = () => {
             &nbsp;to your passport. Once you have added enough stamps, submit your passport to recalculate your score.
           </p>
           <br />
-          <b>NOTE: You need to have a minimum score of &apos;{PASSPORT_THRESHOLD}&apos; to watch an ad.</b>
+          <b>NOTE: You need to have a minimum score of <u>{PASSPORT_THRESHOLD}</u> to watch an ad.</b>
           <br />
           <Link href="https://passport.gitcoin.co/#/dashboard" target="_blank">
             <Button variant="contained" size="small" sx={{ mt: 2 }}>Configure your passport</Button>

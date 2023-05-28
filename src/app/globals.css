@@ -22,7 +22,7 @@ a {
   text-decoration: none !important;
 }
 
-a:hover::not(.MuiMenuItem-root) {
+a:hover:not(:has(li.MuiMenuItem-root))  {
   text-decoration: underline !important;
 }
 
