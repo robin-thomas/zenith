@@ -20,9 +20,13 @@ export async function POST(request: Request) {
       }),
     });
 
-    const signingMessage = await response.json();
+    const data = await response.json();
 
-    return NextResponse.json(signingMessage, { status: 200 });
+    if (response.ok) {
+      return NextResponse.json(data, { status: 200 });
+    }
+
+    return NextResponse.json(data, { status: response.status });
   } catch (err) {
     return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
