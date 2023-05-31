@@ -1,0 +1,8 @@
+.code {
+  display: block !important;
+  background-color: rgba(0, 0, 0, 0.9) !important;
+  color: white !important;
+  padding: 1rem !important;
+  font-size: 0.8rem !important;
+  font-family: monospace !important;
+}

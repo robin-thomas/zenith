@@ -22,7 +22,7 @@ a {
   text-decoration: none !important;
 }
 
-a:hover:not(:has(li.MuiMenuItem-root))  {
+a:hover:not(:has(li.MuiMenuItem-root)):not(:has(img)):not(:has(.MuiChip-label))  {
   text-decoration: underline !important;
 }
 
@@ -30,7 +30,8 @@ a:hover:not(:has(li.MuiMenuItem-root))  {
   border-color: #8168eb !important;
 }
 
-.MuiAlert-icon {
+.MuiAlert-icon,
+.MuiSwitch-input:checked + .MuiSwitch-thumb {
   color: #8168eb !important;
 }
 
@@ -62,6 +63,10 @@ a:hover:not(:has(li.MuiMenuItem-root))  {
 
 .MuiMenuItem-root.Mui-selected {
   background-color: rgba(129,104,235,0.4) !important;
+}
+
+.Mui-checked + .MuiSwitch-track {
+  background-color: rgba(129, 104, 235, 0.7) !important;
 }
 
 .MuiDataGrid-root .MuiDataGrid-cell:focus,

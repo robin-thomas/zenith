@@ -21,7 +21,7 @@ export const advertiserItems = [
 export const publisherItems = [
   {
     name: 'Settings',
-    href: '/user/ad',
+    href: '/user/settings',
     icon: <SettingsIcon fontSize="small" />,
     description: 'Get paid to watch an advertisement',
   },

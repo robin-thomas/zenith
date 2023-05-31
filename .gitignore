@@ -11,3 +11,5 @@ out/
 build
 
 npm-debug.log*
+.DS_Store
+public/cmp/**
