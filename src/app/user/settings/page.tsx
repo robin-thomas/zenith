@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -14,6 +15,7 @@ import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Title } from '@/layouts/typography';
 import { useAppContext } from '@/hooks/useAppContext';
 import { APP_HOST } from '@/constants/app';
+import { PASSPORT_THRESHOLD } from '@/constants/passport';
 
 const WatchAnAd: React.FC = () => {
   const { wallet } = useAppContext();
@@ -71,7 +73,9 @@ const WatchAnAd: React.FC = () => {
           control={<Switch checked={hideOnNoAd} onChange={(e) => setHideOnNoAd(e.target.checked)} />}
           label={(
             <>
-              Hide if no ads are available&nbsp;
+              Hide if no ads are available or user <Link href="https://passport.gitcoin.co/#/dashboard" target="_blank">
+                Gitcoin Passport
+              </Link> score is less than <b>{PASSPORT_THRESHOLD}</b>
             </>
           )}
         />

@@ -5,8 +5,10 @@ import { hydrateRoot } from 'react-dom/client';
 import { BrowserProvider } from 'ethers';
 import Skeleton from '@mui/material/Skeleton';
 
-import { getAnAd } from './src//utils/metamask';
+import { AdvertisementDialog } from './src/layouts/dialog';
+import { getAnAd, getSignatureForAdClick } from './src//utils/metamask';
 import { PreviewCard } from './src/layouts/card';
+import { APP_HOST } from './src/constants/app';
 import { PASSPORT_THRESHOLD } from './src/constants/passport';
 import { PLACEHOLDER_NAME, PLACEHOLDER_DESCRIPTION, PLACEHOLDER_URL } from './src/constants/campaign';
 
@@ -32,35 +34,70 @@ const getGitcoinPassportScore = async (address: string) => {
   return data?.score;
 };
 
+type Ad = {
+  address: string | null, ad: null | {
+    name: string,
+    description: string,
+    url: string,
+    id?: string,
+    advertiser?: string
+  }
+};
+
 const loadAd = async () => {
+  const result: Ad = { address: null, ad: null };
   const defaultAd = { name: PLACEHOLDER_NAME, description: PLACEHOLDER_DESCRIPTION, url: PLACEHOLDER_URL };
 
   const provider = new BrowserProvider(window.ethereum);
   if (!provider) {
-    return config?.hideOnNoMetaMask ? undefined : defaultAd;
+    if (!config?.hideOnNoMetaMask) {
+      result.ad = defaultAd;
+    }
+    return result;
   }
 
   const accounts = await provider.send('eth_accounts', []);
   if (!Array.isArray(accounts) || accounts.length === 0) {
-    return config?.hideOnNoMetaMask ? undefined : defaultAd;
+    if (!config?.hideOnNoMetaMask) {
+      result.ad = defaultAd;
+    }
+    return result;
   }
+
+  result.address = accounts[0];
 
   const score = await getGitcoinPassportScore(accounts[0]);
   if (!score || score < PASSPORT_THRESHOLD) {
-    return config?.hideOnNoMetaMask ? undefined : defaultAd;
+    if (!config?.hideOnNoMetaMask) {
+      result.ad = defaultAd;
+    }
+    return result;
   }
 
   const ad = await getAnAd(accounts[0]);
   if (!ad) {
-    return config?.hideOnNoAd ? undefined : defaultAd;
+    if (!config?.hideOnNoAd) {
+      result.ad = defaultAd;
+    }
+    return result;
   }
+
+  result.ad = ad;
+
+  return result;
 };
 
 const App: React.FC = () => {
-  const [ad, setAd] = React.useState<any>();
+  const [ad, setAd] = React.useState<Ad['ad']>();
+  const [openAd, setOpenAd] = React.useState(false);
+  const [address, setAddress] = React.useState<string | null>();
 
   React.useEffect(() => {
-    loadAd().then((_ad) => setAd(_ad ?? null));
+    loadAd()
+      .then(({ ad: _ad, address }) => {
+        setAd(_ad ?? null);
+        setAddress(address ?? null);
+      });
   }, []);
 
   if (ad === undefined) {
@@ -71,12 +108,43 @@ const App: React.FC = () => {
     return null;
   }
 
+  const handleOpenAd = () => setOpenAd(true);
+  const handleCloseAd = () => setOpenAd(false);
+  const handleViewAd = async () => {
+    if (ad?.id) {
+      const viewed = Date.now();
+      const signature = await getSignatureForAdClick(ad.id, viewed);
+
+      await fetch(`${APP_HOST}/api/click`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          campaignId: ad.id,
+          advertiser: ad.advertiser,
+          publisher: config.publisherId,
+          clicker: address,
+          signature,
+          viewed: viewed.toString(),
+        }),
+      });
+    }
+
+    window.open(ad.url, '_blank');
+    ad?.id && handleCloseAd();
+  };
+
   return (
-    <PreviewCard
-      name={ad?.name}
-      description={ad?.description}
-      url={ad?.url}
-    />
+    <>
+      {ad?.id && <AdvertisementDialog open={openAd} handleClose={handleCloseAd} onYes={handleViewAd} />}
+      <PreviewCard
+        name={ad?.name}
+        description={ad?.description}
+        url={ad?.url}
+        onClick={ad?.id ? handleOpenAd : handleViewAd}
+      />
+    </>
   );
 };
 
