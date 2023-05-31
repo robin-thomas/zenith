@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { hydrateRoot } from 'react-dom/client';
+import dynamic from 'next/dynamic';
 
 import { BrowserProvider } from 'ethers';
 import Skeleton from '@mui/material/Skeleton';
@@ -137,23 +138,28 @@ const App: React.FC = () => {
 
   return (
     <>
-      {ad?.id && <AdvertisementDialog open={openAd} handleClose={handleCloseAd} onYes={handleViewAd} />}
+      {ad.id && <AdvertisementDialog open={openAd} handleClose={handleCloseAd} onYes={handleViewAd} />}
       <PreviewCard
-        name={ad?.name}
-        description={ad?.description}
-        url={ad?.url}
-        onClick={ad?.id ? handleOpenAd : handleViewAd}
+        name={ad.name}
+        description={ad.description}
+        url={ad.url}
+        onClick={ad.id ? handleOpenAd : handleViewAd}
       />
     </>
   );
 };
+
+const AppNoSSR = dynamic(() => Promise.resolve(App), { ssr: false }) as any;
 
 const loadZenith = async () => {
   const div = document.createElement('div');
   div.id = 'zenith-ad';
   document.getElementById('zenith-js')?.parentNode?.appendChild(div);
 
-  hydrateRoot(document.getElementById('zenith-ad') as HTMLElement, <App />);
+  hydrateRoot(
+    document.getElementById('zenith-ad') as HTMLElement,
+    <AppNoSSR />
+  );
 };
 
 const initZenith = (_config: ZenithConfig) => {
