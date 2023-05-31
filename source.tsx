@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { hydrateRoot } from 'react-dom/client';
+import type { Root } from 'react-dom/client';
 import dynamic from 'next/dynamic';
 
 import { BrowserProvider } from 'ethers';
@@ -151,12 +152,19 @@ const App: React.FC = () => {
 
 const AppNoSSR = dynamic(() => Promise.resolve(App), { ssr: false }) as any;
 
+let zenithAdNode: Root | null = null;
+
 const loadZenith = async () => {
+  if (zenithAdNode) {
+    zenithAdNode.unmount();
+    zenithAdNode = null;
+  }
+
   const div = document.createElement('div');
   div.id = 'zenith-ad';
   document.getElementById('zenith-js')?.parentNode?.appendChild(div);
 
-  hydrateRoot(
+  zenithAdNode = hydrateRoot(
     document.getElementById('zenith-ad') as HTMLElement,
     <AppNoSSR />
   );

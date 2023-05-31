@@ -81,7 +81,7 @@ const WatchAnAd: React.FC = () => {
         />
       </FormGroup>
       <Divider sx={{ mt: 2, mb: 3 }} />
-      <p>Paste this HTML code where you want the ad to appear.</p><br />
+      <p>Paste below HTML code where you want the ad to appear.</p><br />
       <SyntaxHighlighter
         language="javascript"
         style={a11yDark}

@@ -23,7 +23,7 @@ export default function RootLayout({
       <head>
         <link rel="shortcut icon" href="/logo.png" />
       </head>
-      <body className={poppins.className}>
+      <body className={poppins.className} suppressHydrationWarning>
         <DataProvider>
           <MetamaskProvider>
             <div className={styles.page}>
