@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const country = searchParams.get('country') || 'us';
 
-  const { campaignId, advertiser, clicker, signature, viewed } = await request.json();
+  const { campaignId, advertiser, publisher, clicker, signature, viewed } = await request.json();
 
   // Verify the score is above threshold.
   const score = await getPassportScore(clicker);
@@ -25,10 +25,11 @@ export async function POST(request: NextRequest) {
   const resourceId = `${APP_NAME_CAPS}.${TABLE_CLICK}`;
 
   const data = await sdk.query(
-    `INSERT INTO ${resourceId}(campaign_id, advertiser, clicker, country, signature, viewed_time)
+    `INSERT INTO ${resourceId}(campaign_id, advertiser, publisher, clicker, country, signature, viewed_time)
       VALUES(
         ${campaignId.toString()},
         '${advertiser}',
+        '${publisher}',
         '${clicker}',
         '${country}',
         '${getSignature(signature)}',
