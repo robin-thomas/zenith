@@ -73,7 +73,7 @@ a:hover:not(:has(li.MuiMenuItem-root)):not(:has(img)):not(:has(.MuiChip-label)) 
 .MuiDataGrid-root .MuiDataGrid-cell:focus-within,
 .MuiDataGrid-root .MuiDataGrid-columnHeader:focus,
 .MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within {
-  outline: none;
+  outline: none !important;
 }
 
 .MuiLinearProgress-root {

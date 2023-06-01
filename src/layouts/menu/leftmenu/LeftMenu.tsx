@@ -59,7 +59,7 @@ const LeftMenu: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <Logo />
+      <Logo disableLink />
       <Dialog open={open} onClose={handleClose}>
         <DialogContent>
           <DialogContentText>

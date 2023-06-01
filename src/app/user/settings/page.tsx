@@ -75,7 +75,10 @@ const WatchAnAd: React.FC = () => {
             <>
               Hide if no ads are available or user <Link href="https://passport.gitcoin.co/#/dashboard" target="_blank">
                 Gitcoin Passport
-              </Link> score is less than <b>{PASSPORT_THRESHOLD}</b>
+              </Link> score is less than <b>{PASSPORT_THRESHOLD}</b>&nbsp;
+              <Tooltip arrow title="Gitcoin Passport is an identity verification application">
+                <HelpIcon sx={{ fontSize: 16 }} />
+              </Tooltip>
             </>
           )}
         />

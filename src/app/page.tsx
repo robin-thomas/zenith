@@ -19,8 +19,9 @@ import { Logo } from '@/layouts/typography';
 import styles from './page.module.css';
 import { login as loginWithMetamask } from '@/utils/metamask';
 import { useAppContext } from '@/hooks/useAppContext';
-import { APP_DESCRIPTION_SHORT, APP_DESCRIPTION_EXTRA, CURRENCY_SYMBOL } from '@/constants/app';
+import { APP_DESCRIPTION_SHORT, CURRENCY_SYMBOL, CURRENCY_NAME } from '@/constants/app';
 import { StatsCard } from '@/layouts/card';
+import { HomeLink } from '@/layouts/link';
 
 const Home: React.FC = () => {
   const { setWallet } = useAppContext();
@@ -73,7 +74,13 @@ const Home: React.FC = () => {
       <Grid container className={styles.detailsContainer} justifyContent="space-around">
         <Grid item md={6}>
           <div className={styles.description}>{APP_DESCRIPTION_SHORT}</div>
-          <div className={styles.descriptionExtra}>{APP_DESCRIPTION_EXTRA}</div>
+          <div className={styles.descriptionExtra}>
+            Powered by&nbsp;
+            <HomeLink href="https://polygon.technology" title="Polygon" />,&nbsp;
+            <HomeLink href="https://chain.link" title="Chainlink" />,&nbsp;
+            <HomeLink href="https://www.spaceandtime.io" title="SxT" />,&nbsp;
+            <HomeLink href="https://truflation.com" title="Truflation" />
+          </div>
           <Link href="/about">
             <Button variant="contained" sx={{ mt: 2 }}>Learn More</Button>
           </Link>
@@ -85,10 +92,16 @@ const Home: React.FC = () => {
                 icon={<AccountBalanceRoundedIcon sx={{ color: '#8168eb' }} />}
                 title="Deposits"
                 value={stats?.deposits !== undefined ? `${CURRENCY_SYMBOL} ${stats?.deposits}` : undefined}
+                description={`Remaining ${CURRENCY_NAME} in smart contract`}
               />
             </Grid>
             <Grid item md={6}>
-              <StatsCard icon={<AdsClickIcon sx={{ color: '#8168eb' }} />} title="Ad Clicks" value={stats?.adClicks} />
+              <StatsCard
+                icon={<AdsClickIcon sx={{ color: '#8168eb' }} />}
+                title="Ad Clicks"
+                value={stats?.adClicks}
+                description="Total number of ad clicks for which rewards are collected"
+              />
             </Grid>
             <Grid item md={6}>
               <StatsCard icon={<AddShoppingCartRoundedIcon sx={{ color: '#8168eb' }} />} title="Campaigns" value={stats?.campaigns} />

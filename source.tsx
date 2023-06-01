@@ -29,8 +29,8 @@ declare global {
 
 const config = {} as ZenithConfig;
 
-const getGitcoinPassportScore = async (address: string) => {
-  const resp = await fetch(`/api/passport/score/${address}`);
+const getGitcoinPassportScore = async (address: string, init?: RequestInit) => {
+  const resp = await fetch(`/api/passport/score/${address}`, init);
   const data = await resp.json();
 
   return data?.score;
@@ -46,7 +46,7 @@ type Ad = {
   }
 };
 
-const loadAd = async () => {
+const loadAd = async (init?: RequestInit) => {
   const result: Ad = { address: null, ad: null };
   const defaultAd = { name: PLACEHOLDER_NAME, description: PLACEHOLDER_DESCRIPTION, url: PLACEHOLDER_URL };
 
@@ -68,7 +68,7 @@ const loadAd = async () => {
 
   result.address = accounts[0];
 
-  const score = await getGitcoinPassportScore(accounts[0]);
+  const score = await getGitcoinPassportScore(accounts[0], init);
   if (!score || score < PASSPORT_THRESHOLD) {
     if (!config?.hideOnNoMetaMask) {
       result.ad = defaultAd;
@@ -76,7 +76,7 @@ const loadAd = async () => {
     return result;
   }
 
-  const ad = await getAnAd(accounts[0]);
+  const ad = await getAnAd(accounts[0], init);
   if (!ad) {
     if (!config?.hideOnNoAd) {
       result.ad = defaultAd;
@@ -93,14 +93,26 @@ const App: React.FC = () => {
   const [ad, setAd] = React.useState<Ad['ad']>();
   const [openAd, setOpenAd] = React.useState(false);
   const [address, setAddress] = React.useState<string | null>();
+  const [isMounted, setIsMounted] = React.useState(false);
 
   React.useEffect(() => {
-    loadAd()
+    setIsMounted(true);
+
+    const controller = new AbortController();
+
+    loadAd({ signal: controller.signal })
       .then(({ ad: _ad, address }) => {
         setAd(_ad ?? null);
         setAddress(address ?? null);
-      });
+      })
+      .catch(() => controller.abort());
+
+    return () => controller.abort();
   }, []);
+
+  if (!isMounted) {
+    return null;
+  }
 
   if (ad === undefined) {
     return <Skeleton variant="rounded" height={125} />;

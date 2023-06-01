@@ -7,7 +7,7 @@ dotenvConfig();
 build({
   entryPoints: ['source.tsx'],
   bundle: true,
-  // minify: true,
+  minify: true,
   legalComments: 'none',
   format: 'esm',
   target: 'es2020',
