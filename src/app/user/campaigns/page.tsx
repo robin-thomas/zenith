@@ -85,7 +85,12 @@ const Campaigns: React.FC = () => {
               />
             </Grid>
             <Grid item md={5}>
-              <StatsCard icon={<AdsClickIcon sx={{ color: '#8168eb' }} />} title="Clicks" value={adClickCount} />
+              <StatsCard
+                icon={<AdsClickIcon sx={{ color: '#8168eb' }} />}
+                title="Clicks"
+                value={adClickCount}
+                description="Total number of ad clicks for which rewards are collected"
+              />
             </Grid>
             <Grid item md={5}>
               <StatsCard icon={<AddShoppingCartRoundedIcon sx={{ color: '#8168eb' }} />} title="Campaigns" value={campaignCount} />

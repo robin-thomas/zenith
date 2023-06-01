@@ -4,17 +4,21 @@ import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import Tooltip from '@mui/material/Tooltip';
 
 import ToggleCampaign from './ToggleCampaign';
 import type { CampaignGridProps } from './CampaignGrid.types';
-import styles from './CampaignGrid.module.css';
 import { CURRENCY_SYMBOL } from '@/constants/app';
 
 const renderLink = (params: any) => {
   if (params.value == null) {
     return '';
   }
-  return <a href={params.value} target="_blank" className={styles.gridlink}>{params.value}</a>;
+  return (
+    <Tooltip arrow title={params.value}>
+      <a href={params.value} target="_blank">{params.value}</a>
+    </Tooltip>
+  );
 };
 
 const renderCurrency = (params: any) => {
@@ -53,7 +57,7 @@ const CampaignGrid: React.FC<CampaignGridProps> = ({ rows }) => {
       <ToggleCampaign
         status="start"
         campaignId={params.value.split('_')[1]}
-          icon={<PlayArrowIcon fontSize="inherit" color="success" />}
+        icon={<PlayArrowIcon fontSize="inherit" color="success" />}
         toggleCampaignStatus={toggleCampaignStatus(params.value)}
       />
     );
@@ -61,8 +65,8 @@ const CampaignGrid: React.FC<CampaignGridProps> = ({ rows }) => {
 
   const columns = [
     { field: 'status', headerName: '', width: 50, renderCell: renderStatusButtons },
-    { field: 'name', headerName: 'Name', width: 175 },
-    { field: 'url', headerName: 'URL', width: 160, renderCell: renderLink },
+    { field: 'name', headerName: 'Name', width: 170 },
+    { field: 'url', headerName: 'URL', width: 185, renderCell: renderLink },
     { field: 'budget', headerName: 'Budget', width: 100, renderCell: renderCurrency },
     { field: 'remaining', headerName: 'Balance', width: 100, renderCell: renderCurrency },
     { field: 'clicks', headerName: 'Clicks', width: 70 },
@@ -82,8 +86,7 @@ const CampaignGrid: React.FC<CampaignGridProps> = ({ rows }) => {
             },
           },
         }}
-        pageSizeOptions={[2]}
-        // checkboxSelection
+        pageSizeOptions={[3]}
         disableRowSelectionOnClick
       />
     </Box>
