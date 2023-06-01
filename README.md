@@ -9,15 +9,15 @@ Zenith is a decentralized advertising platform that connects advertisers and pub
 
 ### Advertisers
 
-To create a campaign, the advertiser need to provide the budget (which will be transferred to the smart contract) and a base cost per click. This base cost per click will be used for the ad bidding auction as well as deciding the cost of an ad click (explain in more detail in further sections).
+To create a campaign, the advertiser need to provide the budget (which will be transferred to the smart contract) and a base cost per click. This base cost per click will be used for the ad bidding auction as well as deciding the cost of an ad click (explained in more detail in further sections).
 
-Campaign metadata like `name`, `description`, `url` and `created_time` are stored in Space and Time (SxT). A SxT identifier to this metadata is returned which is stored in the smart contract.
+Campaign metadata like `name`, `description`, `url` and `created_time` are stored in Space and Time (SxT) tables. A SxT identifier to this metadata is returned which is stored in the smart contract.
 
 The advertiser can enable or disable a campaign at any time.
 
 ### Publishers
 
-Publishers are website owners, who can copy a snippet of JavaScript code from the Zenith "Settings" page, and then add to their websites. This code will fetch the winning ad (after the decentralized auction) from the smart contract and show it to the users.
+Publishers are website owners, who can copy a snippet of JavaScript code from the Zenith "Settings" page, and then add it to their websites. This code will fetch the winning ad (after the decentralized auction) from the smart contract and show it to the users.
 
 Publishers will be paid only for valid ad clicks:
   - User need to have MetaMask wallet installed
