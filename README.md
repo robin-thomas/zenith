@@ -5,7 +5,7 @@ Advertising and Blockchain are two areas I'm pretty much interested in. Advertis
 
 ## What it does
 
-Zenith is a decentralized advertising platform that connects advertisers and publishers, eliminating the need for middlemen.
+Zenith is a decentralized advertising platform that connects advertisers and publishers through smart contracts, eliminating the need for middlemen.
 
 ### Advertisers
 
