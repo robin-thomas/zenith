@@ -38,12 +38,14 @@ const Rewards: React.FC = () => {
       const timestamp = await getLastProcessed();
 
       const resp = await fetch(`/api/click?user=${address}&t=${timestamp}`);
-      const clicks = await resp.json();
+      if (resp.ok) {
+        const clicks = await resp.json();
 
-      if (clicks?.length > 0) {
-        setShowRewardsBtn(true);
-      } else {
-        setShowRewardsBtn(false);
+        if (clicks?.length > 0) {
+          setShowRewardsBtn(true);
+        } else {
+          setShowRewardsBtn(false);
+        }
       }
     };
 
