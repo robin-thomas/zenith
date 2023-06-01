@@ -31,13 +31,16 @@ const Payment: React.FC<PaymentProps> = ({ setActiveStep }) => {
       endDate: values.endDate.unix(),
     };
 
-    const txn = await pay(payload);
-    setHash(txn.hash);
+    try {
+      const txn = await pay(payload);
+      setHash(txn.hash);
 
-    await txn.wait();
+      await txn.wait();
+
+      setActiveStep(index => index + 1);
+    } catch (err) { }
 
     setPaymentProcessing(false);
-    setActiveStep(index => index + 1);
   };
 
   if (hash) {
