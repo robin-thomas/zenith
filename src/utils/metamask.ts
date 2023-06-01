@@ -102,13 +102,13 @@ export const toggleCampaignStatus = async (campaignId: string, status: 'pause' |
   return await contract.enableCampaign(campaignId);
 };
 
-export const getAnAd = async (address: string) => {
+export const getAnAd = async (address: string, init?: RequestInit) => {
   const contract = await getContract();
   const ads = await contract.getAvailableCampaigns();
 
   let campaigns = ads.map(toCampaign);
 
-  const resp = await fetch(`/api/click?user=${address}`);
+  const resp = await fetch(`/api/click?user=${address}`, init);
   if (resp.ok) {
     const clicks = await resp.json();
     const campaignIds = clicks.map(({ campaignId }: any) => campaignId.toString());
@@ -117,7 +117,7 @@ export const getAnAd = async (address: string) => {
       .filter(({ id }: { id: number }) => !campaignIds.includes(id));
   }
 
-  const campaignDetails = await getCampaignDetails(campaigns.map(({ cid }: any) => cid));
+  const campaignDetails = await getCampaignDetails(campaigns.map(({ cid }: any) => cid), init);
 
   const advertisers = campaigns.map(({ advertiser }: any) => advertiser);
   const reputation = await getReputation(advertisers);
@@ -174,12 +174,12 @@ export const getRewardDetails = async () => {
   };
 };
 
-const getReputation = async (advertisers: string[]) => {
+const getReputation = async (advertisers: string[], init?: RequestInit) => {
   const reputation = {} as any;
 
   for (const advertiser of advertisers) {
     try {
-      const resp = await fetch(`/api/passport/score/${advertiser}`);
+      const resp = await fetch(`/api/passport/score/${advertiser}`, init);
       const { score } = await resp.json();
 
       reputation[advertiser] = score;
@@ -189,12 +189,12 @@ const getReputation = async (advertisers: string[]) => {
   return reputation;
 };
 
-const getCampaignDetails = async (campaignIds: string[]) => {
+const getCampaignDetails = async (campaignIds: string[], init?: RequestInit) => {
   if (campaignIds.length === 0) {
     return {};
   }
 
-  const resp = await fetch(`/api/campaign?ids=${campaignIds.join(',')}`);
+  const resp = await fetch(`/api/campaign?ids=${campaignIds.join(',')}`, init);
   const json = await resp.json();
 
   return json.reduce((acc: any, { id, name, description, url, created }: any) => ({
