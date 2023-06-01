@@ -190,6 +190,10 @@ const getReputation = async (advertisers: string[]) => {
 };
 
 const getCampaignDetails = async (campaignIds: string[]) => {
+  if (campaignIds.length === 0) {
+    return {};
+  }
+
   const resp = await fetch(`/api/campaign?ids=${campaignIds.join(',')}`);
   const json = await resp.json();
 

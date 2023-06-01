@@ -1,9 +1,9 @@
 import SignalCellularAltOutlinedIcon from '@mui/icons-material/SignalCellularAltOutlined';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import AddIcon from '@mui/icons-material/Add';
-import PolicyIcon from '@mui/icons-material/Policy';
+import SettingsIcon from '@mui/icons-material/Settings';
 
-export const items = [
+export const advertiserItems = [
   {
     name: 'New Campaign',
     href: '/user/campaigns/new',
@@ -16,10 +16,13 @@ export const items = [
     icon: <SignalCellularAltOutlinedIcon fontSize="small" />,
     description: 'See analytics of your campaigns',
   },
+];
+
+export const publisherItems = [
   {
-    name: 'Watch an Ad',
-    href: '/user/ad',
-    icon: <PolicyIcon fontSize="small" />,
+    name: 'Settings',
+    href: '/user/settings',
+    icon: <SettingsIcon fontSize="small" />,
     description: 'Get paid to watch an advertisement',
   },
   {
@@ -29,3 +32,4 @@ export const items = [
     description: 'See your rewards',
   },
 ];
+

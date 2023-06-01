@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Poppins } from 'next/font/google';
-import Link from 'next/link';
 
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListSubheader from '@mui/material/ListSubheader';
 import Avatar from '@mui/material/Avatar';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -18,15 +16,17 @@ import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 
-import { items } from '@/constants/leftmenu';
+import { advertiserItems, publisherItems } from '@/constants/leftmenu';
 import styles from './LeftMenu.module.css';
 import { Logo } from '@/layouts/typography';
 import { useAppContext } from '@/hooks/useAppContext';
+import Menu from './Menu';
 
 const poppins = Poppins({ weight: '300', subsets: ['latin'] });
 
 const getCurrentMenu = () => {
-  return items.find((item) => item.href === window.location.pathname)?.name ?? 'Analytics';
+  return [...advertiserItems, ...publisherItems]
+    .find((item) => item.href === window.location.pathname)?.name ?? 'Analytics';
 };
 
 const getAddress = (wallet: any, trim = false) => {
@@ -71,30 +71,20 @@ const LeftMenu: React.FC = () => {
           <Button onClick={onLogout}>Yes</Button>
         </DialogActions>
       </Dialog>
-      <MenuList
-        subheader={
-          <ListSubheader component="div" className={styles.subheader}>
-            Menu
-          </ListSubheader>
-        }
-      >
-        {items.map((item) => (
-          <Tooltip key={item.name} title={item.description} arrow>
-            <Link href={item.href}>
-              <MenuItem
-                sx={{ mt: 1, mb: 1 }}
-                selected={selectedLeftMenu === item.name}
-                onClick={() => setSelectedLeftMenu(item.name)}
-              >
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText className={styles.itemname}>
-                  <span className={poppins.className} style={{ fontSize: '0.8rem' }}>{item.name}</span>
-                </ListItemText>
-              </MenuItem>
-            </Link>
-          </Tooltip>
-        ))}
-        <Divider sx={{ mt: 2, mb: 2 }} />
+      <Menu
+        title="Advertiser"
+        items={advertiserItems}
+        selectedMenu={selectedLeftMenu}
+        setSelectedMenu={setSelectedLeftMenu}
+      />
+      <Menu
+        title="Publisher"
+        items={publisherItems}
+        selectedMenu={selectedLeftMenu}
+        setSelectedMenu={setSelectedLeftMenu}
+      />
+      <MenuList>
+        <Divider sx={{ mt: -1, mb: 2 }} />
         <MenuItem onClick={onLogoutClick}>
           <ListItemIcon><LogoutRoundedIcon /></ListItemIcon>
           <ListItemText className={styles.itemname}>
