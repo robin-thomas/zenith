@@ -7,6 +7,8 @@ Advertising and Blockchain are two areas I'm pretty much interested in. Advertis
 
 Zenith is a decentralized advertising platform that connects advertisers and publishers through smart contracts, eliminating the need for middlemen.
 
+Advertisers enjoy secure, verifiable transactions, while publishers are rewarded fairly for their user engagement. Join the DeFi advertising revolution and unlock your advertising potential with Zenith today.
+
 ### Advertisers
 
 To create a campaign, the advertiser need to provide the budget (which will be transferred to the smart contract) and a base cost per click. This base cost per click will be used for the ad bidding auction as well as deciding the cost of an ad click (explained in more detail in further sections).
