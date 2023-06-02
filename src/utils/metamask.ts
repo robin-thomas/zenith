@@ -37,7 +37,7 @@ export const login = async (): Promise<string[] | undefined> => {
   }
 };
 
-export const pay = async ({ budget, costPerClick, name, url, description, endDate }: IPay) => {
+export const pay = async ({ budget, costPerClick, name, url, targeting, description, endDate }: IPay) => {
   const resp = await fetch('/api/campaign', {
     method: 'POST',
     headers: {
@@ -47,6 +47,7 @@ export const pay = async ({ budget, costPerClick, name, url, description, endDat
       name,
       description,
       url,
+      targeting,
     }),
   });
   const { id } = await resp.json();

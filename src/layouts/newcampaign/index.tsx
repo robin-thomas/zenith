@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 import Tooltip from '@mui/material/Tooltip';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -21,7 +22,7 @@ import TextInput from '@/layouts/newcampaign/textinput/TextInput';
 import { PLACEHOLDER_NAME, PLACEHOLDER_DESCRIPTION, PLACEHOLDER_URL } from '@/constants/campaign';
 import { CURRENCY_SYMBOL, CURRENCY_NAME } from '@/constants/app';
 import { useAppContext } from '@/hooks/useAppContext';
-import Link from 'next/link';
+import Targeting from '@/layouts/newcampaign/targeting/Targeting';
 
 const validationSchema = YupObject({
   name: YupString(),
@@ -83,6 +84,13 @@ const NewCampaign: React.FC = () => {
         budget: '',
         costPerClick: '',
         endDate: null,
+        walletAge: '1',
+        transactionCount: '1',
+        maticBalance: '0.1',
+        walletAgeChecked: false,
+        transactionCountChecked: false,
+        maticBalanceChecked: false,
+        nftChecked: false,
       }}
       validationSchema={validationSchema}
       onSubmit={() => {
@@ -116,7 +124,19 @@ const NewCampaign: React.FC = () => {
                   </Link>
                 </Alert>
               </Tooltip>
-              <TextInput id="name" label="Campaign Name" placeholder={PLACEHOLDER_NAME} />
+              <Grid container spacing={2}>
+                <Grid md={6}>
+                  <TextInput id="name" label="Campaign Name" placeholder={PLACEHOLDER_NAME} />
+                </Grid>
+                <Grid md={6}>
+                  <TextInput
+                    id="url"
+                    label="Campaign URL"
+                    placeholder={PLACEHOLDER_URL}
+                    description="Users will be redirected here on clicking the ad"
+                  />
+                </Grid>
+              </Grid>
               <TextInput id="description" rows={2} label="Campaign Description" placeholder={PLACEHOLDER_DESCRIPTION} />
               <Grid container spacing={2}>
                 <Grid md={4}>
@@ -145,12 +165,12 @@ const NewCampaign: React.FC = () => {
                   <CampaignEnd />
                 </Grid>
               </Grid>
-              <TextInput
-                id="url"
-                label="Campaign URL"
-                placeholder={PLACEHOLDER_URL}
-                description="Users will be redirected here on clicking the ad"
-              />
+            </StepContent>
+          </Step>
+          <Step>
+            <StepLabel>Targeting</StepLabel>
+            <StepContent>
+              <Targeting />
             </StepContent>
           </Step>
           <Step>
