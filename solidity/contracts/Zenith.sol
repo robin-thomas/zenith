@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.15;
 
 import "./Truflation.sol";
 import "./Utils.sol";
@@ -19,20 +19,20 @@ contract Zenith is UserRequest {
     using ECDSA for bytes32;
 
     /** @dev https://github.com/SxT-Community/chainlink-hackathon/blob/main/README.md */
-    string public jobId = "bc97c680d2924f31a0581d947314cc64";
+    string public constant jobId = "bc97c680d2924f31a0581d947314cc64";
 
-    Truflation truflationContract;
+    Truflation immutable truflationContract;
 
     /**
      * @dev Store the details of a campaign.
      */
     struct Campaign {
         uint id;
-        address advertiser;
         uint budget;
         uint remaining;
         uint baseCostPerClick;
         uint endDatetime;
+        address advertiser;
         string cid;
         bool active;
     }
@@ -91,9 +91,21 @@ contract Zenith is UserRequest {
     uint public numAdClicks = 0;
     uint public totalRewards = 0;
 
-    event CampaignCreated(uint _campaigns, address _advertiser, uint _budget);
-    event CampaignEnabled(uint _campaignId);
-    event CampaignDisabled(uint _campaignId);
+    event CampaignCreated(
+        uint indexed _campaigns,
+        address indexed _advertiser,
+        uint indexed _budget
+    );
+    event CampaignEnabled(uint indexed _campaignId);
+    event CampaignDisabled(uint indexed _campaignId);
+
+    error LinkTransferFailed();
+    error CampaignBudgetTooLow(uint provided, uint required);
+    error CampaignBudgetMissing(uint required);
+    error CampaignCostPerClickTooLow(uint provided, uint required);
+    error CampaignEndDatetimeTooSoon(uint provided, uint required);
+    error CampaignCidMissing();
+    error NotAuthorized();
 
     constructor(
         ISxTRelayProxy sxtRelayAddress,
@@ -116,16 +128,26 @@ contract Zenith is UserRequest {
         uint _budget,
         uint _baseCostPerClick,
         uint _endDatetime,
-        string memory _cid
+        string calldata _cid
     ) public payable returns (uint) {
-        require(_budget > 0, "Budget must be greater than 0");
-        require(msg.value == _budget, "Insufficient funds sent");
-        require(_baseCostPerClick > 0, "Bid must be greater than 0");
-        require(
-            _endDatetime >= block.timestamp + 1 days,
-            "End datetime must be in the future"
-        );
-        require(bytes(_cid).length > 0, "Cid cannot be empty");
+        if (_budget < 0.1 ether) {
+            revert CampaignBudgetTooLow(_budget, 0.1 ether);
+        }
+        if (msg.value != _budget) {
+            revert CampaignBudgetMissing(_budget);
+        }
+        if (_baseCostPerClick < 0.001 ether) {
+            revert CampaignCostPerClickTooLow(_baseCostPerClick, 0.001 ether);
+        }
+        if (_endDatetime < block.timestamp + 1 days) {
+            revert CampaignEndDatetimeTooSoon(
+                _endDatetime,
+                block.timestamp + 1 days
+            );
+        }
+        if (bytes(_cid).length == 0) {
+            revert CampaignCidMissing();
+        }
 
         Campaign memory _campaign = Campaign({
             id: numCampaigns,
@@ -240,15 +262,16 @@ contract Zenith is UserRequest {
      * @return _requestId The Chainlink request id.
      */
     function triggerRetrieveRewards(
-        string memory _resourceId
+        string calldata _resourceId
     ) external nonReentrant returns (bytes32 _requestId) {
-        require(
-            getChainlinkToken().approve(
+        if (
+            !getChainlinkToken().approve(
                 address(getSxTRelayContract().impl()),
                 getSxTRelayContract().feeInLinkToken()
-            ),
-            "UserRequest: Insufficient LINK allowance"
-        );
+            )
+        ) {
+            revert LinkTransferFailed();
+        }
 
         string memory _query = string(
             abi.encodePacked(
@@ -374,14 +397,29 @@ contract Zenith is UserRequest {
 
     /**
      * @dev Request update of CPI using Truflation.
+     * We will update this for each country atmax once a day.
      *
      * @param _country The country to update CPI.
      * @return _requestId The Chainlink request id.
      */
     function requestCPI(
-        string memory _country
+        string calldata _country
     ) public returns (bytes32 _requestId) {
-        return truflationContract.requestCPI(_country);
+        if (
+            truflationContract.lastUpdated(_country) + 1 days < block.timestamp
+        ) {
+            LinkTokenInterface _link = getChainlinkToken();
+            if (
+                !_link.transfer(
+                    address(truflationContract),
+                    truflationContract.fee()
+                )
+            ) {
+                revert LinkTransferFailed();
+            }
+
+            _requestId = truflationContract.requestCPI(_country);
+        }
     }
 
     /**
@@ -411,14 +449,22 @@ contract Zenith is UserRequest {
      */
     function withdrawLink() public onlyOwner {
         LinkTokenInterface _link = getChainlinkToken();
-        require(
-            _link.transfer(msg.sender, _link.balanceOf(address(this))),
-            "Unable to transfer"
-        );
+        if (!_link.transfer(msg.sender, _link.balanceOf(address(this)))) {
+            revert LinkTransferFailed();
+        }
     }
 
-    modifier isAdvertiser(uint campaignId) {
-        require(msg.sender == campaigns[campaignId].advertiser);
+    /**
+     * @dev Check if the caller is the advertiser of a campaign.
+     */
+    function checkAdvertiser(uint _campaignId) private view {
+        if (msg.sender != campaigns[_campaignId].advertiser) {
+            revert NotAuthorized();
+        }
+    }
+
+    modifier isAdvertiser(uint _campaignId) {
+        checkAdvertiser(_campaignId);
         _;
     }
 }

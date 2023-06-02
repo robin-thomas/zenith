@@ -10,7 +10,7 @@ async function deployAppContract() {
   const appContract = await AppContract.deploy(
     '0xf6b18242dab7af6F7390505fCFd16e03F61F8bCB', // SXT Relay Proxy address
     LINK_TOKEN,
-    '0x53C28Fa2761CC82110F509569F1CA336e9F1CD78' // Truflation contract address
+    '0x534Edd5fec97D0ae7523F3bEfCa449396ca14eCA' // Truflation contract address
   );
 
   await appContract.deployed();

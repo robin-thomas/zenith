@@ -58,7 +58,7 @@ cost per click = (current year-over-year CPI of the country) * (base cost per cl
 
 Example: if the yoy CPI of USA is 2.88%, and the base cost per click is 0.002 MATIC, then the cost of an ad click in US will be 0.0020576 MATIC.
 
-The current year-over-year CPI of all countries supported are fetched from Truflation once a day. If the CPI of a country is not available, then the cost of an ad click will be the base cost per click.
+The current year-over-year CPI of all countries supported are fetched from Truflation once a day (using GitHub Actions). If the CPI of a country is not available, then the cost of an ad click will be the base cost per click.
 
 Once the rewards are calculated, they are transferred from the smart contract to the user's wallet.
 

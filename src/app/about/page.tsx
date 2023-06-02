@@ -47,7 +47,7 @@ The auction process is run everytime there is an availability to show an ad. The
 who has the highest bid, which is calculated by below formula:
 
 \`\`\`javascript
-bid = 0.7 * base cost per click + 0.2 * Gitcoin Passport score + 0.1 * remaining balance of campaign.
+bid = 0.7 * base_cost_per_click + 0.2 * gitcoin_passport_score + 0.1 * campaign_balance
 \`\`\`
 
 This bid is used only to determine the auction winner. The cost per click is calculated using a different formula.
@@ -73,7 +73,7 @@ When the user requests pending rewards from ad clicks, this triggers a request t
 The cost of an ad click is calculated using the following formula:
 
 \`\`\`javascript
-cost per click = (current year-over-year CPI of the country) * (base cost per click set in campaign)
+cost_per_click = campaign_base_cost_per_click * country_CPI
 \`\`\`
 
 Example: if the yoy CPI of USA is 2.88%, and the base cost per click is 0.002 MATIC, then the cost of an ad click

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.15;
 
 import "./Utils.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -11,6 +11,11 @@ import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
  */
 contract Truflation is ChainlinkClient, ConfirmedOwner {
     using Chainlink for Chainlink.Request;
+
+    /**
+     * @dev Mapping of country code to the timestamp of the last update.
+     */
+    mapping(string => uint) public lastUpdated;
 
     /**
      * @dev Mapping of country code to year-over-year CPI
@@ -25,9 +30,11 @@ contract Truflation is ChainlinkClient, ConfirmedOwner {
     /**
      * @dev Refer to https://marketplace.truflation.com for more details.
      */
-    uint public fee = 1 ether;
-    address public oracleId = 0x6D141Cf6C43f7eABF94E288f5aa3f23357278499;
-    bytes32 public jobId = bytes32(bytes("d220e5e687884462909a03021385b7ae"));
+    uint public constant fee = 1 ether;
+    address public constant oracleId = 0x6D141Cf6C43f7eABF94E288f5aa3f23357278499;
+    bytes32 public constant jobId = bytes32(bytes("d220e5e687884462909a03021385b7ae"));
+
+    error LinkTransferFailed();
 
     /**
      * @dev Initializes the contract with the address of the LINK token.
@@ -48,7 +55,7 @@ contract Truflation is ChainlinkClient, ConfirmedOwner {
      * @return _requestId The Chainlink request ID.
      */
     function requestCPI(
-        string memory _country
+        string calldata _country
     ) public returns (bytes32 _requestId) {
         string memory _data = string(
             abi.encodePacked('{"location":"', _country, '"}')
@@ -67,6 +74,7 @@ contract Truflation is ChainlinkClient, ConfirmedOwner {
         _requestId = sendChainlinkRequestTo(oracleId, _req, fee);
 
         requests[_requestId] = _country;
+        lastUpdated[_country] = block.timestamp;
     }
 
     /**
@@ -80,7 +88,7 @@ contract Truflation is ChainlinkClient, ConfirmedOwner {
      */
     function receiveCPI(
         bytes32 _requestId,
-        bytes memory _data
+        bytes calldata _data
     ) public recordChainlinkFulfillment(_requestId) {
         string memory _country = requests[_requestId];
         cpi[_country] = (1e18 + Utils.stringToUint(string(_data))) / 1e14;
@@ -98,7 +106,7 @@ contract Truflation is ChainlinkClient, ConfirmedOwner {
      */
     function multiplyByCPI(
         uint _amount,
-        string memory _country
+        string calldata _country
     ) public view returns (uint) {
         return (_amount * getCPI(_country)) / 1e4;
     }
@@ -108,7 +116,7 @@ contract Truflation is ChainlinkClient, ConfirmedOwner {
      * @param _country The two letter country code.
      * @return The CPI of the country multipled by 1e4.
      */
-    function getCPI(string memory _country) private view returns (uint) {
+    function getCPI(string calldata _country) private view returns (uint) {
         if (cpi[_country] == 0) {
             return 1e4;
         } else {
@@ -125,9 +133,8 @@ contract Truflation is ChainlinkClient, ConfirmedOwner {
      */
     function withdrawLink() public onlyOwner {
         LinkTokenInterface _link = LinkTokenInterface(chainlinkTokenAddress());
-        require(
-            _link.transfer(msg.sender, _link.balanceOf(address(this))),
-            "Unable to transfer"
-        );
+        if (!_link.transfer(msg.sender, _link.balanceOf(address(this)))) {
+            revert LinkTransferFailed();
+        }
     }
 }
