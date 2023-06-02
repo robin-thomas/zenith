@@ -1,0 +1,13 @@
+name: Truflation CPI daily update
+on:
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hourly cron job
+        run: |
+          curl --request POST \
+          --url 'https://zenith-six.vercel.app/api/cpi' \
+          --header 'Authorization: Bearer ${{ secrets.CPI_AUTH_KEY }}'

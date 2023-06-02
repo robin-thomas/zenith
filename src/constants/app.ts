@@ -5,3 +5,5 @@ export const APP_HOST= 'https://zenith-six.vercel.app';
 export const CURRENCY_SYMBOL = '∾';
 export const CURRENCY_NAME = 'MATIC';
 export const CHAIN_ID = '0x13881'; // Polygon Mumbai
+export const CHAIN_NAME = 'maticmum';
+export const TRUFLATION_COUNTRIES = ['us','uk'];
