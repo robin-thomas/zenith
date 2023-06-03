@@ -46,6 +46,8 @@ Publishers will be paid only for valid ad clicks:
 Advertisers have the option for targeting the ads, allowing them to reach specific DeFi user segments based
 on factors such as wallet activity, transaction history, wallet balance and so on.
 
+The targeting details are stored in SxT tables.
+
 Currently we support the below targeting options are:
 - Wallet age more than 1 day, 1 week, 1 month
 - Wallet activity more than 1 transaction, 5 transactions, 10 transactions
