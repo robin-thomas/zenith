@@ -2,11 +2,11 @@ import { NextResponse } from 'next/server';
 
 import { DqlSDK } from '@robinthomas/sxt-sdk';
 import dayjs from 'dayjs';
-import { formatEther } from 'ethers';
+import { formatEther, getAddress } from 'ethers';
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
-  const address = url.searchParams.get('address') as string;
+  const address = getAddress(url.searchParams.get('address') as string);
 
   const sdk = new DqlSDK({ host: process.env.SXT_HOST as string });
 

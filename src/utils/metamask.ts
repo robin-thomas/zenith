@@ -118,7 +118,7 @@ export const getAnAd = async (address: string, init?: RequestInit) => {
       .filter(({ id }: { id: number }) => !campaignIds.includes(id));
   }
 
-  const accountResp = await fetch(`/api/account?user=${address}`, init);
+  const accountResp = await fetch(`/api/account?address=${address}`, init);
   if (accountResp.ok) {
     const account = await accountResp.json();
 
