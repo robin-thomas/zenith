@@ -3,6 +3,7 @@ import Alert from '@mui/material/Alert';
 
 import SelectOption from '@/layouts/newcampaign/targeting/SelectOption';
 import { CURRENCY_NAME } from '@/constants/app';
+import { WALLET_AGE_VALUES, WALLET_BALANCE_VALUES, TRANSACTION_COUNT_VALUES } from '@/constants/targeting';
 
 const Targeting: React.FC = () => (
   <>
@@ -17,33 +18,21 @@ const Targeting: React.FC = () => (
       <SelectOption
         id="walletAge"
         label="Wallet age is greater than or equal to   "
-        values={[
-          { label: '1 day', value: '1' },
-          { label: '1 week', value: '7' },
-          { label: '1 month', value: '30' },
-        ]}
+        values={WALLET_AGE_VALUES}
       />
     </FormGroup>
     <FormGroup>
       <SelectOption
         id="transactionCount"
         label="Number of transactions is greater than or equal to   "
-        values={[
-          { label: '1 transaction', value: '1' },
-          { label: '5 transactions', value: '5' },
-          { label: '10 transactions', value: '10' },
-        ]}
+        values={TRANSACTION_COUNT_VALUES}
       />
     </FormGroup>
     <FormGroup>
       <SelectOption
         id="maticBalance"
         label={`${CURRENCY_NAME} balance is greater than or equal to  `}
-        values={[
-          { label: `0.1 ${CURRENCY_NAME}`, value: '0.1' },
-          { label: `1 ${CURRENCY_NAME}`, value: '1' },
-          { label: `10 ${CURRENCY_NAME}`, value: '10' },
-        ]}
+        values={WALLET_BALANCE_VALUES}
       />
     </FormGroup>
     <FormGroup>

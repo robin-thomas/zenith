@@ -9,6 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 import ToggleCampaign from './ToggleCampaign';
 import type { CampaignGridProps } from './CampaignGrid.types';
 import { CURRENCY_SYMBOL } from '@/constants/app';
+import Targeting from './Targeting';
 
 const renderLink = (params: any) => {
   if (params.value == null) {
@@ -16,7 +17,7 @@ const renderLink = (params: any) => {
   }
   return (
     <Tooltip arrow title={params.value}>
-      <a href={params.value} target="_blank">{params.value}</a>
+      <a href={params.value} target="_blank">URL</a>
     </Tooltip>
   );
 };
@@ -63,13 +64,18 @@ const CampaignGrid: React.FC<CampaignGridProps> = ({ rows }) => {
     );
   };
 
+  const renderTracking = (params: any) => (
+    <Targeting targeting={params.value} />
+  );
+
   const columns = [
     { field: 'status', headerName: '', width: 50, renderCell: renderStatusButtons },
-    { field: 'name', headerName: 'Name', width: 170 },
-    { field: 'url', headerName: 'URL', width: 185, renderCell: renderLink },
-    { field: 'budget', headerName: 'Budget', width: 100, renderCell: renderCurrency },
-    { field: 'remaining', headerName: 'Balance', width: 100, renderCell: renderCurrency },
-    { field: 'clicks', headerName: 'Clicks', width: 70 },
+    { field: 'targeting', headerName: '', width: 50, renderCell: renderTracking },
+    { field: 'name', headerName: 'Name', width: 200 },
+    { field: 'url', headerName: 'URL', width: 80, renderCell: renderLink },
+    { field: 'budget', headerName: 'Budget', width: 110, renderCell: renderCurrency },
+    { field: 'remaining', headerName: 'Balance', width: 110, renderCell: renderCurrency },
+    { field: 'clicks', headerName: 'Clicks', width: 80 },
     { field: 'created', headerName: 'Created', width: 175 },
     { field: 'end', headerName: 'End', width: 175 },
   ];

@@ -58,6 +58,7 @@ const Campaigns: React.FC = () => {
           created: c.startDatetime,
           end: c.endDatetime,
           status: `${c.active}_${c.id}`,
+          targeting: c.targeting,
         })));
       } else {
         setCampaignCount(0);
