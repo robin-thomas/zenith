@@ -26,6 +26,68 @@ Publishers will be paid only for valid ad clicks:
   - Need to have a Gitcoin Passport score of 15
   - A user can click on an ad only once
 
+### Ad Targeting
+
+Advertisers have the option for targeting the ads, allowing them to reach specific DeFi user segments based on factors such as wallet activity, transaction history, wallet balance and so on.
+
+The targeting details are stored in SxT tables.
+
+Currently we support the below targeting options are:
+- Wallet age more than 1 day, 1 week, 1 month
+- Wallet activity more than 1 transaction, 5 transactions, 10 transactions
+- Wallet balance more than 0.1 MATIC, 1 MATIC, 10 MATIC
+- Currently own or previously owned an NFT
+
+These are implemented using SxT SQL:
+
+```sql
+SELECT
+  TXNS.TXN_COUNT,
+  WALLET.BALANCE,
+  AGE.WALLET_FIRST_TXN_DATE,
+  NFT.TO_ AS OWNED_NFT
+FROM
+(
+  SELECT COUNT(TIME_STAMP) AS TXN_COUNT
+  FROM
+  (
+    SELECT TIME_STAMP
+    FROM MUMBAI2.TRANSACTIONS
+    WHERE FROM_ADDRESS = :address
+    LIMIT 10
+  )
+) AS TXNS
+LEFT JOIN (
+  SELECT
+    CAST(TIME_STAMP AS DATE) AS WALLET_FIRST_TXN_DATE,
+    FROM_ADDRESS
+  FROM MUMBAI2.TRANSACTIONS
+  WHERE FROM_ADDRESS = :address
+  ORDER BY TIME_STAMP ASC
+  LIMIT 1
+) AS AGE ON AGE.FROM_ADDRESS = :address
+LEFT JOIN (
+  SELECT TO_
+  FROM MUMBAI2.ERC721_TRANSFER
+  WHERE TO_ = :address
+  LIMIT 1
+) AS NFT ON NFT.TO_ = :address
+LEFT JOIN (
+  SELECT
+    WALLET_ADDRESS,
+    BALANCE
+  FROM MUMBAI2.NATIVE_WALLET
+  WHERE
+    WALLET_ADDRESS = :address
+  ORDER BY TIME_STAMP DESC
+  LIMIT 1
+) AS WALLET ON WALLET.WALLET_ADDRESS = :address
+```
+
+where `:address` is the user's wallet address.
+
+NOTE: The above targeting options are just for demo purposes.
+
 ### Decentralised Auction
 
 The auction process is run everytime there is an availability to show an ad. The auction winner is the advertiser who has the highest bid, which is calculated by below formula:

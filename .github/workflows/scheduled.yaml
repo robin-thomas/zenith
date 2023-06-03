@@ -6,7 +6,7 @@ jobs:
   cron:
     runs-on: ubuntu-latest
     steps:
-      - name: Hourly cron job
+      - name: Daily cron job
         run: |
           curl --request POST \
           --url 'https://zenith-six.vercel.app/api/cpi' \

@@ -53,7 +53,9 @@ a:hover:not(:has(li.MuiMenuItem-root)):not(:has(img)):not(:has(.MuiChip-label)) 
 
 .MuiCardHeader-content span,
 .MuiStepIcon-root.Mui-active,
-.MuiStepIcon-root.Mui-completed {
+.MuiStepIcon-root.Mui-completed,
+.MuiCheckbox-colorPrimary.Mui-checked
+{
   color: #8168eb !important;
 }
 

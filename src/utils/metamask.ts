@@ -37,7 +37,7 @@ export const login = async (): Promise<string[] | undefined> => {
   }
 };
 
-export const pay = async ({ budget, costPerClick, name, url, description, endDate }: IPay) => {
+export const pay = async ({ budget, costPerClick, name, url, targeting, description, endDate }: IPay) => {
   const resp = await fetch('/api/campaign', {
     method: 'POST',
     headers: {
@@ -47,6 +47,7 @@ export const pay = async ({ budget, costPerClick, name, url, description, endDat
       name,
       description,
       url,
+      targeting,
     }),
   });
   const { id } = await resp.json();
@@ -115,6 +116,40 @@ export const getAnAd = async (address: string, init?: RequestInit) => {
 
     campaigns = campaigns
       .filter(({ id }: { id: number }) => !campaignIds.includes(id));
+  }
+
+  const accountResp = await fetch(`/api/account?address=${address}`, init);
+  if (accountResp.ok) {
+    const account = await accountResp.json();
+
+    campaigns = campaigns
+      .filter(({ targeting }: any) => {
+        if (targeting?.nftChecked) {
+          if (account.ownedNFT === false) {
+            return false;
+          }
+        }
+
+        if (targeting?.maticBalanceChecked) {
+          if (account.balance < Number.parseFloat(targeting.maticBalance)) {
+            return false;
+          }
+        }
+
+        if (targeting?.transactionCountChecked) {
+          if (account.txnCount < Number.parseInt(targeting.transactionCount)) {
+            return false;
+          }
+        }
+
+        if (targeting?.walletAgeChecked) {
+          if (account.walletAge < Number.parseInt(targeting.walletAge)) {
+            return false;
+          }
+        }
+
+        return true;
+      });
   }
 
   const campaignDetails = await getCampaignDetails(campaigns.map(({ cid }: any) => cid), init);
@@ -197,12 +232,13 @@ const getCampaignDetails = async (campaignIds: string[], init?: RequestInit) => 
   const resp = await fetch(`/api/campaign?ids=${campaignIds.join(',')}`, init);
   const json = await resp.json();
 
-  return json.reduce((acc: any, { id, name, description, url, created }: any) => ({
+  return json.reduce((acc: any, { id, name, description, url, targeting, created }: any) => ({
     ...acc,
     [id]: {
       name,
       description,
       url,
+      targeting,
       startDatetime: created ? dayjs(created).format('MMM D, YYYY hh:mm A') : null,
     }
   }), {});

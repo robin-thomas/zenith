@@ -41,6 +41,19 @@ Publishers will be paid only for valid ad clicks:
   - Need to have a Gitcoin Passport score of 15
   - A user can click on an ad only once
 
+### Ad Targeting
+
+Advertisers have the option for targeting the ads, allowing them to reach specific DeFi user segments based
+on factors such as wallet activity, transaction history, wallet balance and so on.
+
+The targeting details are stored in SxT tables.
+
+Currently we support the below targeting options are:
+- Wallet age more than 1 day, 1 week, 1 month
+- Wallet activity more than 1 transaction, 5 transactions, 10 transactions
+- Wallet balance more than 0.1 MATIC, 1 MATIC, 10 MATIC
+- Currently own or previously owned an NFT
+
 ### Decentralised Auction
 
 The auction process is run everytime there is an availability to show an ad. The auction winner is the advertiser

@@ -5,4 +5,5 @@ export interface IPay {
   description: string;
   url: string;
   endDate: number;
+  targeting: string;
 }

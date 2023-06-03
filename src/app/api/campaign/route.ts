@@ -8,15 +8,15 @@ import { TABLE_CAMPAIGN } from '@/constants/sxt';
 
 export async function POST(request: Request) {
   const id = randomUUID();
-  const { name, description, url } = await request.json();
+  const { name, description, url, targeting } = await request.json();
 
   const sdk = new DmlSDK({ host: process.env.SXT_HOST as string });
 
   const resourceId = `${APP_NAME_CAPS}.${TABLE_CAMPAIGN}`;
 
   const data = await sdk.query(
-    `INSERT INTO ${resourceId}(id, name, detail, url, created_time)
-      VALUES('${id}', '${name}', '${description}', '${url}', '${Date.now().toString()}')`,
+    `INSERT INTO ${resourceId}(id, name, detail, url, targeting, created_time)
+      VALUES('${id}', '${name}', '${description}', '${url}', '${targeting}', '${Date.now().toString()}')`,
     {
       resourceId,
       biscuit: process.env.SXT_BISCUIT_CAMPAIGN as string,
@@ -81,5 +81,6 @@ const toCampaign = (campaign: any) => ({
   name: campaign.NAME,
   description: campaign.DETAIL,
   url: campaign.URL,
+  targeting: JSON.parse(campaign.TARGETING),
   created: Number.parseInt(campaign.CREATED_TIME),
 });

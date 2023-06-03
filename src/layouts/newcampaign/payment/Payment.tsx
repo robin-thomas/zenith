@@ -29,6 +29,17 @@ const Payment: React.FC<PaymentProps> = ({ setActiveStep }) => {
       budget: values.budget,
       costPerClick: values.costPerClick,
       endDate: values.endDate.unix(),
+      targeting: JSON.stringify({
+        maticBalance: values.maticBalance,
+        transactionCount: values.transactionCount,
+        walletAge: values.walletAge,
+        enabled: {
+          maticBalance: values.maticBalanceChecked,
+          nft: values.nftChecked,
+          transactionCount: values.transactionCountChecked,
+          walletAge: values.walletAgeChecked,
+        },
+      }),
     };
 
     try {

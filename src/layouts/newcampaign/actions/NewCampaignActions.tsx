@@ -17,7 +17,7 @@ const NewCampaignActions: React.FC<NewCampaignActionsProps> = ({ activeStep, set
     setActiveStep(index => index + 1);
   };
 
-  return activeStep < 3 ? (
+  return activeStep < 4 ? (
     <DialogActions>
       <Button
         disabled={paymentProcessing || activeStep === 0}
@@ -25,7 +25,7 @@ const NewCampaignActions: React.FC<NewCampaignActionsProps> = ({ activeStep, set
       >
         Previous
       </Button>
-      <Button disabled={activeStep >= 2} onClick={onNextStep}>Next</Button>
+      <Button disabled={activeStep >= 3} onClick={onNextStep}>Next</Button>
     </DialogActions>
   ) : null;
 };

@@ -7,4 +7,11 @@ export interface NewCampaignState {
   costPerClick: number;
   endDate: Dayjs;
   url: string;
+  maticBalance: number;
+  transactionCount: number;
+  walletAge: number;
+  maticBalanceChecked: boolean;
+  transactionCountChecked: boolean;
+  walletAgeChecked: boolean;
+  nftChecked: boolean;
 }

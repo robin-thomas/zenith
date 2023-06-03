@@ -18,6 +18,7 @@ const resourceId = `${APP_NAME_CAPS}.${TABLE_CAMPAIGN}`;
       name VARCHAR NOT NULL,
       detail VARCHAR NOT NULL,
       url VARCHAR NOT NULL,
+      targeting VARCHAR NOT NULL,
       created_time VARCHAR NOT NULL
     ) WITH \"public_key=${process.env.SXT_BISCUIT_PUBLIC_KEY},access_type=public_write\"`,
     {
