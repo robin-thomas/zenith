@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from 'react';
 
-import { Title } from '@/layouts/typography';
-import { getCampaigns } from '@/utils/metamask';
 import Grid from '@mui/material/Grid';
 import AdsClickIcon from '@mui/icons-material/AdsClick';
 import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRounded';
@@ -13,6 +11,8 @@ import { CampaignGrid, CampaignMap } from '@/layouts/data';
 import { StatsCard } from '@/layouts/card';
 import type { CampaignGridData } from '@/layouts/data/grid/CampaignGrid.types';
 import { CURRENCY_SYMBOL, CURRENCY_NAME } from '@/constants/app';
+import { Title } from '@/layouts/typography';
+import { getCampaigns } from '@/utils/metamask';
 
 const Campaigns: React.FC = () => {
   const [adClickCount, setAdClickCount] = useState<number>();
