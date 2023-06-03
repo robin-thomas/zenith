@@ -81,5 +81,6 @@ const toCampaign = (campaign: any) => ({
   name: campaign.NAME,
   description: campaign.DETAIL,
   url: campaign.URL,
+  targeting: JSON.parse(campaign.TARGETING),
   created: Number.parseInt(campaign.CREATED_TIME),
 });

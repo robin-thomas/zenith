@@ -118,6 +118,40 @@ export const getAnAd = async (address: string, init?: RequestInit) => {
       .filter(({ id }: { id: number }) => !campaignIds.includes(id));
   }
 
+  const accountResp = await fetch(`/api/account?user=${address}`, init);
+  if (accountResp.ok) {
+    const account = await accountResp.json();
+
+    campaigns = campaigns
+      .filter(({ targeting }: any) => {
+        if (targeting?.nftChecked) {
+          if (account.ownedNFT === false) {
+            return false;
+          }
+        }
+
+        if (targeting?.maticBalanceChecked) {
+          if (account.balance < Number.parseFloat(targeting.maticBalance)) {
+            return false;
+          }
+        }
+
+        if (targeting?.transactionCountChecked) {
+          if (account.txnCount < Number.parseInt(targeting.transactionCount)) {
+            return false;
+          }
+        }
+
+        if (targeting?.walletAgeChecked) {
+          if (account.walletAge < Number.parseInt(targeting.walletAge)) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+  }
+
   const campaignDetails = await getCampaignDetails(campaigns.map(({ cid }: any) => cid), init);
 
   const advertisers = campaigns.map(({ advertiser }: any) => advertiser);
@@ -198,12 +232,13 @@ const getCampaignDetails = async (campaignIds: string[], init?: RequestInit) => 
   const resp = await fetch(`/api/campaign?ids=${campaignIds.join(',')}`, init);
   const json = await resp.json();
 
-  return json.reduce((acc: any, { id, name, description, url, created }: any) => ({
+  return json.reduce((acc: any, { id, name, description, url, targeting, created }: any) => ({
     ...acc,
     [id]: {
       name,
       description,
       url,
+      targeting,
       startDatetime: created ? dayjs(created).format('MMM D, YYYY hh:mm A') : null,
     }
   }), {});
