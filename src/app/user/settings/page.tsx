@@ -9,13 +9,16 @@ import Switch from '@mui/material/Switch';
 import Tooltip from '@mui/material/Tooltip';
 import HelpIcon from '@mui/icons-material/Help';
 import Divider from '@mui/material/Divider';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import js from 'react-syntax-highlighter/dist/esm/languages/prism/javascript';
 import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import { Title } from '@/layouts/typography';
 import { useAppContext } from '@/hooks/useAppContext';
 import { APP_HOST } from '@/constants/app';
 import { PASSPORT_THRESHOLD } from '@/constants/passport';
+
+SyntaxHighlighter.registerLanguage('javascript', js);
 
 const WatchAnAd: React.FC = () => {
   const { wallet } = useAppContext();

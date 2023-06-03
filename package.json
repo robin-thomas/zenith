@@ -13,6 +13,7 @@
     "dev": "next dev",
     "prebuild": "node scripts/esbuild.mjs",
     "build": "next build",
+    "analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
@@ -34,12 +35,12 @@
     "next": "^13.4.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-markdown": "^8.0.7",
     "react-svg-worldmap": "^2.0.0-alpha.16",
     "react-syntax-highlighter": "^15.5.0",
     "yup": "^1.1.1"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^13.4.4",
     "@tsconfig/node18": "^2.0.1",
     "@types/node": "^20.1.5",
     "@types/react": "^18.2.6",
