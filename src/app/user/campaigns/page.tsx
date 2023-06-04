@@ -94,7 +94,11 @@ const Campaigns: React.FC = () => {
               />
             </Grid>
             <Grid item md={5}>
-              <StatsCard icon={<AddShoppingCartRoundedIcon sx={{ color: '#8168eb' }} />} title="Campaigns" value={campaignCount} />
+              <StatsCard
+                icon={<AddShoppingCartRoundedIcon sx={{ color: '#8168eb' }} />}
+                title="Campaigns"
+                value={campaignCount}
+              />
             </Grid>
           </Grid>
         </Grid>

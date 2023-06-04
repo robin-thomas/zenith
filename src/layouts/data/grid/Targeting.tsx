@@ -24,8 +24,8 @@ const Targeting: React.FC<TargetingProps> = ({ targeting }) => {
   return (
     <>
       <Tooltip title="See details about Campaign Targeting" arrow>
-        <IconButton>
-          <AdsClickIcon onClick={handleOpen} fontSize="inherit" color="success" />
+        <IconButton onClick={handleOpen}>
+          <AdsClickIcon fontSize="inherit" color="success" />
         </IconButton>
       </Tooltip>
       <Dialog open={open} onClose={handleClose}>
