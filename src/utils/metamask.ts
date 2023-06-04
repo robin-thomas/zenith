@@ -118,31 +118,35 @@ export const getAnAd = async (address: string, init?: RequestInit) => {
       .filter(({ id }: { id: number }) => !campaignIds.includes(id));
   }
 
+  const campaignDetails = await getCampaignDetails(campaigns.map(({ cid }: any) => cid), init);
+
   const accountResp = await fetch(`/api/account?address=${address}`, init);
   if (accountResp.ok) {
     const account = await accountResp.json();
 
     campaigns = campaigns
-      .filter(({ targeting }: any) => {
-        if (targeting?.nftChecked) {
+      .filter(({ cid }: any) => {
+        const { targeting } = campaignDetails[cid];
+
+        if (targeting.enabled.nft) {
           if (account.ownedNFT === false) {
             return false;
           }
         }
 
-        if (targeting?.maticBalanceChecked) {
+        if (targeting.enabled.maticBalance) {
           if (account.balance < Number.parseFloat(targeting.maticBalance)) {
             return false;
           }
         }
 
-        if (targeting?.transactionCountChecked) {
+        if (targeting.enabled.transactionCount) {
           if (account.txnCount < Number.parseInt(targeting.transactionCount)) {
             return false;
           }
         }
 
-        if (targeting?.walletAgeChecked) {
+        if (targeting.enabled.walletAge) {
           if (account.walletAge < Number.parseInt(targeting.walletAge)) {
             return false;
           }
@@ -151,8 +155,6 @@ export const getAnAd = async (address: string, init?: RequestInit) => {
         return true;
       });
   }
-
-  const campaignDetails = await getCampaignDetails(campaigns.map(({ cid }: any) => cid), init);
 
   const advertisers = campaigns.map(({ advertiser }: any) => advertiser);
   const reputation = await getReputation(advertisers);

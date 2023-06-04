@@ -20,7 +20,7 @@ import { PASSPORT_THRESHOLD } from '@/constants/passport';
 
 SyntaxHighlighter.registerLanguage('javascript', js);
 
-const WatchAnAd: React.FC = () => {
+const Settings: React.FC = () => {
   const { wallet } = useAppContext();
 
   const [loadedJs, setLoadedJs] = useState<any>(false);
@@ -88,27 +88,29 @@ const WatchAnAd: React.FC = () => {
       </FormGroup>
       <Divider sx={{ mt: 2, mb: 3 }} />
       <p>Paste below HTML code where you want the ad to appear.</p><br />
-      <SyntaxHighlighter
-        language="javascript"
-        style={a11yDark}
-        customStyle={{
-          padding: 0,
-          margin: 0,
-          fontSize: '0.8rem',
-        }}
-      >
-        {`
+      {wallet?.accounts?.[0] && (
+        <SyntaxHighlighter
+          language="javascript"
+          style={a11yDark}
+          customStyle={{
+            padding: 0,
+            margin: 0,
+            fontSize: '0.8rem',
+          }}
+        >
+          {`
   <script type="module" src="${APP_HOST}/cmp/ad-0.1.0.js" id="zenith-js"></script>
   <script type="text/javascript">
     window.initZenith({
-      publisherId: "${wallet?.accounts?.[0]}",
+      publisherId: "${wallet.accounts[0]}",
       hideOnNoMetaMask: ${hideOnNoMetaMask},
       hideOnNoAd: ${hideOnNoAd},
     });
   </script>
 
 `}
-      </SyntaxHighlighter>
+        </SyntaxHighlighter>
+      )}
       <Divider sx={{ mt: 3, mb: 3 }} />
       <p style={{ marginBottom: '0.75rem' }}>Preview</p>
       <div id="zenith-ad-preview"></div>
@@ -116,4 +118,4 @@ const WatchAnAd: React.FC = () => {
   );
 };
 
-export default WatchAnAd;
+export default Settings;
