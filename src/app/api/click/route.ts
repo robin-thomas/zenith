@@ -116,6 +116,8 @@ const toClick = (click: any) => ({
   advertiser: click.ADVERTISER,
   clicker: click.CLICKER,
   country: click.COUNTRY,
+  cpc: Number.parseInt(click.CPC),
+  cpcDivideBy: Number.parseInt(click.CPC_DIVIDE_BY),
   signature: click.SIGNATURE,
   viewed: Number.parseInt(click.VIEWED_TIME),
 });
