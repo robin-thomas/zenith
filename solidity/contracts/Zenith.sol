@@ -322,7 +322,7 @@ contract Zenith is UserRequest {
                 continue;
             }
 
-            uint _displayTime = block.timestamp;
+            uint _displayTime = Utils.stringToUint(_data[_index][5]);
             bytes memory _signature = Utils.hexStringToBytes(_data[_index][4]);
             address _clicker = getClickerFromSignature(
                 _campaignId,
