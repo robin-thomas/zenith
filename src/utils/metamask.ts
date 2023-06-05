@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 
 import AppContract from '../../solidity/artifacts/contracts/Zenith.sol/Zenith.json';
 import type { IPay } from './metamask.types';
-import { APP_NAME_CAPS, CHAIN_ID } from '@/constants/app';
+import { APP_HOST, APP_NAME_CAPS, CHAIN_ID } from '@/constants/app';
 import { TABLE_CLICK } from '@/constants/sxt';
 
 const getContract = async () => {
@@ -38,7 +38,7 @@ export const login = async (): Promise<string[] | undefined> => {
 };
 
 export const pay = async ({ budget, costPerClick, name, url, targeting, description, endDate }: IPay) => {
-  const resp = await fetch('/api/campaign', {
+  const resp = await fetch(`${APP_HOST}/api/campaign`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -106,10 +106,13 @@ export const toggleCampaignStatus = async (campaignId: string, status: 'pause' |
 export const getAnAd = async (address: string, init?: RequestInit) => {
   const contract = await getContract();
   const ads = await contract.getAvailableCampaigns();
+  if (ads.length === 0) {
+    return;
+  }
 
   let campaigns = ads.map(toCampaign);
 
-  const resp = await fetch(`/api/click?user=${address}`, init);
+  const resp = await fetch(`${APP_HOST}/api/click?user=${address}`, init);
   if (resp.ok) {
     const clicks = await resp.json();
     const campaignIds = clicks.map(({ campaignId }: any) => campaignId.toString());
@@ -120,7 +123,7 @@ export const getAnAd = async (address: string, init?: RequestInit) => {
 
   const campaignDetails = await getCampaignDetails(campaigns.map(({ cid }: any) => cid), init);
 
-  const accountResp = await fetch(`/api/account?address=${address}`, init);
+  const accountResp = await fetch(`${APP_HOST}/api/account?address=${address}`, init);
   if (accountResp.ok) {
     const account = await accountResp.json();
 
@@ -216,7 +219,7 @@ const getReputation = async (advertisers: string[], init?: RequestInit) => {
 
   for (const advertiser of advertisers) {
     try {
-      const resp = await fetch(`/api/passport/score/${advertiser}`, init);
+      const resp = await fetch(`${APP_HOST}/api/passport/score/${advertiser}`, init);
       const { score } = await resp.json();
 
       reputation[advertiser] = score;
@@ -231,7 +234,7 @@ const getCampaignDetails = async (campaignIds: string[], init?: RequestInit) => 
     return {};
   }
 
-  const resp = await fetch(`/api/campaign?ids=${campaignIds.join(',')}`, init);
+  const resp = await fetch(`${APP_HOST}/api/campaign?ids=${campaignIds.join(',')}`, init);
   const json = await resp.json();
 
   return json.reduce((acc: any, { id, name, description, url, targeting, created }: any) => ({

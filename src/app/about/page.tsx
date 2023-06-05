@@ -123,20 +123,40 @@ const About: React.FC = () => (
       <h3>Calculation of rewards</h3>
       <p>The cost of an ad click is calculated using the following formula:</p>
       <SyntaxHighlighter
-        children="cost_per_click = campaign_base_cost_per_click * country_CPI"
+        children="cost_per_click = campaign_base_cost_per_click * country_CPI * big_mac_index"
         style={a11yDark}
         language="javascript"
         PreTag="div"
       />
       <p>
-        Example: if the yoy CPI of USA is 2.88%, and the base cost per click is 0.002 {CURRENCY_NAME},
-        then the cost of an ad click in US will be 0.0020576 {CURRENCY_NAME}.
+        Example: if the yoy CPI of UK is 8.7%, base cost per click for the campaign is
+        0.002 {CURRENCY_NAME}, and Big Mac Index for UK is 0.904, then the cost of the ad
+        click will be 0.001965296 {CURRENCY_NAME}.
       </p>
+      <SyntaxHighlighter
+        children={`cost per click = 1.087 * 0.002 * 0.904 = 0.001965296 ${CURRENCY_NAME}`}
+        style={a11yDark}
+        language="javascript"
+        PreTag="div"
+      />
       <p>
         The current year-over-year CPI of all countries supported are fetched from Truflation once a day.
         If the CPI of a country is not available, then the cost of an ad click will be the base cost per
         click.
       </p>
+      <br />
+      <figure>
+        <q cite="https://www.economist.com/big-mac-index">
+          <i>The big mac index was invented by The Economist in 1986 as a lighthearted guide to
+            whether currencies are at their “correct” level. It is based on the theory of
+            purchasing-power parity (PPP), the notion that in the long run exchange rates should
+            move towards the rate that would equalise the prices of an identical basket of goods
+            and services (in this case, a burger) in any two countries.</i>
+        </q>
+        <figcaption>
+          &mdash; <cite>The Economist</cite>
+        </figcaption>
+      </figure>
       <p>
         Once the rewards are calculated, they are transferred from the smart contract to the user&apos;s
         wallet.

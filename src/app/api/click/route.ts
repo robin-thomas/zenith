@@ -7,6 +7,7 @@ import { APP_NAME_CAPS } from '@/constants/app';
 import { TABLE_CLICK } from '@/constants/sxt';
 import { getPassportScore } from '@/utils/passport';
 import { PASSPORT_THRESHOLD } from '@/constants/passport';
+import { BIG_MAC_INDEX } from '@/constants/bigmac';
 
 export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -20,21 +21,36 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'not enough score' }, { status: 400 });
   }
 
+  const { cpc, cpcDivideBy } = getCPC(country);
+
   const sdk = new DmlSDK({ host: process.env.SXT_HOST as string });
 
   const resourceId = `${APP_NAME_CAPS}.${TABLE_CLICK}`;
 
   const data = await sdk.query(
-    `INSERT INTO ${resourceId}(campaign_id, advertiser, publisher, clicker, country, signature, viewed_time)
-      VALUES(
-        ${campaignId.toString()},
-        '${advertiser}',
-        '${publisher}',
-        '${clicker}',
-        '${country}',
-        '${getSignature(signature)}',
-        '${viewed}'
-      )`,
+    `INSERT INTO ${resourceId}(
+      campaign_id,
+      advertiser,
+      publisher,
+      clicker,
+      country,
+      cpc,
+      cpc_divide_by,
+      signature,
+      viewed_time
+    )
+    VALUES
+    (
+      ${campaignId.toString()},
+      '${advertiser}',
+      '${publisher}',
+      '${clicker}',
+      '${country}',
+      '${cpc}',
+      '${cpcDivideBy}',
+      '${getSignature(signature)}',
+      '${viewed}'
+    )`,
     {
       resourceId,
       biscuit: process.env.SXT_BISCUIT_CLICK as string,
@@ -87,11 +103,21 @@ const getSignature = (signature: string) => {
   return signature;
 };
 
+const getCPC = (country: string) => {
+  const cpcDivideBy = 1000;
+  const _country = country.toLowerCase() as keyof typeof BIG_MAC_INDEX;
+  const cpc = (BIG_MAC_INDEX[_country] ?? 0.500) * cpcDivideBy;
+
+  return { cpc, cpcDivideBy };
+};
+
 const toClick = (click: any) => ({
   campaignId: Number.parseInt(click.CAMPAIGN_ID),
   advertiser: click.ADVERTISER,
   clicker: click.CLICKER,
   country: click.COUNTRY,
+  cpc: Number.parseInt(click.CPC),
+  cpcDivideBy: Number.parseInt(click.CPC_DIVIDE_BY),
   signature: click.SIGNATURE,
   viewed: Number.parseInt(click.VIEWED_TIME),
 });
