@@ -115,8 +115,16 @@ When the user requests pending rewards from ad clicks, this triggers a request t
 The cost of an ad click is calculated using the following formula:
 
 ```
-cost per click = (current year-over-year CPI of the country) * (base cost per click set in campaign)
+cost per click = (current year-over-year CPI of the country) * (base cost per click set in campaign) * (big max index)
 ```
+
+>>> The big mac index was invented by The Economist in 1986 as a lighthearted guide to whether currencies
+>>> are at their “correct” level. It is based on the theory of purchasing-power parity (PPP), the notion
+>>> that in the long run exchange rates should move towards the rate that would equalise the prices of an
+>>> identical basket of goods and services (in this case, a burger) in any two countries.
+>>>
+>>> read more: https://www.economist.com/big-mac-index
+
 
 Example: if the yoy CPI of USA is 2.88%, and the base cost per click is 0.002 MATIC, then the cost of an ad click in US will be 0.0020576 MATIC.
 
