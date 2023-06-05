@@ -19,6 +19,8 @@ const resourceId = `${APP_NAME_CAPS}.${TABLE_CLICK}`;
       advertiser VARCHAR NOT NULL,
       publisher VARCHAR NOT NULL,
       country VARCHAR NOT NULL,
+      cpc VARCHAR NOT NULL,
+      cpc_divide_by VARCHAR NOT NULL,
       signature VARCHAR NOT NULL,
       viewed_time VARCHAR NOT NULL,
       PRIMARY KEY(campaign_id, clicker)
