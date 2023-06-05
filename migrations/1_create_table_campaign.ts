@@ -1,4 +1,9 @@
 /* eslint-disable no-console */
+
+/**
+ * @dev npm run migration --file=./migrations/1_create_table_campaign.ts
+ */
+
 import { DdlSDK } from '@robinthomas/sxt-sdk';
 import { config as dotenvConfig } from 'dotenv';
 
