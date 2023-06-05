@@ -333,15 +333,10 @@ contract Zenith is UserRequest {
             string memory _clickerStr = Strings.toHexString(_clicker);
 
             if (Strings.equal(_clickerStr, _data[_index][2])) {
-                /** @dev Big mac index */
-                // uint _cpcIndex = Utils.stringToUint(_data[_index][4]);
-                // uint _cpcIndexDividedBy = Utils.stringToUint(_data[_index][5]);
-
                 uint _costPerClick = truflationContract.multiplyByCPI(
                     campaigns[_campaignId].baseCostPerClick,
                     _data[_index][3]
                 );
-                // _costPerClick = _costPerClick * _cpcIndex / _cpcIndexDividedBy;
                 _costPerClick = Math.min(
                     _costPerClick,
                     campaigns[_campaignId].remaining
