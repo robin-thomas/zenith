@@ -118,6 +118,14 @@ The cost of an ad click is calculated using the following formula:
 cost per click = (current year-over-year CPI of the country) * (base cost per click set in campaign) * (big mac index)
 ```
 
+Example: if the yoy CPI of UK is 8.7%, base cost per click for the campaign is 0.002 MATIC, and Big Mac Index for UK is 0.904, then the cost of the ad click will be 0.001965296 MATIC.
+
+```
+cost per click = 1.087 * 0.002 * 0.904 = 0.001965296 MATIC
+```
+
+The current year-over-year CPI of all countries supported are fetched from Truflation once a day (using GitHub Actions). If the CPI of a country is not available, then the cost of an ad click will be the base cost per click.
+
 > The big mac index was invented by The Economist in 1986 as a lighthearted guide to whether currencies
 > are at their “correct” level. It is based on the theory of purchasing-power parity (PPP), the notion
 > that in the long run exchange rates should move towards the rate that would equalise the prices of an
@@ -126,14 +134,6 @@ cost per click = (current year-over-year CPI of the country) * (base cost per cl
 > Read more: https://www.economist.com/big-mac-index
 
 The Big Mac index is fetched from https://github.com/TheEconomist/big-mac-data.
-
-Example: if the yoy CPI of UK is 8.7%, base cost per click for the campaign is 0.002 MATIC, and Big Mac Index for UK is 0.904, then the cost of the ad click will be 0.001965296 MATIC.
-
-```
-cost per click = 1.087 * 0.002 * 0.904 = 0.001965296 MATIC
-```
-
-The current year-over-year CPI of all countries supported are fetched from Truflation once a day (using GitHub Actions). If the CPI of a country is not available, then the cost of an ad click will be the base cost per click.
 
 Once the rewards are calculated, they are transferred from the smart contract to the user's wallet.
 
