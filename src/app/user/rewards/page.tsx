@@ -20,7 +20,7 @@ import { useAppContext } from '@/hooks/useAppContext';
 import { StatsCard } from '@/layouts/card';
 import { MetaMaskDialog } from '@/layouts/dialog';
 import { getHumanError } from '@/utils/utils';
-import { CURRENCY_SYMBOL } from '@/constants/app';
+import { APP_HOST, CURRENCY_SYMBOL } from '@/constants/app';
 
 const Rewards: React.FC = () => {
   const [txn, setTxn] = useState<any>();
@@ -37,7 +37,7 @@ const Rewards: React.FC = () => {
       const address = wallet.accounts[0];
       const timestamp = await getLastProcessed();
 
-      const resp = await fetch(`/api/click?user=${address}&t=${timestamp}`);
+      const resp = await fetch(`${APP_HOST}/api/click?user=${address}&t=${timestamp}`);
       if (resp.ok) {
         const clicks = await resp.json();
 

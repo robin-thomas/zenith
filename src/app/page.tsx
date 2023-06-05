@@ -19,7 +19,7 @@ import { Logo } from '@/layouts/typography';
 import styles from './page.module.css';
 import { login as loginWithMetamask } from '@/utils/metamask';
 import { useAppContext } from '@/hooks/useAppContext';
-import { APP_DESCRIPTION_SHORT, CURRENCY_SYMBOL, CURRENCY_NAME } from '@/constants/app';
+import { APP_DESCRIPTION_SHORT, CURRENCY_SYMBOL, CURRENCY_NAME, APP_HOST } from '@/constants/app';
 import { StatsCard } from '@/layouts/card';
 import { HomeLink } from '@/layouts/link';
 
@@ -31,7 +31,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const fn = async () => {
-      const resp = await fetch('/api/stats');
+      const resp = await fetch(`${APP_HOST}/api/stats`);
       const data = await resp.json();
       setStats(data);
     };

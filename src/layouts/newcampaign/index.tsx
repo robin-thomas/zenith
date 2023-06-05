@@ -20,7 +20,7 @@ import NewCampaignActions from '@/layouts/newcampaign/actions/NewCampaignActions
 import Preview from '@/layouts/newcampaign/Preview';
 import TextInput from '@/layouts/newcampaign/textinput/TextInput';
 import { PLACEHOLDER_NAME, PLACEHOLDER_DESCRIPTION, PLACEHOLDER_URL } from '@/constants/campaign';
-import { CURRENCY_SYMBOL, CURRENCY_NAME } from '@/constants/app';
+import { CURRENCY_SYMBOL, CURRENCY_NAME, APP_HOST } from '@/constants/app';
 import { useAppContext } from '@/hooks/useAppContext';
 import Targeting from '@/layouts/newcampaign/targeting/Targeting';
 
@@ -42,7 +42,7 @@ const NewCampaign: React.FC = () => {
 
   useEffect(() => {
     const fn = async () => {
-      const resp = await fetch(`/api/passport/score/${wallet.accounts[0]}`);
+      const resp = await fetch(`${APP_HOST}/api/passport/score/${wallet.accounts[0]}`);
       const data = await resp.json();
 
       setScore(data?.score ?? null);
@@ -57,7 +57,7 @@ const NewCampaign: React.FC = () => {
   const onSubmitPassport = async () => {
     setSubmitting(true);
 
-    const passportResp = await fetch('/api/passport', {
+    const passportResp = await fetch(`${APP_HOST}/api/passport`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

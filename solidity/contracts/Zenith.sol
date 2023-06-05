@@ -275,7 +275,7 @@ contract Zenith is UserRequest {
 
         string memory _query = string(
             abi.encodePacked(
-                "SELECT campaign_id,publisher,clicker,country,cpc,cpc_divide_by,signature,viewed_time FROM ",
+                "SELECT campaign_id,publisher,clicker,country,signature,viewed_time FROM ",
                 _resourceId,
                 " WHERE viewed_time > '",
                 Strings.toString(lastProcessed[msg.sender]),
