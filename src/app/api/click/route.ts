@@ -45,9 +45,9 @@ export async function POST(request: NextRequest) {
       '${advertiser}',
       '${publisher}',
       '${clicker}',
+      '${country}',
       '${cpc}',
       '${cpcDivideBy}',
-      '${country}',
       '${getSignature(signature)}',
       '${viewed}'
     )`,
