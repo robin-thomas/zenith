@@ -275,12 +275,12 @@ contract Zenith is UserRequest {
 
         string memory _query = string(
             abi.encodePacked(
-                "SELECT campaign_id,publisher,clicker,country,signature,viewed_time FROM ",
+                "SELECT campaign_id, clicker, country, signature FROM ",
                 _resourceId,
                 " WHERE viewed_time > '",
                 Strings.toString(lastProcessed[msg.sender]),
                 "' AND clicker = '",
-                Strings.toHexString(uint160(msg.sender), 20),
+                Strings.toHexString(msg.sender),
                 "'"
             )
         );
@@ -322,8 +322,8 @@ contract Zenith is UserRequest {
                 continue;
             }
 
-            uint _displayTime = Utils.stringToUint(_data[_index][7]);
-            bytes memory _signature = Utils.hexStringToBytes(_data[_index][6]);
+            uint _displayTime = block.timestamp;
+            bytes memory _signature = Utils.hexStringToBytes(_data[_index][3]);
             address _clicker = getClickerFromSignature(
                 _campaignId,
                 _displayTime,
@@ -332,14 +332,14 @@ contract Zenith is UserRequest {
 
             string memory _clickerStr = Strings.toHexString(_clicker);
 
-            if (Strings.equal(_clickerStr, _data[_index][2])) {
+            if (Strings.equal(_clickerStr, _data[_index][1])) {
                 /** @dev Big mac index */
                 // uint _cpcIndex = Utils.stringToUint(_data[_index][4]);
                 // uint _cpcIndexDividedBy = Utils.stringToUint(_data[_index][5]);
 
                 uint _costPerClick = truflationContract.multiplyByCPI(
                     campaigns[_campaignId].baseCostPerClick,
-                    _data[_index][3]
+                    _data[_index][2]
                 );
                 // _costPerClick = _costPerClick * _cpcIndex / _cpcIndexDividedBy;
                 _costPerClick = Math.min(
@@ -348,7 +348,7 @@ contract Zenith is UserRequest {
                 );
 
                 AdClick memory _adClick = AdClick({
-                    country: _data[_index][3],
+                    country: _data[_index][2],
                     user: _user,
                     clickedTime: _displayTime,
                     costPerClick: _costPerClick

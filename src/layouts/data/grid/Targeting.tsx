@@ -32,28 +32,32 @@ const Targeting: React.FC<TargetingProps> = ({ targeting }) => {
         <DialogTitle>Campaign Targeting</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <SelectOption
-              label="Wallet age is greater than or equal to   "
-              checked={targeting.enabled.walletAge}
-              value={targeting.walletAge}
-              valueLabel={walletAgeValueLabel(targeting.walletAge)}
-            />
-            <SelectOption
-              label="Number of transactions is greater than or equal to   "
-              checked={targeting.enabled.transactionCount}
-              value={targeting.transactionCount}
-              valueLabel={transactionCountValueLabel(targeting.transactionCount)}
-            />
-            <SelectOption
-              label={`${CURRENCY_NAME} balance is greater than or equal to  `}
-              checked={targeting.enabled.maticBalance}
-              value={targeting.maticBalance}
-              valueLabel={walletBalanceValueLabel(targeting.maticBalance)}
-            />
-            <SelectOption
-              label="Currently own or has owned an NFT"
-              checked={targeting.enabled.nft}
-            />
+            {targeting?.enabled && (
+              <>
+                <SelectOption
+                  label="Wallet age is greater than or equal to   "
+                  checked={targeting.enabled.walletAge}
+                  value={targeting.walletAge}
+                  valueLabel={walletAgeValueLabel(targeting.walletAge)}
+                />
+                <SelectOption
+                  label="Number of transactions is greater than or equal to   "
+                  checked={targeting.enabled.transactionCount}
+                  value={targeting.transactionCount}
+                  valueLabel={transactionCountValueLabel(targeting.transactionCount)}
+                />
+                <SelectOption
+                  label={`${CURRENCY_NAME} balance is greater than or equal to  `}
+                  checked={targeting.enabled.maticBalance}
+                  value={targeting.maticBalance}
+                  valueLabel={walletBalanceValueLabel(targeting.maticBalance)}
+                />
+                <SelectOption
+                  label="Currently own or has owned an NFT"
+                  checked={targeting.enabled.nft}
+                />
+              </>
+            )}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
