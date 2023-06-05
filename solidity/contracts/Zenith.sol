@@ -275,7 +275,7 @@ contract Zenith is UserRequest {
 
         string memory _query = string(
             abi.encodePacked(
-                "SELECT campaign_id, clicker, country, signature FROM ",
+                "SELECT campaign_id, publisher, clicker, country, signature, viewed_time FROM ",
                 _resourceId,
                 " WHERE viewed_time > '",
                 Strings.toString(lastProcessed[msg.sender]),
@@ -332,14 +332,14 @@ contract Zenith is UserRequest {
 
             string memory _clickerStr = Strings.toHexString(_clicker);
 
-            if (Strings.equal(_clickerStr, _data[_index][1])) {
+            if (Strings.equal(_clickerStr, _data[_index][2])) {
                 /** @dev Big mac index */
                 // uint _cpcIndex = Utils.stringToUint(_data[_index][4]);
                 // uint _cpcIndexDividedBy = Utils.stringToUint(_data[_index][5]);
 
                 uint _costPerClick = truflationContract.multiplyByCPI(
                     campaigns[_campaignId].baseCostPerClick,
-                    _data[_index][2]
+                    _data[_index][3]
                 );
                 // _costPerClick = _costPerClick * _cpcIndex / _cpcIndexDividedBy;
                 _costPerClick = Math.min(
@@ -348,7 +348,7 @@ contract Zenith is UserRequest {
                 );
 
                 AdClick memory _adClick = AdClick({
-                    country: _data[_index][2],
+                    country: _data[_index][3],
                     user: _user,
                     clickedTime: _displayTime,
                     costPerClick: _costPerClick
