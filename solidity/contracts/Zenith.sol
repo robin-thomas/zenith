@@ -275,7 +275,7 @@ contract Zenith is UserRequest {
 
         string memory _query = string(
             abi.encodePacked(
-                "SELECT campaign_id, publisher, clicker, country, signature, viewed_time FROM ",
+                "SELECT campaign_id, clicker, country, signature, viewed_time, cpc, cpc_divide_by FROM ",
                 _resourceId,
                 " WHERE viewed_time > '",
                 Strings.toString(lastProcessed[msg.sender]),
@@ -322,8 +322,8 @@ contract Zenith is UserRequest {
                 continue;
             }
 
-            uint _displayTime = Utils.stringToUint(_data[_index][5]);
-            bytes memory _signature = Utils.hexStringToBytes(_data[_index][4]);
+            uint _displayTime = Utils.stringToUint(_data[_index][4]);
+            bytes memory _signature = Utils.hexStringToBytes(_data[_index][3]);
             address _clicker = getClickerFromSignature(
                 _campaignId,
                 _displayTime,
@@ -332,18 +332,22 @@ contract Zenith is UserRequest {
 
             string memory _clickerStr = Strings.toHexString(_clicker);
 
-            if (Strings.equal(_clickerStr, _data[_index][2])) {
+            if (Strings.equal(_clickerStr, _data[_index][1])) {
+                uint _cpc = Utils.stringToUint(_data[_index][5]);
+                uint _cpcDivideBy = Utils.stringToUint(_data[_index][6]);
+
                 uint _costPerClick = truflationContract.multiplyByCPI(
                     campaigns[_campaignId].baseCostPerClick,
-                    _data[_index][3]
+                    _data[_index][2]
                 );
+                _costPerClick = _costPerClick * _cpc / _cpcDivideBy;
                 _costPerClick = Math.min(
                     _costPerClick,
                     campaigns[_campaignId].remaining
                 );
 
                 AdClick memory _adClick = AdClick({
-                    country: _data[_index][3],
+                    country: _data[_index][2],
                     user: _user,
                     clickedTime: _displayTime,
                     costPerClick: _costPerClick
