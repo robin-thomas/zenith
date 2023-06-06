@@ -169,18 +169,22 @@ The web app is built using React and NextJS and is hosted on Vercel.
 ### Backend
 Backend is comprised of a few APIs hosted on Vercel.
 
-- `/api/campaigns`
+- `/api/campaign`
   - `GET` = search for campaign metadata in SxT
   - `POST` = create a new campaign metadata in SxT, which returns a cid that is stored in `Zenith.sol`
 - `/api/click`
   - `POST` = store ad click data in SxT
   - `GET` = search for pending ad clicks of a user (used by the Chainlink Oracle request)
+- `/api/cpi`
+  - `POST` = called by GitHub Actions to trigger the smart contract which uses Chainlink and Truflation to update the cpi of all countries supported
 - `/api/passport/score/:address`
   - `GET` = get the Gitcoin passport score of a user
 - `/api/passport`
   - `POST` = submit passport of a user to recalculate the score
 - `/api/stats`
   - `GET` = get stats of like total campaigns, ad clicks and current deposit value
+- `/api/targeting/:address`
+  - `GET` = get targeting details of a user using SxT
 
 ### Blockchain
 
