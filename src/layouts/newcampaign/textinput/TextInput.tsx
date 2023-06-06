@@ -26,6 +26,7 @@ const TextInput: React.FC<TextInputProps> = ({ type, id, label, placeholder, row
         variant="standard"
         fullWidth
         InputProps={InputProps}
+        autoComplete="off"
         {...multiLineProps}
       />
     </Tooltip>

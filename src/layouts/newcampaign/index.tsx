@@ -13,6 +13,7 @@ import { Formik } from 'formik';
 import { object as YupObject, string as YupString, number as YupNumber, date as YupDate } from 'yup';
 import dayjs from 'dayjs';
 import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import Payment from '@/layouts/newcampaign/payment/Payment';
 import CampaignEnd from '@/layouts/newcampaign/CampaignEnd';
@@ -117,7 +118,8 @@ const NewCampaign: React.FC = () => {
                     </LoadingButton>
                   )}
                 >
-                  Your <i>Gitcoin Passport</i> Score: <b>{score}</b>.
+                  Your <i>Gitcoin Passport</i> Score:&nbsp;
+                  {score === undefined ? <CircularProgress size={10} /> : <b>{score}</b>}.
                   Increase your score by adding more stamps at:&nbsp;
                   <Link href="https://passport.gitcoin.co/#/dashboard" target="_blank">
                     Gitcoin Passport
@@ -144,7 +146,7 @@ const NewCampaign: React.FC = () => {
                     type="number"
                     id="budget"
                     label="Budget"
-                    description={`Budget for this campaign in ${CURRENCY_NAME}s (${CURRENCY_SYMBOL})`}
+                    description={`Budget for this campaign (in ${CURRENCY_NAME})`}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">{CURRENCY_SYMBOL}</InputAdornment>,
                     }}
@@ -155,7 +157,10 @@ const NewCampaign: React.FC = () => {
                     id="costPerClick"
                     label="Cost per click"
                     type="number"
-                    description="Base cost per click. This will adjusted based on trufflation rate and PPP index."
+                    description={`
+                      Base cost per click (in ${CURRENCY_NAME}).
+                      This will adjusted based on truflation rate and Big Mac index.
+                    `}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">{CURRENCY_SYMBOL}</InputAdornment>,
                     }}

@@ -123,7 +123,7 @@ export const getAnAd = async (address: string, init?: RequestInit) => {
 
   const campaignDetails = await getCampaignDetails(campaigns.map(({ cid }: any) => cid), init);
 
-  const accountResp = await fetch(`${APP_HOST}/api/account?address=${address}`, init);
+  const accountResp = await fetch(`${APP_HOST}/api/targeting/${address}`, init);
   if (accountResp.ok) {
     const account = await accountResp.json();
 

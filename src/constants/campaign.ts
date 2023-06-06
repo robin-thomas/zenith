@@ -1,3 +1,3 @@
-export const PLACEHOLDER_NAME = 'Chainlink: The Industry-Standard Web3 Services Platform';
-export const PLACEHOLDER_DESCRIPTION = 'Chainlink is a decentralized blockchain oracle network intended to be used to facilitate the transfer of tamper-proof data from off-chain sources to on-chain smart contracts.';
-export const PLACEHOLDER_URL = 'https://chain.link';
+export const PLACEHOLDER_NAME = 'Zenith: The Decentralised Advertising Platform';
+export const PLACEHOLDER_DESCRIPTION = 'Unlock advertising\'s future: Transparency, efficiency, and fairness. Verifiable transactions for advertisers, and fair rewards for publishers. Experience it now!';
+export const PLACEHOLDER_URL = 'https://zenith-six.vercel.app';
