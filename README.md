@@ -208,6 +208,8 @@ There are two smart contracts deployed on the Polygon Mumbai testnet:
 
 - SxT SDK. Created a NodeJS SDK for SxT to make it easy to interact with SxT in NodeJS (supports DDL, DML, DQL).
 
+- JS snippet code that can be used by publishers to display ads on their website.
+
 - The cost per ad click, which is calculated using the base cost per click from the campaign, the current year-over-year CPI of the country and the Big Mac index of the user's country.
 
 - UI/UX. Clean and modern responsive design created from scratch.
