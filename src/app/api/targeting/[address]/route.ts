@@ -4,9 +4,8 @@ import { DqlSDK } from '@robinthomas/sxt-sdk';
 import dayjs from 'dayjs';
 import { formatEther, getAddress } from 'ethers';
 
-export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const address = getAddress(url.searchParams.get('address') as string);
+export async function GET(_: Request, { params }: { params: { address: string } }) {
+  const address = getAddress(params.address);
 
   const sdk = new DqlSDK({ host: process.env.SXT_HOST as string });
 
