@@ -31,7 +31,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const fn = async () => {
-      const resp = await fetch(`${APP_HOST}/api/stats`);
+      const resp = await fetch(`${APP_HOST}/api/stats`, { next: { revalidate: 0 } });
       const data = await resp.json();
       setStats(data);
     };

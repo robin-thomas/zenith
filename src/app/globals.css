@@ -30,7 +30,12 @@ a:hover:not(:has(li.MuiMenuItem-root)):not(:has(img)):not(:has(.MuiChip-label)) 
   border-color: #8168eb !important;
 }
 
+.MuiLoadingButton-loadingIndicator > .MuiCircularProgress-root > .MuiCircularProgress-svg {
+  color: white !important;
+}
+
 .MuiAlert-icon,
+.MuiCircularProgress-svg,
 .MuiSwitch-input:checked + .MuiSwitch-thumb {
   color: #8168eb !important;
 }
