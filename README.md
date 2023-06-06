@@ -221,3 +221,4 @@ There are two smart contracts deployed on the Polygon Mumbai testnet:
 - Add support for more countries and currencies.
 - Add support for more ad types like video, audio, etc.
 - Add support for more ad metrics like impressions, conversions, etc.
+- Add support for more targeting options.
