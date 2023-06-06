@@ -145,8 +145,7 @@ const About: React.FC = () => (
       />
       <p>
         The current year-over-year CPI of all countries supported are fetched from Truflation once a day.
-        If the CPI of a country is not available, then the cost of an ad click will be the base cost per
-        click.
+        If the CPI of a country is not available, then its taken as 1.000.
       </p>
       <br />
       <figure>

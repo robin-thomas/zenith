@@ -1,10 +1,5 @@
 # Zenith
 
-## Inspiration
-Advertising and Blockchain are two areas I'm pretty much interested in. Advertising, because that's what my daily work entails. Blockchain, because I love smart contracts and their decentralized aspect. Trying to bring both these worlds a bit closer is what inspired me to build Zenith.
-
-## What it does
-
 Zenith is a decentralized advertising platform that connects advertisers and publishers through smart contracts, eliminating the need for middlemen.
 
 Advertisers enjoy secure, verifiable transactions, while publishers are rewarded fairly for their user engagement. Join the DeFi advertising revolution and unlock your advertising potential with Zenith today.
@@ -21,7 +16,7 @@ The advertiser can enable or disable a campaign at any time.
 
 Publishers are website owners, who can copy a snippet of JavaScript code from the Zenith "Settings" page, and then add it to their websites. This code will fetch the winning ad (after the decentralized auction) from the smart contract and show it to the users.
 
-Publishers will be paid only for valid ad clicks:
+Publishers will be paid only for valid ad clicks by their users:
   - User need to have MetaMask wallet installed
   - Need to have a Gitcoin Passport score of 15
   - A user can click on an ad only once
@@ -32,7 +27,7 @@ Advertisers have the option for targeting the ads, allowing them to reach specif
 
 The targeting details are stored in SxT tables.
 
-Currently we support the below targeting options are:
+Currently we support the below targeting options:
 - Wallet age more than 1 day, 1 week, 1 month
 - Wallet activity more than 1 transaction, 5 transactions, 10 transactions
 - Wallet balance more than 0.1 MATIC, 1 MATIC, 10 MATIC
@@ -108,23 +103,25 @@ A user can click on an ad only once per campaign, and shall see only active camp
 
 When a user clicks on an ad, the ad click data like `campaign_id`, `user_address`, `click_time` and `country` are stored in SxT. The country detection happen through Vercel.
 
-When the user requests pending rewards from ad clicks, this triggers a request to the SxT through [Chainlink Direct Requests](https://docs.spaceandtime.io/docs/chainlink-direct-requests), and retrieve all pending ad clicks of this user. The smart contract (inside Oracle fulfillment) will then verify the signature of the ad clicks, and only valid ad clicks will be rewarded.
+When a publisher requests pending rewards from ad clicks, this triggers a request to the SxT through [Chainlink Direct Requests](https://docs.spaceandtime.io/docs/chainlink-direct-requests), and retrieve all pending ad clicks for this publisher. The smart contract (inside Oracle fulfillment) will then verify the signature of the ad clicks, and calculate the cost of each ad click.
+
+Once the rewards are calculated, they are transferred from the smart contract to the publisher's wallet.
 
 ### Calculation of rewards
 
 The cost of an ad click is calculated using the following formula:
 
 ```
-cost per click = (current year-over-year CPI of the country) * (base cost per click set in campaign) * (big mac index)
+cost_per_click = campaign_base_cost_per_click * country_CPI * big_mac_index
 ```
 
 Example: if the yoy CPI of UK is 8.7%, base cost per click for the campaign is 0.002 MATIC, and Big Mac Index for UK is 0.904, then the cost of the ad click will be 0.001965296 MATIC.
 
 ```
-cost per click = 1.087 * 0.002 * 0.904 = 0.001965296 MATIC
+cost_per_click = 0.002 MATIC * 1.087 * 0.904 = 0.001965296 MATIC
 ```
 
-The current year-over-year CPI of all countries supported are fetched from Truflation once a day (using GitHub Actions). If the CPI of a country is not available, then the cost of an ad click will be the base cost per click.
+The current year-over-year CPI of all countries supported are fetched from Truflation once a day (using GitHub Actions). If the CPI of a country is not available, then its taken as 1.000.
 
 > The big mac index was invented by The Economist in 1986 as a lighthearted guide to whether currencies
 > are at their “correct” level. It is based on the theory of purchasing-power parity (PPP), the notion
@@ -135,7 +132,7 @@ The current year-over-year CPI of all countries supported are fetched from Trufl
 
 The Big Mac index is fetched from https://github.com/TheEconomist/big-mac-data.
 
-Once the rewards are calculated, they are transferred from the smart contract to the user's wallet.
+If the Big Mac index of the country is not available, 0.500 is used as the index.
 
 ## How to run it locally
 
