@@ -51,10 +51,10 @@ const About: React.FC = () => (
       <h3>Publishers</h3>
       <p>
         Publishers are website owners, who can copy a snippet of JavaScript code from the {APP_NAME}
-        <code>Settings</code> page, and then add it to their websites. This code will fetch the winning ad
+        &nbsp;<code>Settings</code> page, and then add it to their websites. This code will fetch the winning ad
         (after the decentralized auction) from the smart contract and show it to the users.
       </p>
-      <p>Publishers will be paid only for valid ad clicks:</p>
+      <p>Publishers will be paid only for valid ad clicks by their users:</p>
       <ul>
         <li>User need to have MetaMask wallet installed</li>
         <li>Need to have a Gitcoin Passport score of {PASSPORT_THRESHOLD}</li>
@@ -66,7 +66,7 @@ const About: React.FC = () => (
         on factors such as wallet activity, transaction history, wallet balance and so on.
       </p>
       <p>The targeting details are stored in SxT tables.</p>
-      <p>Currently we support the below targeting options are:</p>
+      <p>Currently we support the below targeting options:</p>
       <ul>
         <li>Wallet age more than 1 day, 1 week, 1 month</li>
         <li>Wallet activity more than 1 transaction, 5 transactions, 10 transactions</li>
@@ -113,12 +113,16 @@ const About: React.FC = () => (
         The country detection happen through Vercel.
       </p>
       <p>
-        When the user requests pending rewards from ad clicks, this triggers a request to the SxT
+        When a publisher requests pending rewards from ad clicks, this triggers a request to the SxT
         through&nbsp;
         <Link target="_blank" href="https://docs.spaceandtime.io/docs/chainlink-direct-requests">Chainlink Direct
           Requests</Link>
-        , and retrieve all pending ad clicks of this user. The smart contract (inside Oracle fulfillment)
-        will then verify the signature of the ad clicks, and only valid ad clicks will be rewarded.
+        , and retrieve all pending ad clicks for this publisher. The smart contract (inside Oracle fulfillment)
+        will then verify the signature of the ad clicks, and calculate the cost of each ad click.
+      </p>
+      <p>
+        Once the rewards are calculated, they are transferred from the smart contract to the publisher&apos;s
+        wallet.
       </p>
       <h3>Calculation of rewards</h3>
       <p>The cost of an ad click is calculated using the following formula:</p>
@@ -134,7 +138,7 @@ const About: React.FC = () => (
         click will be 0.001965296 {CURRENCY_NAME}.
       </p>
       <SyntaxHighlighter
-        children={`cost per click = 1.087 * 0.002 * 0.904 = 0.001965296 ${CURRENCY_NAME}`}
+        children={`cost_per_click = 0.002 ${CURRENCY_NAME} * 1.087 * 0.904 = 0.001965296 ${CURRENCY_NAME}`}
         style={a11yDark}
         language="javascript"
         PreTag="div"
@@ -157,10 +161,7 @@ const About: React.FC = () => (
           &mdash; <cite>The Economist</cite>
         </figcaption>
       </figure>
-      <p>
-        Once the rewards are calculated, they are transferred from the smart contract to the user&apos;s
-        wallet.
-      </p>
+      <p>If the Big Mac index of the country is not available, <b>0.500</b> is used as the index.</p>
     </div>
   </div>
 );
